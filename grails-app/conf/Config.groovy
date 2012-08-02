@@ -89,3 +89,17 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+
+
+// thank you, Andres Almiray
+/** Certificate Hostname Verifier configuration key */
+rest.https.cert.hostnameVerifier = 'ALLOW_ALL'
+
+//ActiveMQ
+// JMX monitoring is disabled by default, but you can enable JMX monitoring with this config
+grails.plugins.activemq.useJmx=false
+
+grails.plugins.activemq.port=7892
+
+/// And you can configure the messaging persistence, the persistence is disabled by default.
+grails.plugins.activemq.persistent=false

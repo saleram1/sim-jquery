@@ -6,14 +6,14 @@ package com.mercadolibre.apps.sim
  * @see ItemImport
  *
  */
-class Item {
+class Item implements Comparable {
 	String gp_id
 	String site
 	String category
 	String title
 	String description
-	String condition = "new"
-	String currency = "USD"
+	String condition
+	String currency
 	Double price
 	String pictureURL
 	String pictureURL2
