@@ -6,18 +6,6 @@
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'itemImportSource.label', default: 'ItemImportSource')}" />
 		<title>New Import</title>
-
-	   	<script type="text/javascript">
-			var hook = true;
-			window.onbeforeunload = function() {
-			    if (hook) {
-			        return "Did you save your stuff?"
-			    }
-			}
-			function unhook() {
-			    hook = false;
-			}
-	    </script>
 	</head>	
 	<body>
 		<header class="jumbotron subhead" id="overview">
@@ -78,12 +66,25 @@
 				</div>
 			</fieldset>
 
-			<bsfu:fileUpload action="upload" controller="image" dropTarget="dropZone51" />
+			<bsfu:fileUpload action="upload" controller="itemImportFileSource" action="save" formData="['site': 'MLA', 'category': 'MLA78884', 'access_token': 'APP-USR_123465678123467890']"  acceptFileTypes="/(\\.|\\/)(csv|xls?x|txt)\$/i" dropTarget="dropZone51" />
 			
 			<div id="dropZone51" dropzone="copy"><p>Drag-n-Drop</p> </div>
 		  </div>
 		</div>
-		
+
+<!-- scripts -->
+		<script type="text/javascript">
+			var hook = true;
+			window.onbeforeunload = function() {
+			    if (hook) {
+			        return "Did you save your stuff?"
+			    }
+			}
+			function unhook() {
+			    hook = false;
+			}
+		</script>
+
 		<script type="text/javascript">
 			document.getElementById("description").disabled=true;
 		</script>

@@ -54,9 +54,7 @@
 				</g:each>
 				</tbody>
 			</table>
-			<div class="pagination">
-				<g:paginate total="${itemImportSourceInstanceTotal}" />
-			</div>
+			
 		</div>
 	</body>
 </html>
