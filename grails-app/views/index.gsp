@@ -1,1 +1,1 @@
-${response.sendRedirect("upload/new")}
+${response.sendRedirect("uploads/new")}

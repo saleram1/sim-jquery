@@ -1,49 +1,44 @@
 package com.mercadolibre.apps.sim
 
-//import com.lucastex.grails.fileuploader.UFile
+import groovy.transform.ToString
 
+@ToString
 class ItemImport implements Comparable {
+	String bsfuUUID
 	String status = "PENDING"
+	String category
 	String description
-	String errorMessages
-	File fileAttachment
 	Integer errorItemsCount = 0
 	Integer validItemsCount = 0
-	Boolean itemsReady = true
-	Date dateCreated
 	
-	static transients = ['compositeId','totalItemsProcessed','status']
+	static transients = ['compositeId', 'totalItemsProcessed']
 	
-	static hasMany = [errs: ApiError]
+	static hasMany = [files: ItemImportFileSource, errs: ApiError]
 	
 	static constraints = {
+		bsfuUUID(nullable: false, blank: false, unique: true)
+		category(nullable: true, blank: true)
+		description(nullable: true, blank: true)
 		id(display:false, attributes:[listable:false]) // do not show id anywhere
-		fileAttachment(nullable: false)
-		description(nullable: true)
-		validItemsCount()
-		errorItemsCount()
-		errorMessages(nullable: true)
 		status(attributes:[listable:false], inList:['PENDING', 'READY', 'SENT_TO_MARKETPLACE', 'HAS_ERRORS'])
 	}
 	
-	static ItemImport getComposite(String compositeId) {
-		// change this only, if your domain class has a composite key
-		return ItemImport.get(compositeId)
-	}
-	
-	public String getCompositeId() {
-		// change this only, if your domain class has a composite key
-		return this.id
-	}
-	
-	public void deleteAndClearReferences() {
-		// and finally do what we really want
-		this.delete(flush:true)
+	static mapping = {
+        version false
+        autoTimestamp false
 	}
 	
 	public int compareTo(Object o) {
 		// TODO: change id to fitting order property
-		return (id.compareTo(o.id))
+		return (bsfuUUID.compareTo(o.bsfuUUID))
+	}
+
+	String getSite() {
+		return category?.substring(0,3)
+	}
+	
+	void setSite(String aSite) {
+		// noop
 	}
 	
 	Integer getTotalItemsProcessed() {
@@ -53,23 +48,4 @@ class ItemImport implements Comparable {
 	void setTotalItemsProcessed(Integer aTotalItemsProcessed) {
 		//
 	}
-	
-	String getStatus() {
-		if (!itemsReady) {
-			"PENDING"
-		}
-		else {
-			"READY"
-		}
-	}
-	
-	void setStatus(String status) {
-		if (status == 'READY') {
-			itemsReady = true
-		}
-	}
-		
-	String toString() {
-		return "ItemImport  -> [${id}] [${status}]";
-	}	
 }

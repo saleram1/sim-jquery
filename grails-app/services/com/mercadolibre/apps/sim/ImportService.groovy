@@ -11,23 +11,8 @@ import com.mercadolibre.apps.sim.util.CSVImporter
  */
 class ImportService {
   static transactional = false
-  static exposes = ['jms']
-  static destination = "queue.newfile.notification"
 
   CategoryService categoryService
-
-  def onMessage(aMessage) {
-    ItemImport whatsToImport = ItemImport.get((aMessage['importTicketId'] as Long))
-    println whatsToImport
-
-    // this method shall return a number of errors , number of Items added
-    def arry = importContactsFromCSV(aMessage['filePath'])
-    whatsToImport.validItemsCount = arry[0]
-    whatsToImport.errorItemsCount = arry[1] - arry[0]
-    whatsToImport.save()
-
-    return;
-  }
 
 
   def importContactsFromCSV(String csvFile) {
@@ -43,16 +28,20 @@ class ImportService {
       String accessToken = setupMercadoApiAccess(7418, "Spz9fcrMyPQo9cD8ZJtbdn8Kk46fy2Z3")
       log.info "Got accessToken: " + accessToken
 
+	println totalCount
       items.eachWithIndex { it, idx ->
         Item aProperItem = new Item(it)
-
-        if (!itemExists(aProperItem) && aProperItem.validate()) {
-          try {
+		
+        if (aProperItem.validate()) {
+          	println aProperItem
+		
+			try {
             // if user is a Fashionista we do not support at present
             // @TODO support a 'required attribute' message in the output of ItemImport
 
             // if user has not already uploaded and the Category is okay
-            if (categoryService.isValidCategory(aProperItem.category) && !categoryService.isFunkyFashionFootwearCategory(aProperItem.category)) {
+/*            if (categoryService.isValidCategory(aProperItem.category) && !categoryService.isFunkyFashionFootwearCategory(aProperItem.category)) {
+*/
               String newItemId = newItemToMarketplace(aProperItem, accessToken)
               aProperItem.mercadoLibreItemId = newItemId
 
@@ -62,11 +51,11 @@ class ImportService {
                 println aProperItem
               }
             }
-            else {
+/*            else {
               log.warn "Cannot support category id: ${aProperItem.category} in this version"
             }
-          }
-          catch (Throwable tr) { tr.printStackTrace() }
+*/
+          catch (Throwable tr) { System.err.printStackTrace() }
         }
       }
     }

@@ -2,20 +2,34 @@ package com.mercadolibre.apps.sim
 
 import groovy.transform.ToString
 
-//import com.lucastex.grails.fileuploader.UFile
-
-@ToString
-class ItemImportFileSource {
-	String description
-	String site
+class ItemImportFileSource {	
+	String bsfuUUID
+	Integer callerId
 	String category
-	File fileAttachment
+	String description
+	String digest
+	String originalFilename
+	String path
+	Boolean pipelineComplete = false
 	Date dateCreated
 	
 	static constraints = {
+		bsfuUUID(nullable: false, blank: false)
+		callerId()
+		category(nullable: true, blank: true)
+		description(nullable: true, blank: true)
+		digest(nullable: true, blank: false)
 		id(display:false, attributes:[listable:false])
-		description(nullable: true, blank: false)
-		site(nullable: true, blank: false)
-		category(nullable: true, blank: false)
+		originalFilename()
+		path()
+		pipelineComplete()
+	}
+	
+	static mapping = {
+		version false
+	}
+	
+	String toString() {
+		"${originalFilename} -> ${path}"
 	}
 }

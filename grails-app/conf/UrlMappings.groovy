@@ -7,7 +7,8 @@ class UrlMappings {
 			}
 		}
 		
-		"/upload/new"(controller: "itemImportFileSource", action: "create")
+		"/uploads/new"(controller: "itemImportFileSource", action: "create")
+		"/uploads/show/latest"(controller: "itemImport", action: "showUploadProgress")
 
 		"/"(view:"/index")
 		"500"(view:'/error')
