@@ -19,7 +19,13 @@
 	    </script>
 	</head>	
 	<body>
-		<div id="create-itemImportSource" class="content scaffold-create" role="main">
+		<div class="container section">
+		<header class="jumbotron subhead" id="overview">
+		  <h1>Upload Items</h1>
+		  <p class="lead">Choose a Site and Category Id from the fields below and click 'Add Files&hellip;' with your inventory files in CSV format</p>
+		</header>
+		
+		  <div class="span9">
 			<g:if test="${flash.message}">
 				<div class="message" role="status">${flash.message}</div>
 			</g:if>
@@ -31,9 +37,6 @@
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			
-			<h1>Upload Items</h1>
-
 			<fieldset>
 				<div class="fieldcontain required">
 					<label for="site">
@@ -72,13 +75,12 @@
 					</label>
 					<input type="text" name="description" value="" id="description" maxLength="80" size="80" />
 				</div>
-
-				<div id="dropZone1234" style="background-color:yellow; width: 480; height: 250">
-					&nbsp;<br/>
-				</div>
 			</fieldset>
 
-			<bsfu:fileUpload action="upload" controller="image" dropTarget="dropZone1234" />
+			<bsfu:fileUpload action="upload" controller="image" dropTarget="dropZone51" />
+			
+			<div id="dropZone51" dropzone="copy"><p>Drag-n-Drop</p> </div>
+		  </div>
 		</div>
 		
 		<script type="text/javascript">
