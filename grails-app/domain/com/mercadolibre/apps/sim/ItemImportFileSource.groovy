@@ -5,7 +5,7 @@ import groovy.transform.ToString
 //import com.lucastex.grails.fileuploader.UFile
 
 @ToString
-class ItemImportSource {
+class ItemImportFileSource {
 	String description
 	String site
 	String category

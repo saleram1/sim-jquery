@@ -33,8 +33,8 @@
 					</a>					
 					<a class="brand" href="${createLink(uri: '/')}">Simple Inventory Mgmt (SIM)</a>
 					<div class="nav-collapse">
-						<ul class="nav">							
-							<li<%= request.forwardURI == "${createLink(uri: '/')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/')}">Home</a></li>
+						<ul class="nav">
+							<li<%= request.forwardURI == "${createLink(uri: '/help')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/help')}">Help</a></li>
 
 						</ul>
 					</div>

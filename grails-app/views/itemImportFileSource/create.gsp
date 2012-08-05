@@ -1,4 +1,5 @@
-<%@ page import="com.mercadolibre.apps.sim.ItemImportSource" %>
+<%@ page import="com.mercadolibre.apps.sim.ItemImportFileSource" %>
+
 <!doctype html>
 <html>
 	<head>
@@ -19,12 +20,12 @@
 	    </script>
 	</head>	
 	<body>
-		<div class="container section">
 		<header class="jumbotron subhead" id="overview">
 		  <h1>Upload Items</h1>
 		  <p class="lead">Choose a Site and Category Id from the fields below and click 'Add Files&hellip;' with your inventory files in CSV format</p>
 		</header>
-		
+
+		<div class="container section">		
 		  <div class="span9">
 			<g:if test="${flash.message}">
 				<div class="message" role="status">${flash.message}</div>

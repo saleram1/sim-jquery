@@ -5,9 +5,9 @@ import org.springframework.web.multipart.MultipartFile
 
 import grails.converters.JSON
 
-class ItemImportSourceController {
+class ItemImportFileSourceController {
 
-	static scaffold = ItemImportSource
+	static scaffold = ItemImportFileSource
 
     def save() {
 		switch (request.method) {

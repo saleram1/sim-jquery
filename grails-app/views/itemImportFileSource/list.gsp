@@ -1,5 +1,5 @@
 
-<%@ page import="com.mercadolibre.apps.sim.ItemImportSource" %>
+<%@ page import="com.mercadolibre.apps.sim.ItemImportFileSource" %>
 <!doctype html>
 <html>
 	<head>
