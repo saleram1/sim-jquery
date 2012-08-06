@@ -52,22 +52,8 @@ public class CSVImporter {
 		if (ds.getErrors() != null && ds.getErrors().size() > 0) {
 			System.err.println("FOUND ERRORS IN FILE");
 		}
-
 		return items;
 	}
-
-	// private static ContactBean newContactBean( DataSet ds ) {
-	// 	ContactBean contact = new ContactBean();
-	// 	contact.setEmail( ds.getString("email") );
-	// 	contact.setFirstName( ds.getString("first_name" ) );
-	// 	contact.setLastName( ds.getString("last_name" ) );
-	// 	contact.setPrefix(ds.getString("prefix"));
-	// 	contact.setPhoneNumber(ds.getString("phone"));
-	// 	contact.setFaxNumber(ds.getString("fax"));
-	// 	contact.setTitle(ds.getString("title"));
-	// 	contact.setCompanyName(ds.getString("company"));;
-	// 	return contact;
-	// }
 	
 	private static Map newItemMap( DataSet ds ) {
 		Map<String,Object> aMap = new HashMap<String,Object>();
@@ -82,7 +68,7 @@ public class CSVImporter {
 		aMap.put("available_quantity", ds.getInt("available_quantity") );
 		aMap.put("duration", ds.getInt("duration") );
 		aMap.put("price", ds.getDouble("price") );
-		aMap.put("shippingCosts", ds.getString("shippingCosts") );
+		aMap.put("shippingCosts", ds.getDouble("shippingCosts") );
 		aMap.put("location", ds.getString("location") );
 		aMap.put("condition", ds.getString("condition") );
 		aMap.put("shipsFrom", ds.getString("shipsFrom") );
