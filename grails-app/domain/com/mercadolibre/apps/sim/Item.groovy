@@ -12,8 +12,8 @@ class Item implements Comparable {
 	String category
 	String title
 	String description
-	String condition
-	String currency
+	String condition = "new"
+	String currency = "USD"
 	Double price
 	String pictureURL
 	String pictureURL2
