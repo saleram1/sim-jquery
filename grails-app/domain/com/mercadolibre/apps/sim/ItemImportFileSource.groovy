@@ -10,19 +10,18 @@ class ItemImportFileSource {
 	String digest
 	String originalFilename
 	String path
-	Boolean pipelineComplete = false
 	Date dateCreated
 	
 	static constraints = {
+		id(display:false, attributes:[listable:false])
 		bsfuUUID(nullable: false, blank: false)
 		callerId()
 		category(nullable: true, blank: true)
 		description(nullable: true, blank: true)
 		digest(nullable: true, blank: false)
-		id(display:false, attributes:[listable:false])
+			///, unique: true)
 		originalFilename()
 		path()
-		pipelineComplete()
 	}
 	
 	static mapping = {

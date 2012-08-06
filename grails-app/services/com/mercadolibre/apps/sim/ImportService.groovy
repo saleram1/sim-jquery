@@ -28,37 +28,28 @@ class ImportService {
       String accessToken = setupMercadoApiAccess(7418, "Spz9fcrMyPQo9cD8ZJtbdn8Kk46fy2Z3")
       log.info "Got accessToken: " + accessToken
 
-	println totalCount
       items.eachWithIndex { it, idx ->
         Item aProperItem = new Item(it)
 		
-        if (aProperItem.validate()) {
-          	println aProperItem
-		
-			try {
-            // if user is a Fashionista we do not support at present
-            // @TODO support a 'required attribute' message in the output of ItemImport
+        if (!aProperItem.validate()) {
+			aProperItem.errors.each() {
+				println it
+			}
+			return [0,0]
+		}
+		try {
+             String newItemId = newItemToMarketplace(aProperItem, accessToken)
+             aProperItem.mercadoLibreItemId = newItemId
 
-            // if user has not already uploaded and the Category is okay
-/*            if (categoryService.isValidCategory(aProperItem.category) && !categoryService.isFunkyFashionFootwearCategory(aProperItem.category)) {
-*/
-              String newItemId = newItemToMarketplace(aProperItem, accessToken)
-              aProperItem.mercadoLibreItemId = newItemId
-
-              if (newItemId) {
-                aProperItem.save(flush: true, failOnError: true)
-                count++
-                println aProperItem
-              }
-            }
-/*            else {
-              log.warn "Cannot support category id: ${aProperItem.category} in this version"
-            }
-*/
+             if (newItemId) {
+               aProperItem.save(flush: true, failOnError: true)
+               count++
+               println aProperItem
+             }
+	  	  }
           catch (Throwable tr) { System.err.printStackTrace() }
-        }
+		}
       }
-    }
     [count, totalCount]
   }
 
@@ -137,7 +128,7 @@ class ImportService {
     }
     // oddly, some of the validations return 400 (Bad Request), which is not proper given the REST API error messages
     catch (groovyx.net.http.HttpResponseException ex) {
-      log.error ex.message
+      log.error ex.message, ex
     }
 
     // do not forget to call a PUT for extra pictures or descriptions as the example is wrong - http://developers.mercadolibre.com/add-pictures-item/

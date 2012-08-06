@@ -16,11 +16,12 @@ class ItemImport implements Comparable {
 	static hasMany = [files: ItemImportFileSource, errs: ApiError]
 	
 	static constraints = {
-		bsfuUUID(nullable: false, blank: false, unique: true)
+		bsfuUUID(nullable: false, blank: false)
+			///, unique: true)
 		category(nullable: true, blank: true)
 		description(nullable: true, blank: true)
 		id(display:false, attributes:[listable:false]) // do not show id anywhere
-		status(attributes:[listable:false], inList:['PENDING', 'READY', 'SENT_TO_MARKETPLACE', 'HAS_ERRORS'])
+		status(attributes:[listable:false], inList:['PENDING', 'READY', 'SENT_TO_MARKETPLACE', 'HAS_ERRORS', 'COMPLETED'])
 	}
 	
 	static mapping = {

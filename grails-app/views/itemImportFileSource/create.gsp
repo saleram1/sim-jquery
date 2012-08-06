@@ -67,18 +67,19 @@
 				</div>
 			</fieldset>
 
+			<div id="update4">&nbsp;</div>
+
 			<bsfu:fileUpload action="upload" controller="itemImportFileSource" action="save" maxNumberOfFiles="${4}" maxFileSize="${250*1024}" formData="${formDataModelMap}" acceptFileTypes="/(\\.|\\/)(csv|xls?x|txt)\$/i" dropTarget="dropZone51" />
 			
 			<div id="dropZone51" dropzone="copy"><p>Drag-n-Drop</p> </div>
 		  </div>
 		</div>
 
-<!-- scripts -->
 		<script type="text/javascript">
 			var hook = true;
 			window.onbeforeunload = function() {
 			    if (hook) {
-			        return "Did you save your stuff?"
+			        return "Did you save your files to the server?"
 			    }
 			}
 			function unhook() {
@@ -92,10 +93,7 @@
 		
 		<script type="text/javascript">
 		$('#fileupload')
-		    .bind('fileuploaddone', function (e, data) { alert('Your upload is complete!'); unhook();  window.location.href='/sim/uploads/show/latest'; return false; })
-
-/*		    .bind('fileuploadstart', function (e) { return confirm('This will start active auctions and may incur listing fees.  Are you sure?'); }) */
-
+		    .bind('fileuploaddone', function (e, data) { alert('Your upload is complete!'); unhook();  window.location.href='/sim/uploads/next'; return false; })
 		</script>
 	</body>
 </html>

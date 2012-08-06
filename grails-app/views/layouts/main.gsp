@@ -10,6 +10,8 @@
 
 		<r:require modules="bootstrap"/>
 		<r:require modules="bootstrap-file-upload"/>
+		<r:require modules="chico"/>
+		
 		<link rel="stylesheet" href="${resource(dir:'css', file:'customised.css')}" type="text/css">
 
 		<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
