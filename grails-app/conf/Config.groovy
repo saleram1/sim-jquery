@@ -104,3 +104,6 @@ grails.plugins.activemq.port=7892
 
 /// And you can configure the messaging persistence, the persistence is disabled by default.
 grails.plugins.activemq.persistent=false
+
+
+// Grab credential here https://www.mercadopago.com/mla/herramientas/aplicaciones
