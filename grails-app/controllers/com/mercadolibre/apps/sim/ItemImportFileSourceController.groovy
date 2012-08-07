@@ -2,7 +2,6 @@ package com.mercadolibre.apps.sim
 
 import com.mercadolibre.apps.sim.util.FileHelper
 
-import javax.servlet.http.Cookie
 import org.springframework.web.multipart.MultipartHttpServletRequest
 import org.springframework.web.multipart.MultipartFile
 
@@ -13,10 +12,12 @@ class ItemImportFileSourceController {
 	def authorize(AuthoriseCommand command) {
 		// Use MELI.login to test if the client has a valid access_token
 
-		session.ml_access_token = command.access_token
-		session.ml_caller_id    = command.user_id
-		session.setMaxInactiveInterval(command.expires_in - 30)
-
+		if (command.validate()) {
+			session.ml_access_token = command.access_token
+			session.ml_caller_id    = command.user_id
+			session.setMaxInactiveInterval(command.expires_in - 30)
+			log.info "Storing session for User ${session.ml_caller_id} with token - ${session.ml_access_token}"
+		}
 		redirect(action: "create")
 	}
 
@@ -81,4 +82,10 @@ class AuthoriseCommand {
 	String  domains
 	Integer expires_in
 	Integer user_id
+	
+	static constraints = {
+		access_token(blank: false, nullable: false)
+		expires_in(min: 900)
+		user_id(min: 1)
+	}
 }

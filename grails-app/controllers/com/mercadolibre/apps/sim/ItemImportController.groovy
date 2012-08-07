@@ -21,7 +21,7 @@ class ItemImportController {
 					ItemImportFileSource.findAllByBsfuUUID(session.transaktions as String).each() { source -> 
 						importRec.addToFiles(source)
 					}
-					importRec.save(failOnError: true, flush: true)
+					importRec.save(flush: true)
 				}
 				redirectParams = [action: "start", params: ['id': importRec.id]]
 			}

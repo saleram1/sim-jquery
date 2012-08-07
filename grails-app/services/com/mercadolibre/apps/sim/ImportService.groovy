@@ -15,8 +15,7 @@ class ImportService {
   CategoryService categoryService
 
 
-  def importContactsFromCSV(String csvFile) {
-	  //, String accessToken = "") {
+  def importContactsFromCSV(String csvFile, String accessToken = "") {
     log.info "importContactsFromCSV: " + csvFile
 
     def items = CSVImporter.doImport(csvFile)
@@ -26,8 +25,8 @@ class ImportService {
     if (items && items instanceof List) {
       totalCount = items?.size()
 
-      String accessToken = setupMercadoApiAccess(7418, "Spz9fcrMyPQo9cD8ZJtbdn8Kk46fy2Z3")
-      log.info "Got accessToken: " + accessToken
+      //String accessToken = setupMercadoApiAccess(7418, "Spz9fcrMyPQo9cD8ZJtbdn8Kk46fy2Z3")
+      log.info "Using accessToken: " + accessToken
 
       items.eachWithIndex { it, idx -> 
 		Item aProperItem = newItemFromMap(it)
