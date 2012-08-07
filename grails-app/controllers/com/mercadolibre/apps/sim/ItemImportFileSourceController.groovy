@@ -15,13 +15,13 @@ class ItemImportFileSourceController {
 
 		session.ml_access_token = command.access_token
 		session.ml_caller_id    = command.user_id
-		session.setMaxInactiveInterval(command.expires_in - 10)
+		session.setMaxInactiveInterval(command.expires_in - 30)
 
 		redirect(action: "create")
 	}
 
 	def create() {
-		def formDataModelMap = ['category': 'MLA78884', 'description': 'Perfecto',
+		def formDataModelMap = ['category': 'Various', 'description': 'Perfecto',
 		  'access_token': "${session.ml_access_token}", 'bsfuUUID': "${System.currentTimeMillis()}"]
 		render(view: "create", model: ['formDataModelMap': formDataModelMap])
 	}

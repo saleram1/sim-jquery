@@ -10,12 +10,13 @@ import com.mercadolibre.apps.sim.util.CSVImporter
  *
  */
 class ImportService {
-  static transactional = false
+  static transactional = true
 
   CategoryService categoryService
 
 
   def importContactsFromCSV(String csvFile) {
+	  //, String accessToken = "") {
     log.info "importContactsFromCSV: " + csvFile
 
     def items = CSVImporter.doImport(csvFile)
@@ -28,8 +29,7 @@ class ImportService {
       String accessToken = setupMercadoApiAccess(7418, "Spz9fcrMyPQo9cD8ZJtbdn8Kk46fy2Z3")
       log.info "Got accessToken: " + accessToken
 
-      items.eachWithIndex { it, idx ->
-        //Item aProperItem = new Item(it)
+      items.eachWithIndex { it, idx -> 
 		Item aProperItem = newItemFromMap(it)
 
         if (!aProperItem.validate()) { // this should never be reached as these are basic constraints
@@ -45,6 +45,7 @@ class ImportService {
              if (newItemId) {
                aProperItem.save(flush: true, failOnError: true)
                count++
+   			   log.info aProperItem
              }
 	  	  }
           catch (Throwable tr) { System.err.printStackTrace() }

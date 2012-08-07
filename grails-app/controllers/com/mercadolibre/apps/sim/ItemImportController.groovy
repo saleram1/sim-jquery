@@ -31,10 +31,6 @@ class ItemImportController {
 		redirect(redirectParams)
 	}
 	
-	def headerWithStatus() {
-		render(template: "header", model: ['itemImportInstance': ItemImport.get(params?.id)])
-	}
-	
 	def start() {
 		// clear the session once copied out...
 		session.removeAttribute('transaktions') 
@@ -44,7 +40,7 @@ class ItemImportController {
 
 	def startUpload(StartUploadCommand command) {
 		if (command.action == "startUpload") {
-			sendQueueJMSMessage("queue.import.notification", ['importTicketId': command.id])
+			sendQueueJMSMessage("queue.import.notification", ['importTicketId': command.id, 'accessToken': session.ml_access_token])
 		} // now we tell the world about it!!
 		
 		render "<strong>Upload started at ${new Date()}</strong>"

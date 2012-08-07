@@ -4,7 +4,6 @@ package com.mercadolibre.apps.sim
  *   ImportToMarketPlaceService
  *
  */
-
 class ImportToMarketPlaceService {
   static transactional = true
   static exposes = ['jms']
@@ -12,8 +11,9 @@ class ImportToMarketPlaceService {
 
   ImportService importService
 
-  // lookup ItemImport based on param ==> importTicketId
+  
   def onMessage(aMessage) {
+	// lookup ItemImport based on param ==> importTicketId
     ItemImport whatsToImport = ItemImport.get((aMessage['importTicketId'] as Long))
 
 	if (whatsToImport.status == "PENDING") {
