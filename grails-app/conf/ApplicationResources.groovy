@@ -5,5 +5,6 @@ modules = {
 
     chico {
         resource url:'/js/mercadolibre-1.0.1.js'
+		resource url:'/js/parseuri.js', disposition:'head'
     }
 }
