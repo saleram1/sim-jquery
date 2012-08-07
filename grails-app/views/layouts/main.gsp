@@ -10,7 +10,6 @@
 
 		<r:require modules="bootstrap"/>
 		<r:require modules="bootstrap-file-upload"/>
-		<r:require modules="chico"/>
 		
 		<link rel="stylesheet" href="${resource(dir:'css', file:'customised.css')}" type="text/css">
 
@@ -18,7 +17,6 @@
 		<!--[if lt IE 9]>
 			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
-		<script src="http://static.mlstatic.com/org-img/sdk/mercadolibre-1.0.2.js"></script>
 		
 		<g:layoutHead/>
 		<r:layoutResources/>

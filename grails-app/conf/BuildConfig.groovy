@@ -51,7 +51,7 @@ grails.project.dependency.resolution = {
 
     runtime ":hibernate:$grailsVersion"
 //    runtime ":jquery:1.7.2"
-	runtime ":cached-resources:1.0"
+//	runtime ":cached-resources:1.0"
     runtime ":resources:1.1.6"
     runtime ":twitter-bootstrap:2.0.2.25"
 
