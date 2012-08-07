@@ -15,6 +15,8 @@
 		</script>
 	</head>
 	<body>
+		<g:if test="${session.ml_access_token}">
+		
 		<div class="row-fluid">
 
 			<div class="span11">
@@ -96,5 +98,6 @@
 				</g:formRemote>
 			</div>
 		</div>
+		</g:if>
 	</body>
 </html>

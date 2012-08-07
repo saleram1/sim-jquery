@@ -28,7 +28,6 @@
 		        MELI.getLoginStatus();
 
 		        $('#get-access-token').click(function() {
-					alert('Got you!');
 					window.location.href = "https://auth.mercadolibre.com.ar/authorization?response_type=token&client_id=10751"
 		        });
 
@@ -53,7 +52,10 @@
 		</script>
 		
 		<script>
-			alert("URL --> " + parseUri(window.location.href).anchor);
+			if (parseUri(window.location.href).anchor != '') {
+				window.location.href = "/sim/authorize?" + parseUri(window.location.href).anchor
+			}
+			 
 		</script>		
 	</body>
 </html>

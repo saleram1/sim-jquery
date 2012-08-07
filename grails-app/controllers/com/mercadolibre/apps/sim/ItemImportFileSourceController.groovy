@@ -10,13 +10,19 @@ import grails.converters.JSON
 
 class ItemImportFileSourceController {
 	
-	def authorize() {
+	def authorize(AuthoriseCommand command) {
 		// Use MELI.login to test if the client has a valid access_token
+
+		session.ml_access_token = command.access_token
+		session.ml_caller_id    = command.user_id
+		session.setMaxInactiveInterval(command.expires_in - 10)
+
 		redirect(action: "create")
 	}
 
 	def create() {
-		def formDataModelMap = ['category': 'MLA78884', 'description': 'Perfecto', 'access_token': 'APP-USR_123465678123467890', 'bsfuUUID': "${System.currentTimeMillis()}"]
+		def formDataModelMap = ['category': 'MLA78884', 'description': 'Perfecto',
+		  'access_token': "${session.ml_access_token}", 'bsfuUUID': "${System.currentTimeMillis()}"]
 		render(view: "create", model: ['formDataModelMap': formDataModelMap])
 	}
 
@@ -62,4 +68,17 @@ class ItemImportFileSourceController {
 			render results as JSON
 		}
     }
+}
+
+class AuthoriseCommand {
+	/*
+		domains: bit.ly
+		user_id: 110657543
+		expires_in: 10800
+		access_token: APP_USR-10751-080622-a0b8b9ab3516e0cfde84b006762962ab-110657543
+	*/
+	String  access_token
+	String  domains
+	Integer expires_in
+	Integer user_id
 }

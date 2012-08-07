@@ -9,6 +9,8 @@
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
 	</head>
 	<body>
+		<g:if test="${session.ml_access_token}">
+		
 		<div class="row-fluid">
 			<div class="span9">
 
@@ -67,5 +69,6 @@
 			</dl>
 		</div>
 	</div>
+	</g:if>
 </body>
 </html>

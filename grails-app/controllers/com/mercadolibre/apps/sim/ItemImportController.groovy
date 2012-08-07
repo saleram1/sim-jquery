@@ -10,7 +10,7 @@ class ItemImportController {
 		def importRec
 		def redirectParams = [:]
 		
-		if (session.transaktions) {
+		if (session.ml_access_token && session.transaktions) {
 			// Collect all the previous file Uploads and put in one container
 			def fileSource = ItemImportFileSource.findByBsfuUUID(session.transaktions as String)
 

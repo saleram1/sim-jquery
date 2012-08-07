@@ -8,6 +8,7 @@
 		<title>SIM</title>
 	</head>
 	<body>
+		<g:if test="${session.ml_access_token}">
 		<header class="jumbotron subhead" id="overview">
 		  <h1>Upload Items</h1>
 		  <p class="lead">Choose a Site and Category Id from the fields below and click 'Add Files&hellip;'<br/>
@@ -95,5 +96,6 @@
 		$('#fileupload')
 		    .bind('fileuploaddone', function (e, data) { alert('Your upload is complete!'); unhook();  window.location.href='/sim/uploads/next'; return false; })
 		</script>
+		</g:if>
 	</body>
 </html>
