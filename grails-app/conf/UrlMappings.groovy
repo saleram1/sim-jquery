@@ -9,11 +9,12 @@ class UrlMappings {
 */
 
 		"/authorize"(controller: "itemImportFileSource", action: "authorize")
-		"/itemImport/$action/$id?"(controller: "itemImport")
+		"/help"(controller: "help", action: "index")
 		"/itemImportFileSource/save"(controller: "itemImportFileSource", action: "save")
+		"/itemImport/$action/$id?"(controller: "itemImport")
 		"/uploads/new"(controller: "itemImportFileSource", action: "create")
 		"/uploads/next"(controller: "itemImport", action: "showUploadProgress")
-
+		
 		"/"(view:"/index")
 		"500"(view:'/error')
 	}
