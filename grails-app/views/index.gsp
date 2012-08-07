@@ -7,55 +7,38 @@
 	<body>
 		<header class="jumbotron subhead" id="overview">
 		  <h1>Upload Items</h1>
+		  <p class="lead">Please click the button below to begin.</p>
 		</header>
 
 		<div class="container section">
 			<div class="span9">
+				<div class="form-actions" id="starter-form">
 				<a href="#">
-					<button class="btn btn-large" type="button" name="get-access-token" id="get-access-token">
+					<button id="get-access-token" class="btn btn-large" type="button">
 						<i class="icon-ok-sign icon-white"></i>
 						<g:message code="xxx" default="Start" />
 					</button>
 				</a>
 
 				<code id="access_token" style="display: none;">token</code>
+				</div>
 			</div>
 		</div>
-		
+
 		<script>
 		    $(document).ready(function() {
-		        MELI.init({client_id: 10751});
-		        MELI.getLoginStatus();
-
 		        $('#get-access-token').click(function() {
-					window.location.href = "https://auth.mercadolibre.com.ar/authorization?response_type=token&client_id=10751"
-		        });
-
-		        $('#show-my-info').click(function() {
-		            if(!MELI.getToken()) {
-		                MELI.login(function() {
-		                    MELI.get('/users/me', null, function(data) {
-		                        $('#show-my-info').hide();
-		                        $('#me').html(JSON.stringify(data[2]));
-		                        $('#me').show();
-		                    });
-		                });
-		            } else {
-		                MELI.get('/users/me', null, function(data) {
-		                    $('#show-my-info').hide();
-		                    $('#me').html(JSON.stringify(data[2]));
-		                    $('#me').show();
-		                });
-		            }
+					window.location.href = "https://auth.mercadolibre.com.ar/authorization?response_type=token&client_id=10751";
 		        });
 		    });
 		</script>
-		
+				
+		<!-- OAuth callback returns to this page with valid access_token -->		
 		<script>
-			if (parseUri(window.location.href).anchor != '') {
-				window.location.href = "/sim/authorize?" + parseUri(window.location.href).anchor
-			}
-			 
+			var newToken = parseUri(window.location.href).anchor;
+			if (newToken != '') {
+				window.location.href = "/sim/authorize?" + newToken;
+			}			 
 		</script>		
 	</body>
 </html>

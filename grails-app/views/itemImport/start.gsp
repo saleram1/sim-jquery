@@ -1,4 +1,5 @@
 <%@ page import="com.mercadolibre.apps.sim.ItemImport" %>
+<g:if test="${session.ml_access_token}">
 
 <!doctype html>
 <html>
@@ -8,21 +9,20 @@
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
 		<script type="text/javascript">
 			function disableStartButton(id) {
-				document.getElementById("start").disabled = true;
+				document.getElementById("_action_start").disabled = true;
 				document.getElementById("starter-form").style.display = 'none';
-				setTimeout(function() {window.location.href = '/sim/itemImport/show/'+id; }, 2500);
+				setTimeout(function() {window.location.href = '/sim/itemImport/show/' + id; }, 1500);
 			}
 		</script>
 	</head>
-	<body>
-		<g:if test="${session.ml_access_token}">
-		
+	<body>	
 		<div class="row-fluid">
 
 			<div class="span11">
+
 			<header class="jumbotron subhead" id="almost">
 			  <h1>Upload Items</h1>
-			  <p class="lead">Confirm these files are correct and click Start.</p>
+			  <p class="lead">Confirm these files are correct and click Continue.</p>
 			</header>
 
 			<g:if test="${flash.message}">
@@ -76,28 +76,38 @@
 				</g:if>
 			</dl>
 
-			<!-- Dynamic timestamp after the Start is engaged -->					
-			<div id="uploadStartTime"></div>
-
+			<!-- Dynamic timestamp after the Start is engaged -->	
+			<bootstrap:alert class="alert-info">
+				<div id="uploadStartTime"></div>
+			</bootstrap:alert>
+			
 			<div class="form-actions" id="starter-form">
 				<g:formRemote name="myForm" on404="alert('Action not found!')" after="disableStartButton(${itemImportInstance?.id})"
 				 	update="uploadStartTime" url="[controller: 'itemImport', action:'startUpload']">
 
-							<g:hiddenField name="id" value="${itemImportInstance?.id}" />
-							<g:hiddenField name="bsfuUUID" value="${itemImportInstance?.bsfuUUID}" />
+						<g:hiddenField name="id" value="${itemImportInstance?.id}" />
+						<g:hiddenField name="bsfuUUID" value="${itemImportInstance?.bsfuUUID}" />
 
-						<button class="btn" type="reset" name="_action_cancel">
+						<button class="btn" type="reset" id="_action_cancel">
 							<i class="icon-arrow-left"></i>
 							<g:message code="default.button.cancel.label" default="Cancel" />
 						</button>
-						<button class="btn btn-danger" type="submit" name="_action_start" id="start">
+						<button class="btn btn-primary" type="submit" id="_action_start">
 							<i class="icon-upload icon-white"></i>
-							<g:message code="default.button.ok.label" default="Start" />
+							<g:message code="default.button.ok.label" default="Continue" />
 						</button>
 					</div>
 				</g:formRemote>
 			</div>
 		</div>
-		</g:if>
+
+		<script>
+		    $(document).ready(function() {
+		        $('#_action_cancel').click(function() {
+					window.location.href = "/sim/uploads/new";
+		        });
+		    });
+		</script>
 	</body>
 </html>
+</g:if>

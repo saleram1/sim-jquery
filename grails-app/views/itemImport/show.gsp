@@ -1,4 +1,5 @@
 <%@ page import="com.mercadolibre.apps.sim.ItemImport" %>
+<g:if test="${session.ml_access_token}">
 
 <!doctype html>
 <html>
@@ -9,9 +10,8 @@
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
 	</head>
 	<body>
-		<g:if test="${session.ml_access_token}">
-		
 		<div class="row-fluid">
+
 			<div class="span9">
 
 			<div id="makeMeAnUpdateICannotRefuse">
@@ -69,6 +69,14 @@
 			</dl>
 		</div>
 	</div>
-	</g:if>
+	
+	<script>
+	    $(document).ready(function() {
+	        $('#_action_complete').click(function() {
+				window.location.href = "/sim/uploads/new";
+	        });
+	    });
+	</script>
 </body>
 </html>
+</g:if>

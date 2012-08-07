@@ -1,4 +1,5 @@
 <%@ page import="com.mercadolibre.apps.sim.ItemImportFileSource" %>
+<g:if test="${session.ml_access_token}">
 
 <!doctype html>
 <html>
@@ -8,7 +9,6 @@
 		<title>SIM</title>
 	</head>
 	<body>
-		<g:if test="${session.ml_access_token}">
 		<header class="jumbotron subhead" id="overview">
 		  <h1>Upload Items</h1>
 		  <p class="lead">Choose a Site and Category Id from the fields below and click 'Add Files&hellip;'<br/>
@@ -24,7 +24,7 @@
 			<g:hasErrors bean="${itemImportSourceInstance}">
 			<ul class="errors" role="alert">
 				<g:eachError bean="${itemImportSourceInstance}" var="error">
-				<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
+				<li><g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
@@ -52,19 +52,11 @@
 					</select>
 				</div>
 
-				<div class="fieldcontain required">
-					<label for="category">
-						Category
-						<span class="required-indicator">*</span>
-					</label>
-					<input type="text" name="category" value="" id="category" />
-				</div>
-
 				<div class="fieldcontain">
 					<label for="description">
 						Description
 					</label>
-					<input type="text" name="description" value="" id="description" maxLength="80" size="80" />
+					<input type="text" name="description" value="" id="description" size="80" />
 				</div>
 			</fieldset>
 
@@ -87,15 +79,11 @@
 			    hook = false;
 			}
 		</script>
-
-		<script type="text/javascript">
-			document.getElementById("description").disabled = true;
-		</script>
 		
 		<script type="text/javascript">
 		$('#fileupload')
 		    .bind('fileuploaddone', function (e, data) { alert('Your upload is complete!'); unhook();  window.location.href='/sim/uploads/next'; return false; })
 		</script>
-		</g:if>
 	</body>
 </html>
+</g:if>
