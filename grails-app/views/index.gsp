@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 	<head>
-		<meta name="layout" content="main">
+		<meta name="layout" content="landing">
 		<title>SIM</title>
 	</head>
 	<body>
