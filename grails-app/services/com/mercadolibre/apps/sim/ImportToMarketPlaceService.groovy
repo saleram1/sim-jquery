@@ -18,7 +18,7 @@ class ImportToMarketPlaceService {
 
 	if (whatsToImport.status == "PENDING") {
 		whatsToImport.files?.each() { file -> 
-			println "Processing file ${file}"
+			log.info "Processing file ${file}"
 				
 		    // this method shall return a number of errors , number of Items added
 		    def arry = importService.importContactsFromCSV(file.path)

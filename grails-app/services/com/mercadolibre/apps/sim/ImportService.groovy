@@ -29,9 +29,10 @@ class ImportService {
       log.info "Got accessToken: " + accessToken
 
       items.eachWithIndex { it, idx ->
-        Item aProperItem = new Item(it)
-		
-        if (!aProperItem.validate()) {
+        //Item aProperItem = new Item(it)
+		Item aProperItem = newItemFromMap(it)
+
+        if (!aProperItem.validate()) { // this should never be reached as these are basic constraints
 			aProperItem.errors.each() {
 				println it
 			}
@@ -44,7 +45,6 @@ class ImportService {
              if (newItemId) {
                aProperItem.save(flush: true, failOnError: true)
                count++
-               println aProperItem
              }
 	  	  }
           catch (Throwable tr) { System.err.printStackTrace() }
@@ -116,14 +116,13 @@ class ImportService {
     def newItemId = null
 
     def builder = new HTTPBuilder("https://api.mercadolibre.com")
-
     try {
       builder.contentType = ContentType.JSON
       builder.post(path: '/items', query: [access_token: appUser], requestContentType: groovyx.net.http.ContentType.JSON, body: itemRef.toMap()) { resp, json ->
         if (resp.status == 201) {
-          System.out << json['id']
           newItemId = json['id']
         }
+		else { log.error "Response status is: " + resp.statusLine }
       }
     }
     // oddly, some of the validations return 400 (Bad Request), which is not proper given the REST API error messages
@@ -136,5 +135,18 @@ class ImportService {
 
     // Done
     return newItemId
+  }
+
+
+  def newItemFromMap(props) {
+	Item anItem = new Item()
+    props?.each() { key, val -> 
+        try {
+		  anItem."$key" = val
+		} catch (org.codehaus.groovy.runtime.typehandling.GroovyCastException gce) {
+			// property is null
+		}
+    }	
+    return anItem
   }
 }

@@ -17,7 +17,6 @@ class ItemImportFileSourceController {
 
 	def create() {
 		def formDataModelMap = ['category': 'MLA78884', 'description': 'Perfecto', 'access_token': 'APP-USR_123465678123467890', 'bsfuUUID': "${System.currentTimeMillis()}"]
-		
 		render(view: "create", model: ['formDataModelMap': formDataModelMap])
 	}
 

@@ -12,47 +12,44 @@ class Item implements Comparable {
 	String category
 	String title
 	String description
-	String condition = "new"
-	String currency = "USD"
+	String condition
+	String currency = "ARS"
 	Double price
+	Double shippingCosts
 	String pictureURL
-	String pictureURL2
-	String pictureURL3
-	String pictureURL4
 	Integer available_quantity
 	String listing_type_id = "silver"
 	String format  //  really buying_mode
 	Integer duration = 60		//   really start_time plus end_time - @TODO need to support this at item level
+	String location
 	String shipsFrom
 	String mercadoLibreItemId
 	Boolean acceptsMercadoPago = true
 	Date dateCreated
 	Date lastUpdated
+	
 		
 	static transients = ['compositeId','pictureMap',"description",   "condition",   "currency",   "pictureURL",   "pictureURL2",   "pictureURL3",   "pictureURL4",   "listing_type_id",   "format",   "shipsFrom"]
 	
 	static constraints = {
 		id(display:false, attributes:[listable:false]) // do not show id anywhere
-		gp_id(nullable: true, blank: true, display:false)
-		site(inList: ["MLA", "MLB"], attributes:[listable:false])
-		category()
-		title(nullable: false, blank: false)
-		description(blank: false, nullable: true, attributes:[listable:false], widget: "textarea")
-		format(inList: ["buy_it_now","auction"])
-		duration(min:1, max:60)
-		price()  // establish reasonable min and max 
-		currency(blank: false, nullable: false, inList: ["ARS", "BRL", "USD"])
-		available_quantity(min:1, max:100000)
-		listing_type_id(inList: ["bronze","silver","gold"], attributes:[listable:false])
-		condition(blank: false, nullable: false, inList: ["new","used"])
-		pictureURL(blank: false, nullable: true, url: true, attributes:[listable:false])
-		pictureURL2(blank: false, nullable: true, url: true)
-		pictureURL3(blank: false, nullable: true, url: true)
-		pictureURL4(blank: false, nullable: true, url: true)
 		acceptsMercadoPago(attributes:[listable:false])
-		lastUpdated(nullable: true, attributes:[listable:false])
-		dateCreated(nullable: true, attributes:[listable:false])
+		available_quantity(min:1, max:100000)
+		category()
+		condition(blank: false, nullable: false, inList: ["new","used"])
+		currency(blank: false, nullable: false, inList: ["ARS", "BRL", "USD"])
+		description(blank: false, nullable: true, attributes:[listable:false], widget: "textarea")
+		duration(min:1, max:60)
+		format(inList: ["buy_it_now","auction"])
+		gp_id(nullable: true, blank: true, display:false)
+		listing_type_id(inList: ["bronze","silver","gold"], attributes:[listable:false])
+		location(nullable: true)
 		mercadoLibreItemId(nullable: true)
+		pictureURL(blank: false, nullable: true, url: true, attributes:[listable:false])
+		price(max: 100000.0d)  // establish reasonable min and max 
+		shippingCosts(nullable: true)
+		site(inList: ["MLA", "MLB"], attributes:[listable:false])
+		title(nullable: false, blank: false)
 	}
 	
 	static Item getComposite(String compositeId) {
@@ -76,32 +73,32 @@ class Item implements Comparable {
 	}
 
 	Map toMap() {
-		List props = ['site','format','listing_type_id','currency','title','description','category','available_quantity','price','condition']
+		List props = ['site', 'format', 'listing_type_id', 'currency', 'title', 'description', 'category', 'available_quantity', 'price', 'condition']
 		Map  domainAsMap = [:]
 		
-	    props.each { prop -> 
-			if (prop in ['site','category','currency']) {
-				domainAsMap["${prop}_id"] = this."$prop"
+	    props.eachWithIndex() { aProp, idx -> 
+			if (aProp in ['site','category','currency']) {
+				domainAsMap["${aProp}_id"] = this."$aProp"
 			}
-			else if ('format' == prop) {
-				domainAsMap['buying_mode'] = this."$prop"
+			else if ('format' == aProp) {
+				domainAsMap['buying_mode'] = this."$aProp"
 			}
 			else {
-		        domainAsMap."$prop" = this."$prop"				
+		        domainAsMap."$aProp" = this."$aProp"				
 			}
 	    }
-		//"pictures":[
-		//{"source":"http://upload.wikimedia.org/wikipedia/en/a/a7/Original_Paperback_Cover.jpg"},
-		//{"source":"http://upload.wikimedia.org/wikipedia/en/2/2c/Harry_Potter_and_the_Philosopher%27s_Stone.jpg"}
-			
+	
+		// From the guides  
+		//   "pictures":[
+		//  {"source":"http://upload.wikimedia.org/wikipedia/en/a/a7/Original_Paperback_Cover.jpg"},
+		//  {"source":"http://upload.wikimedia.org/wikipedia/en/2/2c/Harry_Potter_and_the_Philosopher%27s_Stone.jpg"}
 		if (this.pictureURL) {
 			domainAsMap['pictures'] = [['source': this.pictureURL]]
 		}
-		domainAsMap
+		return domainAsMap
 	}
 	
 	String toString() {
-		return "Item  -> [${id}] [${gp_id}] [${mercadoLibreItemId}] in category [${category}] - ${title} @ ${price} ${currency}";
-		//return (toMap() as JSON).toString()
+		return "Item  -> [${id}] [${gp_id}] [${mercadoLibreItemId}] in category [${category}] - ${title} @ ${currency} ${price} \n";
 	}	
 }
