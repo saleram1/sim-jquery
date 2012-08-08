@@ -38,19 +38,6 @@
 				</g:if>
 
 				<dt><dd></dd></dt>
-				
-				<g:if test="${itemImportInstance?.validItemsCount}">
-					<dt><g:message code="itemImport.validItemsCount.label" default="Valid Items" /></dt>
-					
-						<dd><g:fieldValue bean="${itemImportInstance}" field="validItemsCount"/></dd>
-						
-				</g:if>
-				
-				<g:if test="${itemImportInstance?.errorItemsCount}">
-					<dt><g:message code="itemImport.errorItemsCount.label" default="Error Items Count" /></dt>
-
-						<dd><g:fieldValue bean="${itemImportInstance}" field="errorItemsCount"/></dd>
-				</g:if>
 
 				<g:if test="${itemImportInstance?.files}">
 					<dt><g:message code="itemImport.files.label" default="Files" /></dt>
@@ -59,9 +46,18 @@
 							<dd><g:link controller="itemImportFileSource" action="show" id="${f.id}">${f?.encodeAsHTML()}</g:link></dd>
 						</g:each>
 				</g:if>
+				
+				<hr />
+				
+				<g:if test="${itemImportInstance?.validItemsCount >= 0}">
+					<dt><g:message code="itemImport.validItemsCount.label" default="Listed Items" /></dt>
+					
+						<dd><g:fieldValue bean="${itemImportInstance}" field="validItemsCount"/></dd>
+						
+				</g:if>
 
 				<g:if test="${itemImportInstance?.errs}">
-					<dt><g:message code="itemImport.errs.label" default="Errs" /></dt>
+					<dt><g:message code="itemImport.errs.label" default="Errors" /></dt>
 						<g:each in="${itemImportInstance.errs}" var="e">
 						<dd><g:link controller="apiError" action="show" id="${e.id}">${e?.encodeAsHTML()}</g:link></dd>
 						</g:each>
