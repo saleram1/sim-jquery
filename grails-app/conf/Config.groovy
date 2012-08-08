@@ -107,5 +107,8 @@ grails.plugins.activemq.port=7892
 /// And you can configure the messaging persistence, the persistence is disabled by default.
 grails.plugins.activemq.persistent=false
 
+/// opts for the run-war deployment
+///   echo $JAVA_OPTS
+///   -XX:MaxPermSize=512m -XX:PermSize=128m -Xms2g -Xmx2g -XX:-UseGCOverheadLimit
 
 // Grab credential here https://www.mercadopago.com/mla/herramientas/aplicaciones
