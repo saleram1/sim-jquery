@@ -14,43 +14,39 @@ class ImportService {
 
   CategoryService categoryService
 
+  def importContactsFromCSV(ItemImport itemImport, ItemImportFileSource fileSource, String accessToken = "") {
+      //String accessToken = setupMercadoApiAccess(7418, "Spz9fcrMyPQo9cD8ZJtbdn8Kk46fy2Z3")
+    log.info "importContactsFromCSV: " + fileSource.path + " orig. " + fileSource.originalFilename
+  	log.info "Using accessToken: " + accessToken
 
-  def importContactsFromCSV(String csvFile, String accessToken = "") {
-    log.info "importContactsFromCSV: " + csvFile
-
+	String csvFile = fileSource.path
     def items = CSVImporter.doImport(csvFile)
+
     int totalCount = 0
     int count = 0
 
     if (items && items instanceof List) {
       totalCount = items?.size()
 
-      //String accessToken = setupMercadoApiAccess(7418, "Spz9fcrMyPQo9cD8ZJtbdn8Kk46fy2Z3")
-      log.info "Using accessToken: " + accessToken
-
       items.eachWithIndex { it, idx -> 
 		Item aProperItem = newItemFromMap(it)
 
-        if (!aProperItem.validate()) { // this should never be reached as these are basic constraints
-			aProperItem.errors.each() {
-				println it
-			}
-			return [0,0]
+        if (!aProperItem.validate()) {
+			return [0, 0]
 		}
 		try {
-             String newItemId = newItemToMarketplace(aProperItem, accessToken)
+             String newItemId = pushItemToMarketplace(itemImport, fileSource, idx, aProperItem, accessToken)
              aProperItem.mercadoLibreItemId = newItemId
 
              if (newItemId) {
-               aProperItem.save(flush: true, failOnError: true)
+   			   log.info aProperItem.save(flush: true, failOnError: true)
                count++
-   			   log.info aProperItem
              }
 	  	  }
-          catch (Throwable tr) { System.err.printStackTrace() }
+          catch (Throwable tr) { tr.printStackTrace() }
 		}
-      }
-    [count, totalCount]
+     }
+     [count, totalCount]
   }
 
   /**
@@ -67,6 +63,92 @@ class ImportService {
     }
     return (aPreviousItem != null)
   }
+
+
+  /**
+   pushItemToMarketPlace transaction script :
+   if Item exists already (check that it's been listed), update relevant fields
+
+   if Item  does not exist - ie there is no mapping of gp_id and mercadolibre id - then list it and update w/ pics
+   *  @TODO pass the rowNumber to the ApiError Object
+   *
+   * @param itemRef
+   * @return /item/:id (as String) on successful POST
+   */
+  String pushItemToMarketplace(ItemImport itemImport, ItemImportFileSource fileSource, Integer rowNumber,  Item itemRef, String appUser) {
+    def newItemId = null
+
+    def builder = new HTTPBuilder()
+
+    builder.contentType = ContentType.JSON
+    builder.request("https://api.mercadolibre.com", 
+                    groovyx.net.http.Method.POST, 
+                    groovyx.net.http.ContentType.JSON ) {
+      uri.path = '/items'
+      uri.query = [access_token: appUser]
+	  body = itemRef.toMap()
+	
+     response.success = { resp, json ->
+		newItemId = json['id']
+     }
+     response.failure = { resp, json ->
+       assert json.size() == 4
+		def anException = new ApiError(status: json['status'], error: json['error'], message: json['message'], originalFilename: fileSource.originalFilename)
+		anException.save()
+		itemImport.addToErrs(anException)
+     }
+     response.'403' = { resp, json ->
+       assert json.size() == 4
+		def anError = new AccessViolationError(fileSource.originalFilename)
+		anError.save()
+		itemImport.addToErrs(anError)
+      }
+
+    }
+    newItemId
+  }
+
+/*
+    try {
+      builder.contentType = ContentType.JSON
+      builder.post(path: '/items', query: [access_token: appUser], requestContentType: groovyx.net.http.ContentType.JSON, body: itemRef.toMap()) { resp, json ->
+        if (resp.status == 201) {
+          newItemId = json['id']
+        }
+		else { log.warn "Response status is: " + resp.statusLine }
+      }
+
+	  println 'newItem: '+ newItemId
+    }
+    catch (Exception ex) {
+      log.error ex.message
+
+	  if (ex?.message?.equalsIgnoreCase("Forbidden")) {
+		println 'VERBOTEN'
+	  } else if (ex?.message?.equalsIgnoreCase("Bad Request")) {
+		println 'ACHTUNG'		
+	  } else if (ex?.message?.equalsIgnoreCase("Unauthorized")) {
+		println 'NEIN'
+      } else {
+		log.fatal 'wtf'
+	  }
+    }
+    return newItemId
+  } */
+
+
+  def newItemFromMap(props) {
+	Item anItem = new Item()
+    props?.each() { key, val -> 
+        try {
+		  anItem."$key" = val
+		} catch (org.codehaus.groovy.runtime.typehandling.GroovyCastException gce) {
+			// property is null
+		}
+    }	
+    return anItem
+  }
+
 
   /**
    * Create an authorized token for write access to be used for /item/id
@@ -101,52 +183,5 @@ class ImportService {
     else {
       return ""
     }
-  }
-
-  /**
-   pushItemToMarketPlace transaction script :
-   if Item exists already (check that it's been listed), update relevant fields
-
-   if Item  does not exist - ie there is no mapping of gp_id and mercadolibre id - then list it and update w/ pics
-   *
-   * @param itemRef
-   * @return /item/:id (as String) on successful POST
-   */
-  String newItemToMarketplace(Item itemRef, String appUser) {
-    def newItemId = null
-
-    def builder = new HTTPBuilder("https://api.mercadolibre.com")
-    try {
-      builder.contentType = ContentType.JSON
-      builder.post(path: '/items', query: [access_token: appUser], requestContentType: groovyx.net.http.ContentType.JSON, body: itemRef.toMap()) { resp, json ->
-        if (resp.status == 201) {
-          newItemId = json['id']
-        }
-		else { log.error "Response status is: " + resp.statusLine }
-      }
-    }
-    // oddly, some of the validations return 400 (Bad Request), which is not proper given the REST API error messages
-    catch (groovyx.net.http.HttpResponseException ex) {
-      log.error ex.message, ex
-    }
-
-    // do not forget to call a PUT for extra pictures or descriptions as the example is wrong - http://developers.mercadolibre.com/add-pictures-item/
-    //   restClient.put( path: '/items/MLAnnnnn')
-
-    // Done
-    return newItemId
-  }
-
-
-  def newItemFromMap(props) {
-	Item anItem = new Item()
-    props?.each() { key, val -> 
-        try {
-		  anItem."$key" = val
-		} catch (org.codehaus.groovy.runtime.typehandling.GroovyCastException gce) {
-			// property is null
-		}
-    }	
-    return anItem
   }
 }
