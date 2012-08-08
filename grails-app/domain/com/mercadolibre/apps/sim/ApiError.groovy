@@ -1,21 +1,21 @@
 package com.mercadolibre.apps.sim
 
+import groovy.transform.ToString
+
+/** 
+ *  Example {"message":"Category not found: MLB1234","error":"not_found","status":404,"cause":[]}
+ */
+@ToString
 class ApiError {
-	Integer status = 401
+	Integer status = 400		// Bad request
 	String error
 	String message
 	String cause
-
-/*		curl https://api.mercadolibre.com/pictures/MCO2557702734_032012/metadata
-	{"message":"Picture metadata for id MCO2557702734_032012 not found.", "error":"not_found", "status":"404", "cause":[]}
-	real	0m5.026s
-*/
-
-
+		
 	static constraints = {
-		status()
-		error()
-		message(nullable: true)
-		cause(nullable: true)
+		status(min: 400, max: 499)
+		error(nullable: false, blank: false)
+		message(nullable: false, blank: false)
+		cause(nullable: true, blank: false)
 	}
 }

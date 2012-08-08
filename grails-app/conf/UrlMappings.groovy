@@ -1,12 +1,11 @@
 class UrlMappings {
 
 	static mappings = {
-/*		"/$controller/$action?/$id?"{
+		"/$controller/$action?/$id?"{
 			constraints {
 				// apply constraints here
 			}
 		}
-*/
 
 		"/authorize"(controller: "itemImportFileSource", action: "authorize")
 		"/help"(controller: "help", action: "index")

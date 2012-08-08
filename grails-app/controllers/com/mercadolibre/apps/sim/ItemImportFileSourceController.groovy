@@ -22,9 +22,9 @@ class ItemImportFileSourceController {
 	}
 
 	def create() {
-		def formDataModelMap = ['category': 'Various', 'description': 'Perfecto',
-		  'access_token': "${session.ml_access_token}", 'bsfuUUID': "${System.currentTimeMillis()}"]
-		render(view: "create", model: ['formDataModelMap': formDataModelMap])
+		def formDataModelMap = ['bsfuUUID': "${System.currentTimeMillis()}"] 
+		//[category: "Various2", description: "Shoes and Botas", ...]
+		render(view: "create", model: [formDataModelMap: formDataModelMap])
 	}
 
     def save() {
@@ -46,11 +46,12 @@ class ItemImportFileSourceController {
 					// compute MD5 and notify client to reject later
 					String md5Digest = FileHelper.computeMD5(new FileInputStream(tempFile))
 					
-					def newFileSource = new ItemImportFileSource('callerId': callerId, 'path': tempFile.absolutePath, 'originalFilename': file.originalFilename, 'digest': md5Digest, 'category': params.category, 'description': params.description,  'bsfuUUID': params.bsfuUUID)
+					def newFileSource = new ItemImportFileSource('callerId': callerId, 'path': tempFile.absolutePath, 'originalFilename': file.originalFilename, 'digest': md5Digest,  'bsfuUUID': params.bsfuUUID)  // bsfu Id is the timestamp so file uploads may be grouped together
 					
+					newFileSource.category = "Various"
+					newFileSource.description = "Zapatos e Botas"
 					if (newFileSource.validate()) {
 						newFileSource.save(flush: true)
-						
 	                    results << [
 	                            name: file.originalFilename,
 	                            size: file.size,

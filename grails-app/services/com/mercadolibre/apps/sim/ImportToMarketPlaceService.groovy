@@ -21,7 +21,7 @@ class ImportToMarketPlaceService {
 			log.info "Processing file ${file}"
 				
 		    // this method shall return a number of errors , number of Items added
-		    def arry = importService.importContactsFromCSV(file.path, aMessage['accessToken'])
+		    def arry = importService.importContactsFromCSV(whatsToImport, file.path, aMessage['accessToken'])
 			whatsToImport.validItemsCount += arry[0]
 			whatsToImport.errorItemsCount += arry[1] - arry[0]
 			whatsToImport.status = "SENT_TO_MARKETPLACE"

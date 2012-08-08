@@ -8,7 +8,7 @@ class ItemImportController {
 		
 	def showUploadProgress() {
 		def importRec
-		def redirectParams = [:]
+		def redirectParams = [uri: "/uploads/new"]
 		
 		if (session.ml_access_token && session.transaktions) {
 			// Collect all the previous file Uploads and put in one container
@@ -21,12 +21,10 @@ class ItemImportController {
 					ItemImportFileSource.findAllByBsfuUUID(session.transaktions as String).each() { source -> 
 						importRec.addToFiles(source)
 					}
-					importRec.save(flush: true)
+					importRec.save(failOnError: true)
 				}
 				redirectParams = [action: "start", params: ['id': importRec.id]]
 			}
-		} else {
-			redirectParams = [uri: "/uploads/new"]
 		}
 		redirect(redirectParams)
 	}
@@ -40,9 +38,9 @@ class ItemImportController {
 
 	def startUpload(StartUploadCommand command) {
 		if (command.action == "startUpload") {
+			// now we tell the world about it!!
 			sendQueueJMSMessage("queue.import.notification", ['importTicketId': command.id, 'accessToken': session.ml_access_token])
-		} // now we tell the world about it!!
-		
+		}
 		render "<strong>Upload started at ${new Date()}</strong>"
 	}
 }

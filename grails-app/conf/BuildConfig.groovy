@@ -44,13 +44,14 @@ grails.project.dependency.resolution = {
   plugins {
     compile ":activemq:0.4.1"
     compile ":bootstrap-file-upload:2.1.1"
-	compile ":cache-headers:1.1.5"
 	compile ":console:1.2"
 	compile ":jms:1.2"
     compile ":rest:0.7"
 
     runtime ":hibernate:$grailsVersion"
 //    runtime ":jquery:1.7.2"
+//
+//	compile ":cache-headers:1.1.5"
 //	runtime ":cached-resources:1.0"
     runtime ":resources:1.1.6"
     runtime ":twitter-bootstrap:2.0.2.25"
