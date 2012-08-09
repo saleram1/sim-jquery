@@ -69,7 +69,7 @@
 	<script>
 	    $(document).ready(function() {
 	        $('#_action_complete').click(function() {
-				window.location.href = "/sim/uploads/new";
+				window.location.href = "${createLink(controller: 'itemImportFileSource', action: 'create', absolute: true)}";
 	        });
 	    });
 	</script>
