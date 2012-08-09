@@ -37,7 +37,7 @@
 		<script>
 			var newToken = parseUri(window.location.href).anchor;
 			if (newToken != '') {
-				window.location.href    = "${createLink(action: 'authorize', absolute: true)}" + newToken;
+				window.location.href    = "${createLink(controller: 'itemImportFileSource', action: 'authorize', absolute: true)}" + newToken;
 				///window.location.href = "/sim/authorize?" + newToken;
 			}			 
 		</script>		
