@@ -36,8 +36,11 @@ class ItemImportFileSourceController {
 					MultipartFile file = request.getFile(filename)
 
 					// create a directory for the caller - example /tmp/docs/9885
-					Integer callerId = 9885  	// TODO bring this back from our JSSDK
-					File callerTemp = new File("/tmp/docs/${callerId}")
+
+					File callerTemp = new File("/tmp/docs/${session.ml_caller_id}")
+					if (!callerTemp.exists()) {
+						callerTemp.mkdirs()
+					}
 					File tempFile = File.createTempFile("items", ".csv", callerTemp);
 					
 					// Spring3 is so darned civilized
@@ -46,7 +49,7 @@ class ItemImportFileSourceController {
 					// compute MD5 and notify client to reject later
 					String md5Digest = FileHelper.computeMD5(new FileInputStream(tempFile))
 					
-					def newFileSource = new ItemImportFileSource('callerId': callerId, 'path': tempFile.absolutePath, 'originalFilename': file.originalFilename, 'digest': md5Digest,  'bsfuUUID': params.bsfuUUID)  // bsfu Id is the timestamp so file uploads may be grouped together
+					def newFileSource = new ItemImportFileSource('callerId': session.ml_caller_id, 'path': tempFile.absolutePath, 'originalFilename': file.originalFilename, 'digest': md5Digest,  'bsfuUUID': params.bsfuUUID)  // bsfu Id is the timestamp so file uploads may be grouped together
 					
 					newFileSource.category = "Various"
 					newFileSource.description = "Zapatos e Botas"
