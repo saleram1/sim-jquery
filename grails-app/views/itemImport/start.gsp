@@ -8,11 +8,14 @@
 		<g:set var="entityName" value="${message(code: 'itemImport.label', default: 'ItemImport')}" />
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
 		<script type="text/javascript">
-			function disableStartButton(id) {
-				document.getElementById("_action_start").disabled = true;
-				document.getElementById("starter-form").style.display = 'none';
-				setTimeout(function() {window.location.href = '/sim/itemImport/show/' + id; }, 1500);
-			}
+		function disableStartButton(id) {
+		    document.getElementById("_action_start").disabled = true;
+		    document.getElementById("starter-form").style.display = 'none';
+		    setTimeout(function() {
+		        window.location.href = "${createLink(controller: 'itemImport', action: 'show', absolute: true)}" + '/' + id;
+		    },
+		    2000);
+		}
 		</script>
 	</head>
 	<body>	
