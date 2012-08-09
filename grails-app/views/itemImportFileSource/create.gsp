@@ -82,7 +82,7 @@
 		
 		<script type="text/javascript">
 		$('#fileupload')
-		    .bind('fileuploaddone', function (e, data) { alert('Your upload is complete!'); unhook();  window.location.href='/sim/uploads/next'; return false; })
+		    .bind('fileuploaddone', function (e, data) { alert('Your upload is complete!'); unhook();  window.location.href = "${createLink(controller: 'itemImport', action: 'showUploadProgress'), absolute: true)}"; return false; })
 		</script>
 	</body>
 </html>
