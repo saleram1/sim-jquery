@@ -65,7 +65,7 @@ environments {
     }
     production {
         grails.logging.jul.usebridge = false
-        grails.serverURL = "http://simplificar.elasticbeanstalk.com/"
+        grails.serverURL = "http://simplificar.elasticbeanstalk.com"
     }
 }
 
