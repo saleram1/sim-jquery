@@ -76,11 +76,11 @@ log4j = {
     //appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
+///
+///	debug  "org.apache.http.headers"
 
-	debug  "org.apache.http.headers"
-
-	info   'grails.app'
-    info   'org.codehaus.groovy.grails.web.servlet',        // controllers
+	warn   'grails.app'
+    warn   'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
            'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
