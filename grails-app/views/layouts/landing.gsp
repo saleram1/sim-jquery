@@ -9,6 +9,7 @@
 		<meta name="viewport" content="initial-scale = 1.0">
 
 		<r:require modules="bootstrap"/>
+		<r:require modules="chico"/>
 		<r:require modules="parseuri"/>
 				
 		<link rel="stylesheet" href="${resource(dir:'css', file:'customised.css')}" type="text/css">

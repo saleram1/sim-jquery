@@ -1,6 +1,4 @@
 <%@ page import="com.mercadolibre.apps.sim.ItemImportFileSource" %>
-<g:if test="${session.ml_access_token}">
-
 <!doctype html>
 <html>
 	<head>
@@ -86,4 +84,3 @@
 		</script>
 	</body>
 </html>
-</g:if>
