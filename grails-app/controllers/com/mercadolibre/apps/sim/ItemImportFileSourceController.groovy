@@ -75,13 +75,13 @@ class ItemImportFileSourceController {
     }
 }
 
+/*
+	domains: bit.ly
+	user_id: 110657543
+	expires_in: 10800
+	access_token: APP_USR-10751-080622-a0b8b9ab3516e0cfde84b006762962ab-110657543
+*/
 class AuthoriseCommand {
-	/*
-		domains: bit.ly
-		user_id: 110657543
-		expires_in: 10800
-		access_token: APP_USR-10751-080622-a0b8b9ab3516e0cfde84b006762962ab-110657543
-	*/
 	String  access_token
 	String  domains
 	Integer expires_in

@@ -8,7 +8,7 @@ class ItemsCallbackController {
 //	def itemUpdaterService
 
     def index() { 
-		log.info request.JSON
+		log.warn request.JSON
 //		
 //		itemUpdaterService.consumeMessage(request.JSON))
 //	
