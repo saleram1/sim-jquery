@@ -7,7 +7,7 @@ package com.mercadolibre.apps.sim
  *
  */
 class Item implements Comparable {
-	String gp_id
+	String gp_id		// assigned sku or UPC
 	String site
 	String category
 	String title
