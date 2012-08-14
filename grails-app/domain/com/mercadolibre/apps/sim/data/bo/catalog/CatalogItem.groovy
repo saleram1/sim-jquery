@@ -36,9 +36,8 @@ class CatalogItem implements Comparable {
 		condition(blank: false, nullable: false, inList: ["new","used"])
 		currency(blank: false, nullable: false, inList: ["ARS", "BRL", "USD"])
 		description(blank: false, nullable: true, attributes:[listable:false], widget: "textarea")
-		duration(min:1, max:60)
+		duration(min:1, max:365)
 		format(inList: ["buy_it_now","auction"])
-		gp_id(nullable: true, blank: true, display:false)
 		listing_type_id(inList: ["bronze","silver","gold"], attributes:[listable:false])
 		location(nullable: true)
 		mercadoLibreItemId(nullable: true)
@@ -46,6 +45,7 @@ class CatalogItem implements Comparable {
 		price(max: 100000.0d)  // establish reasonable min and max 
 		shippingCosts(nullable: true)
 		site(inList: ["MLA", "MLB"], attributes:[listable:false])
+		sku(nullable: true, blank: true, display:false)
 		title(nullable: false, blank: false)
 	}
 		
