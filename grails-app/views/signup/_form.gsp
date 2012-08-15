@@ -1,5 +1,3 @@
-<%@ page import="com.mercadolibre.apps.sim.data.bo.core.ShoppeUser" %>
-
 
 <div class="fieldcontain ${hasErrors(bean: shoppeUserInstance, field: 'companyName', 'error')} required">
 	<label for="companyName">

@@ -1,4 +1,4 @@
-<%@ page import="com.mercadolibre.apps.sim.data.bo.core.ShoppeUser" %>
+
 <!doctype html>
 <html>
 	<head>
