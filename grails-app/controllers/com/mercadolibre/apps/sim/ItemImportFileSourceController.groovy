@@ -1,5 +1,6 @@
 package com.mercadolibre.apps.sim
 
+import com.mercadolibre.apps.sim.data.bo.core.User
 import com.mercadolibre.apps.sim.util.FileHelper
 
 import org.springframework.web.multipart.MultipartHttpServletRequest
@@ -10,15 +11,22 @@ import grails.converters.JSON
 class ItemImportFileSourceController {
 	
 	def authorize(AuthoriseCommand command) {
+		def nextAction = [action: "create"]
+		
+		
 		// Use MELI.login to test if the client has a valid access_token
 
 		if (command.validate()) {
 			session.ml_access_token = command.access_token
 			session.ml_caller_id    = command.user_id
 			session.setMaxInactiveInterval(command.expires_in - 30)
-			log.info "Storing session for User ${session.ml_caller_id} with token - ${session.ml_access_token}"
+			log.warn "Storing session for User ${session.ml_caller_id} with token - ${session.ml_access_token}"
+			
+			if (!User.findByCallerId(session.ml_caller_id as Integer)) {
+				nextAction = [controller: "signup", action: "create"]
+			}
 		}
-		redirect(action: "create")
+		redirect(nextAction)
 	}
 
 	def create() {

@@ -12,6 +12,8 @@ class UrlMappings {
 		"/itemImportFileSource/save"(controller: "itemImportFileSource", action: "save")
 		"/itemImport/$action/$id?"(controller: "itemImport")
 		"/itemz/callback"(controller: "itemsCallback", action: "index")
+		"/signups/new"(controller: "signup", action: "create")
+		"/users/show/$id?"(controller: "user", action: "show")
 		"/uploads/new"(controller: "itemImportFileSource", action: "create")
 		"/uploads/next"(controller: "itemImport", action: "showUploadProgress")
 		

@@ -16,7 +16,7 @@
 				<a href="#">
 					<button id="get-access-token" class="btn btn-large" type="button">
 						<i class="icon-ok-sign icon-white"></i>
-						<g:message code="xxx" default="Start" />
+						<g:message code="xxx.yyy" default="Sign in" />
 					</button>
 				</a>
 
@@ -38,7 +38,6 @@
 			var newToken = parseUri(window.location.href).anchor;
 			if (newToken != '') {
 				window.location.href = "${createLink(controller: 'itemImportFileSource', action: 'authorize', absolute: true)}" + '?' + newToken;
-				///window.location.href = "http://localhost:80/sim/authorize?" + newToken;
 			}			 
 		</script>		
 	</body>
