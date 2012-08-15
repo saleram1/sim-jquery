@@ -30,7 +30,6 @@ class CatalogProduct {
   static hasMany = [categories: String, skus: String]
 
   static mapping = {
-    cache true
     id generator: "uuid"
   }	
 }

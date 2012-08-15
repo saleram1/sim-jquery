@@ -18,13 +18,13 @@ implements Serializable {
   static constraints = {
     id(maxSize: 32)
     locations(nullable: true)
-    name(maxSize: 100, blank: false, nullable: true)
+	manager(nullable: true)
+    name(maxSize: 100, blank: false, nullable: false)
     number(maxSize: 20, blank: false, nullable: true)
 	webAddress(nullable: true, url: true)
   }
 
   static mapping = {
-    cache true
     id generator: "uuid"
   }
 

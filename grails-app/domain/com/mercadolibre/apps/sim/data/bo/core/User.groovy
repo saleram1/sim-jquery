@@ -8,23 +8,16 @@ implements Serializable {
    * Account is not accessible due presumably to manually locking or failed login attempts
    */
   boolean accountLocked = false
-
-   /**
-   * Date when account was locked
-   */
-  Date accountLockedDate
+  Integer callerId
   String email = ""
   boolean enabled = true
   String firstName = ""
   String id
   Date lastLogin
   String lastName = ""
-  Date lastPasswordResetRequest
   Locale locale
-  String login = ""
   String oldEmail
   String password = ""
-  String passwordResetToken
   TimeZone timeZone
 
 
@@ -43,30 +36,30 @@ implements Serializable {
 
 
   //GORM
+  // ensure the key to the account is ALWAYS I mean always stored toLowerCase( )
   def beforeInsert = {
     email = email.toLowerCase()
-    login = login.toLowerCase()
   }
 
   static constraints = {
-    accountLockedDate(nullable: true)
-    email(blank: false, unique: true, email: true)
-    firstName(blank: true)
+	callerId()
+	company(nullable: true)
+    email(blank: false, unique: true, email: true)  // this is effectively the login
+    firstName(nullable: false, blank: false)
     id(maxSize: 32)
     lastLogin(nullable: true)
-    lastName(blank: true)
-    lastPasswordResetRequest(nullable: true)
+    lastName(nullable: false, blank: false)
+//    lastPasswordResetRequest(nullable: true)
     lastUpdated(nullable:true)
     locale(nullable: false)
-    login(blank: false, unique: true)
+//    login(blank: false, unique: true)
     oldEmail(nullable: true, blank: false, email: true)
-    passwordResetToken(nullable: true, blank: false, minSize: 64, maxSize: 64)
+//    passwordResetToken(nullable: true, blank: false, minSize: 64, maxSize: 64)
     password(blank: true)
     timeZone(nullable: true)
   }
 
   static mapping = {
-    cache true
     company lazy: false
     id generator: "uuid"
   }
@@ -80,6 +73,6 @@ implements Serializable {
   }
 
   String toString() {
-    "User: login [${this.login}], email [${email}], firstName [${firstName}], lastName [${lastName}]"
+    "User: email [${email}], firstName [${firstName}], lastName [${lastName}] at Company [${company?.name}]"
   }
 }

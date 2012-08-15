@@ -27,7 +27,6 @@ implements Serializable {
   }
 
   static mapping = {
-    cache true
     id generator: "uuid"
   }
 

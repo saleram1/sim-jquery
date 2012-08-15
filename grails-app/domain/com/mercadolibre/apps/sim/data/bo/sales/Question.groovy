@@ -9,7 +9,6 @@ class Question {
   //GORM
   static belongsTo = [item: CatalogItem]
   static mapping = {
-    cache true
     id generator: "uuid"
   }	
 }
