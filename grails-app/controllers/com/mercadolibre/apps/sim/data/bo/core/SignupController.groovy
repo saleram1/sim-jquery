@@ -1,5 +1,7 @@
 package com.mercadolibre.apps.sim.data.bo.core
 
+import org.springframework.validation.FieldError
+
 import com.mercadolibre.apps.sim.data.bo.core.Shoppe
 import com.mercadolibre.apps.sim.data.bo.core.User
 
@@ -10,6 +12,8 @@ class SignupController {
 	}
 
 	def save(NewSignupCommand command) {
+		def nextActionMap
+		
 		User aUser = new User()
 		aUser.callerId = session.ml_caller_id 
 		aUser.firstName = command.firstName
@@ -21,11 +25,24 @@ class SignupController {
 		Shoppe aShoppe = new Shoppe(name: command.companyName)
 		aShoppe.save(failOnError: true)
 		
-		if (aUser.save(failOnError: true)) {
+		// must test for User to be saved properly - 
+		if (aUser.validate()) {
+			aUser.save(flush: true)
 			log.warn 'saved...'
+			log.warn aUser
+			nextActionMap = [controller: "itemImportFileSource", action: "create"]		
 		}
-
-		redirect(controller: "itemImportFileSource", action: "create")
+		else {
+			//nextActionMap = [action: "create"]
+			
+			aUser.errors.fieldErrors.each() { FieldError it -> 
+				command.errors.rejectValue(it.field, it.code, it.defaultMessage)
+			}
+			flash.message = "Please correct the following errors"
+			render(view: "create", model: ['shoppeUserInstance': command])
+			return 
+		}
+		redirect(nextActionMap)
 	}
 }
 

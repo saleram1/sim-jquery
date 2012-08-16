@@ -9,12 +9,15 @@
 	<body>
 		<a href="#create-shoppeUser" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip registration&hellip;"/></a>
 		<div class="nav" role="navigation">
+
 		</div>
+
 		<div id="create-shoppeUser" class="content scaffold-create" role="main">
 			<h1>Get started – it’s free.</h1>
 			<h2>Registration provides further benefits to manage your Shoppe.</h2>
+
 			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
+				<div class="message" role="status">${flash.message}</div>
 			</g:if>
 			<g:hasErrors bean="${shoppeUserInstance}">
 			<ul class="errors" role="alert">
