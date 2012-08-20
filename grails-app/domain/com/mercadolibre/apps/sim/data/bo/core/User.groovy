@@ -52,10 +52,9 @@ implements Serializable {
 //    lastPasswordResetRequest(nullable: true)
     lastUpdated(nullable:true)
     locale(nullable: false)
-//    login(blank: false, unique: true)
     oldEmail(nullable: true, blank: false, email: true)
 //    passwordResetToken(nullable: true, blank: false, minSize: 64, maxSize: 64)
-    password(blank: true)
+    password(nullable: true, blank: false)
     timeZone(nullable: true)
   }
 

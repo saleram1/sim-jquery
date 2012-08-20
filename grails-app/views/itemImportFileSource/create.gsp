@@ -9,8 +9,8 @@
 	<body>
 		<header class="jumbotron subhead" id="overview">
 		  <h1>Upload Items</h1>
-		  <p class="lead">Choose a Site and Category Id from the fields below and click 'Add Files&hellip;'<br/>
-		 	with your inventory files in CSV format</p>
+		  <p class="lead">Choose a column for SKU and enter a Description in the fields below and click 'Add Files&hellip;'<br/>
+		 	with your inventory in CSV format</p>
 		</header>
 
 		<div class="container section">		
@@ -28,26 +28,11 @@
 			</g:hasErrors>
 			<fieldset>
 				<div class="fieldcontain required">
-					<label for="site">
-						Site
+					<label for="keyColumn">
+						SKU Column
 						<span class="required-indicator">*</span>
 					</label>
-
-					<select name="site" id="site"><option value="">Selecciona un Sita...</option>
-							<option data-id="MLA" value="MLA">Argentina</option>
-							<option data-id="MLB" value="MLB">Brasil</option>
-							<option data-id="MCO" value="MCO">Colombia</option>
-							<option data-id="MCR" value="MCR">Costa Rica</option>
-							<option data-id="MEC" value="MEC">Ecuador</option>
-							<option data-id="MLC" value="MLC">Chile</option>
-							<option data-id="MLM" value="MLM">Mexico</option>
-							<option data-id="MLU" value="MLU">Uruguay</option>
-							<option data-id="MLV" value="MLV">Venezuela</option>
-							<option data-id="MPA" value="MPA">Panamá</option>
-							<option data-id="MPE" value="MPE">Perú</option>
-							<option data-id="MPT" value="MPT">Portugal</option>
-							<option data-id="MRD" value="MRD">Dominicana</option>
-					</select>
+					<g:select name="keyColumn" id="keyColumn" from="${'A'..'L'}" />
 				</div>
 
 				<div class="fieldcontain">

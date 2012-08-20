@@ -26,9 +26,10 @@
 			  <p class="lead">Confirm these files are correct and click Continue.</p>
 			</header>
 
-			<g:if test="${flash.message}">
-				<bootstrap:alert class="alert-info">${flash.message}</bootstrap:alert>
-			</g:if>
+			<bootstrap:alert class="alert-info">
+				<!-- Dynamic timestamp after the Start is engaged -->
+				<div id="uploadStartTime"></div>
+			</bootstrap:alert>
 
 			<dl>							
 				<g:if test="${itemImportInstance?.category}">
@@ -77,11 +78,6 @@
 				</g:if>
 			</dl>
 
-			<!-- Dynamic timestamp after the Start is engaged -->	
-			<bootstrap:alert class="alert-info">
-				<div id="uploadStartTime"></div>
-			</bootstrap:alert>
-			
 			<div class="form-actions" id="starter-form">
 				<g:formRemote name="myForm" on404="alert('Action not found!')" after="disableStartButton(${itemImportInstance?.id})"
 				 	update="uploadStartTime" url="[controller: 'itemImport', action:'startUpload']">
