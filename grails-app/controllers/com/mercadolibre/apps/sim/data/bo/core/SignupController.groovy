@@ -15,7 +15,8 @@ class SignupController {
 		def nextActionMap
 		
 		User aUser = new User()
-		aUser.callerId = session.ml_caller_id 
+		aUser.callerId = command.callerId
+		  // session.ml_caller_id 
 		aUser.firstName = command.firstName
 		aUser.lastName = command.lastName
 		aUser.email = command.email
@@ -48,6 +49,7 @@ class SignupController {
 
 
 class NewSignupCommand {
+  Integer callerId
   String  companyName
   String firstName = ""
   String lastName = ""
