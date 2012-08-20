@@ -1,3 +1,4 @@
+<g:hiddenField name="callerId" value="1234" />
 
 <div class="fieldcontain ${hasErrors(bean: shoppeUserInstance, field: 'companyName', 'error')} required">
 	<label for="companyName">
