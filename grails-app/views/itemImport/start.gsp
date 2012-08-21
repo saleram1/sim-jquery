@@ -22,7 +22,7 @@
 			<div class="span11">
 
 			<header class="jumbotron subhead" id="almost">
-			  <h1>Upload Items</h1>
+			  <h1>Catalog Upload</h1>
 			  <p class="lead">Confirm these files are correct and click Continue.</p>
 			</header>
 

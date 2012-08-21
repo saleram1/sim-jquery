@@ -1,5 +1,5 @@
 	<header class="jumbotron subhead" id="almost">
-		<h1>Upload Status</h1>
+		<h1>Catalog Upload - Status</h1>
 		<g:if test="${'COMPLETED' == itemImportInstance.status}">
 			<form action="javascript:alert('window.close will now be called..');"
 			<button class="btn btn-large" type="submit" id="_action_complete">
