@@ -43,15 +43,15 @@ class SignupController {
 
   User newUserFromCommand(NewSignupCommand command, Shoppe aShoppe) {
     User aUser = new User()
-    with aUser {
+    aUser.with {
       callerId = session.ml_caller_id
       firstName = command.firstName
       lastName = command.lastName
       email = command.email
       password = command.password
       locale = Locale.US
+      company = aShoppe
     }
-    aUser.company = aShoppe
     aUser
   }
 }
