@@ -24,16 +24,18 @@ class SignupController {
 
     User aUser = newUserFromCommand(command, aShoppe)
 
-    if (aUser.validate()) {
+    // must test for User to be saved properly - transfer errors back to Command if not
+    if (aUser.validate() && command.validate()) {
       aUser.save(flush: true)
-      log.warn aUser
+      log.info aUser
       nextActionMap = [controller: "itemImportFileSource", action: "create"]
     }
     else {
-      // must test for User to be saved properly - transfer errors back to Command if not
+	  assert aUser.hasErrors() || command.hasErrors()	
       aUser.errors.fieldErrors.each() { FieldError anError ->
         command.errors.rejectValue(anError.field, anError.code, anError.defaultMessage)
       }
+
       flash.message = "Please correct the following errors:"
       render(view: "create", model: ['shoppeUserInstance': command])
       return
