@@ -5,9 +5,8 @@ import grails.converters.JSON
 
 class ItemsCallbackController {
 
-//	def itemUpdaterService
-
     def index() { 
+		log.warn 'This item was now uploaded to the site:'
 		log.warn request.JSON
 //		
 //		itemUpdaterService.consumeMessage(request.JSON))
