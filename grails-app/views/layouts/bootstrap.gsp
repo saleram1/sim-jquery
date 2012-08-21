@@ -1,4 +1,5 @@
 <%@ page import="org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes" %>
+<g:if test="${session.ml_access_token}">
 <!doctype html>
 <html lang="en">
 	<head>
@@ -68,3 +69,4 @@
 		</script>
 	</body>
 </html>
+</g:if>

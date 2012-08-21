@@ -48,7 +48,7 @@
 		<script>
         function getCountryValue() {
             if (document.getElementById("site").value == "null") {
-				return "http://auth.mercadolibre.com"
+				return "http://auth.mercadolibre.com";
 			} else {
 				return document.getElementById("site").value;
 			}
