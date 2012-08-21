@@ -14,8 +14,8 @@
 		<div class="container section">		
 		<div id="hlpQ"><h2>Supported fields for Catalog CSV files</h2></div>
 		<div></div>
-		<div id="hlpA" class="article">A <em>CSV</em> (Comma Separated Values) file is a comma delimited database file. Commas are used to separate different fields in the database. Fields that you can use in your CSV file are:
-		<p></p>
+		<div id="hlpA" class="article">A <em>CSV</em> (Comma Separated Values) file is a comma delimited database file. Commas are used to separate different fields in the database.  <br/> Valid fields that can be used in your Excel CSV format file are the following:
+		<p>nbsp;</p>
 
 		<ul>
 			<li>gp_id</li>

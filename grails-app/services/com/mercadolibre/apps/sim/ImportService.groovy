@@ -5,8 +5,9 @@ import groovyx.net.http.HTTPBuilder
 import com.mercadolibre.apps.sim.util.CSVImporter
 
 /**
- * Grails friendly wrapper around the CSVImporter
- *   ItemImporterService
+ *
+ * Check if Item exists already (check that it's been listed), update relevant fields
+ *          Item  does not exist - ie there is no mapping of gp_id and mercadolibre id - then list it and update w/ pics
  *
  */
 class ImportService {
@@ -15,11 +16,11 @@ class ImportService {
   CategoryService categoryService
 
   def importContactsFromCSV(ItemImport itemImport, ItemImportFileSource fileSource, String accessToken = "") {
-      //String accessToken = setupMercadoApiAccess(7418, "Spz9fcrMyPQo9cD8ZJtbdn8Kk46fy2Z3")
+    //String accessToken = setupMercadoApiAccess(7418, "Spz9fcrMyPQo9cD8ZJtbdn8Kk46fy2Z3")
     log.info "importContactsFromCSV: " + fileSource.path + " orig. " + fileSource.originalFilename
-  	log.info "Using accessToken: " + accessToken
+    log.info "Using accessToken: " + accessToken
 
-	String csvFile = fileSource.path
+    String csvFile = fileSource.path
     def items = CSVImporter.doImport(csvFile)
 
     int totalCount = 0
@@ -28,25 +29,39 @@ class ImportService {
     if (items && items instanceof List) {
       totalCount = items?.size()
 
-      items.eachWithIndex { it, idx -> 
-		Item aProperItem = newItemFromMap(it)
+      items.eachWithIndex { it, idx ->
+        Item aProperItem = newItemFromMap(it)
 
-        if (!aProperItem.validate()) {
-			return [0, 0]
-		}
-		try {
-             String newItemId = pushItemToMarketplace(itemImport, fileSource, idx, aProperItem, accessToken)
-             aProperItem.mercadoLibreItemId = newItemId
+        if (!itemExists(aProperItem) && aProperItem.validate()) {
+          try {
+            // @TODO support a 'required attribute' message in the output of ItemImport - such as options for Fashion
 
-             if (newItemId) {
-   			   log.info aProperItem.save(flush: true, failOnError: true)
-               count++
-             }
-	  	  }
-          catch (Throwable tr) { tr.printStackTrace() }
-		}
-     }
-     [count, totalCount]
+            // if user has not already uploaded and the Category is okay
+            if (categoryService.isValidCategory(aProperItem.category) && !categoryService.isFunkyFashionFootwearCategory(aProperItem.category)) {
+              String newItemId = pushItemToMarketplace(itemImport, fileSource, idx, aProperItem, accessToken)
+              aProperItem.mercadoLibreItemId = newItemId
+
+              if (newItemId) {
+                count++
+                log.info(aProperItem.save(flush: true, failOnError: true))
+              }
+            }
+            else {
+              log.warn "Cannot support category id: ${aProperItem.category} in the current version"
+            }
+          }
+          catch (Throwable tr) {
+            tr.printStackTrace()
+          }
+        }
+        else if (itemExists(aProperItem)) {
+          log.warn("An item was already found with id : " + aProperItem.gp_id)
+          log.warn("Update the quantity to new available_quantity !!") // @TODO
+        }
+        //
+      } // for each Item
+    }
+    [count, totalCount]
   }
 
   /**
@@ -57,101 +72,70 @@ class ImportService {
   Boolean itemExists(Item aProperItem) {
     def aPreviousItem = Item.createCriteria().get() {
       eq('gp_id', aProperItem?.gp_id)
+      cache(true)
     }
-    if (aPreviousItem) {
-      log.warn("An item was already found with id : " + aProperItem.gp_id)
-    }
+
     return (aPreviousItem != null)
   }
 
-
   /**
-   pushItemToMarketPlace transaction script :
-   if Item exists already (check that it's been listed), update relevant fields
-
-   if Item  does not exist - ie there is no mapping of gp_id and mercadolibre id - then list it and update w/ pics
-   *  @TODO pass the rowNumber to the ApiError Object
+     pushItemToMarketPlace transaction script :
+   *
+   * @TODO pass the rowNumber to the ApiError Object
    *
    * @param itemRef
    * @return /item/:id (as String) on successful POST
    */
-  String pushItemToMarketplace(ItemImport itemImport, ItemImportFileSource fileSource, Integer rowNumber,  Item itemRef, String appUser) {
+  String pushItemToMarketplace(ItemImport itemImport, ItemImportFileSource fileSource, Integer rowNumber, Item itemRef, String appUser) {
     def newItemId = null
 
     def builder = new HTTPBuilder()
 
     builder.contentType = ContentType.JSON
-    builder.request("https://api.mercadolibre.com", 
-                    groovyx.net.http.Method.POST, 
-                    groovyx.net.http.ContentType.JSON ) {
+    builder.request("https://api.mercadolibre.com",
+        groovyx.net.http.Method.POST,
+        groovyx.net.http.ContentType.JSON) {
       uri.path = '/items'
       uri.query = [access_token: appUser]
-	  body = itemRef.toMap()
-	
-     response.success = { resp, json ->
-		newItemId = json['id']
-     }
-     response.failure = { resp, json ->
-       assert json.size() == 4
-		def anException = new ApiError(status: json['status'], error: json['error'], message: json['message'], originalFilename: fileSource.originalFilename)
-		anException.save()
-		itemImport.addToErrs(anException)
-     }
-     response.'403' = { resp, json ->
-       assert json.size() == 4
-		def anError = new AccessViolationError(fileSource.originalFilename)
-		anError.save()
-		itemImport.addToErrs(anError)
+      body = itemRef.toMap()
+
+      response.success = { resp, json ->
+        newItemId = json['id']
+      }
+      response.failure = { resp, json ->
+        assert json.size() == 4
+        def anException = new ApiError(status: json['status'], error: json['error'], message: json['message'], originalFilename: fileSource.originalFilename)
+        anException.save()
+        itemImport.addToErrs(anException)
+      }
+      response.'403' = { resp, json ->
+        assert json.size() == 4
+        def anError = new AccessViolationError(fileSource.originalFilename)
+        anError.save()
+        itemImport.addToErrs(anError)
       }
 
     }
     newItemId
   }
 
-/*
-    try {
-      builder.contentType = ContentType.JSON
-      builder.post(path: '/items', query: [access_token: appUser], requestContentType: groovyx.net.http.ContentType.JSON, body: itemRef.toMap()) { resp, json ->
-        if (resp.status == 201) {
-          newItemId = json['id']
-        }
-		else { log.warn "Response status is: " + resp.statusLine }
-      }
-
-	  println 'newItem: '+ newItemId
-    }
-    catch (Exception ex) {
-      log.error ex.message
-
-	  if (ex?.message?.equalsIgnoreCase("Forbidden")) {
-		println 'VERBOTEN'
-	  } else if (ex?.message?.equalsIgnoreCase("Bad Request")) {
-		println 'ACHTUNG'		
-	  } else if (ex?.message?.equalsIgnoreCase("Unauthorized")) {
-		println 'NEIN'
-      } else {
-		log.fatal 'wtf'
-	  }
-    }
-    return newItemId
-  } */
-
 
   def newItemFromMap(props) {
-	Item anItem = new Item()
-    props?.each() { key, val -> 
-        try {
-		  anItem."$key" = val
-		} catch (org.codehaus.groovy.runtime.typehandling.GroovyCastException gce) {
-			// property is null
-		}
-    }	
+    Item anItem = new Item()
+    props?.each() { key, val ->
+      try {
+        anItem."$key" = val
+      } catch (org.codehaus.groovy.runtime.typehandling.GroovyCastException gce) {
+        // property is null
+      }
+    }
     return anItem
   }
 
-
   /**
-   * Create an authorized token for write access to be used for /item/id
+   * Create an authorized token for write access to be used for /item/id   - this is to be used when the server
+   * requires access without the JS tools
+   *
    * @param apiKey
    * @param sharedSecret
    * @return

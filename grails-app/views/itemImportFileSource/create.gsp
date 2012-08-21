@@ -9,8 +9,8 @@
 	<body>
 		<header class="jumbotron subhead" id="overview">
 		  <h1>Catalog Upload</h1>
-		  <p class="lead">Choose a column for SKU and enter a Description in the fields below and click 'Add Files&hellip;'<br/>
-		 	with your inventory in CSV format</p>
+		  <p class="lead">Choose a column for SKU, enter a Description in the fields below and click 'Add Files&hellip;'<br/>
+		 	make sure your inventory files end in &quot;.csv&quot;.</p>
 		</header>
 
 		<div class="container section">		

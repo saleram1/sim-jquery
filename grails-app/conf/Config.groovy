@@ -79,7 +79,7 @@ log4j = {
 ///
 ///	debug  "org.apache.http.headers"
 
-	warn   'grails.app'
+	info   'grails.app'
     warn   'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
