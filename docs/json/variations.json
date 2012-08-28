@@ -1,0 +1,24 @@
+{
+    "variations": [
+    {
+        "attribute_combinations": [
+        {
+            "id": "83000",
+            "value_id": "92028"
+        },
+        {
+            "id": "73001",
+            "value_id": "82059"
+        },
+        {
+            "id": "73002",
+            "value_id": "131993"
+        }
+        ],
+        "available_quantity": 10,
+	    "price": 129.00,
+        "picture_ids": [
+	    	"http://farm7.staticflickr.com/6062/6087409376_f360493109_b.jpg"
+        ]
+    }]
+}

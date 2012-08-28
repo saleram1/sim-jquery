@@ -1,0 +1,73 @@
+{
+    "title": "Test QA Item per Fashionista 9997 - 2012 - NO ofertar",
+    "category_id": "MLA9997",
+    "currency_id": "ARS",
+    "buying_mode": "buy_it_now",
+    "listing_type_id": "silver",
+    "condition": "new",
+    "variations": [
+    {
+        "attribute_combinations": [
+        {
+            "id": "83000",
+            "value_id": "92028"
+        },
+        {
+            "id": "73001",
+            "value_id": "82059"
+        },
+        {
+            "id": "73002",
+            "value_id": "131993"
+        }
+        ],
+        "available_quantity": 10,
+	    "price": 528.00,
+        "picture_ids": [
+	    "http://farm7.staticflickr.com/6062/6087409376_f360493109_b.jpg"
+        ]
+    },
+    {
+        "attribute_combinations": [
+        {
+            "id": "83000",
+            "value_id": "92028"
+        },
+        {
+            "id": "73001",
+            "value_id": "82059"
+        },
+        {
+            "id": "73002",
+            "value_id": "82064"
+        }
+        ],
+        "available_quantity": 10,
+	    "price": 528.00,
+        "picture_ids": [
+	    "http://farm9.staticflickr.com/8143/7341534274_d15703d6cd_b.jpg"
+        ]
+    },
+    {
+        "attribute_combinations": [
+        {
+            "id": "83000",
+            "value_id": "92028"
+        },
+        {
+            "id": "73001",
+            "value_id": "82059"
+        },
+        {
+            "id": "73002",
+            "value_id": "82068"
+        }
+        ],
+        "available_quantity": 10,
+	    "price": 528.00,
+        "picture_ids": [
+	    "http://farm8.staticflickr.com/7250/7485001596_2c200e5200_b.jpg"
+        ]
+    }
+    ]
+}
