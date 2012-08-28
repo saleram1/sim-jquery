@@ -1,0 +1,4 @@
+gp_id,site,format,currency,title,description,category,pictureURL,quantity_available,duration,price,shippingCosts,location,condition,shipsFrom,options
+123456789012,MLA,buy_it_now,USD,Botas Urbanas Con Tachas Y Hebillas Taco Con Camara De Aire,"HTML description coming <b>soon</b>  Remember all ""quote"" characters must be escaped as in this example.
+
+New lines are supported as are all MLA html tags.",MLA9997,http://img1.mlstatic.com/s_MLA_v_O_f_141417155_2525.jpg,20,60,229.99,0,Capital Federal,new,90125,Size 36 38 39 40
