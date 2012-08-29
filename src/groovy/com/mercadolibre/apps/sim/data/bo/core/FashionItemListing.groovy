@@ -1,6 +1,9 @@
 package com.mercadolibre.apps.sim.data.bo.core
 
-
+/**
+ *  DTO for Item which are listed in the new Fashion vertical
+ *
+ */ 
 class FashionItemListing implements Serializable {
 	String site_id = "MLA"
 	String category_id = "MLA9997"
@@ -12,8 +15,8 @@ class FashionItemListing implements Serializable {
 	Integer available_quantity = 10
 	Double price = 529.99
 	String condition = "new"
-	List<Map> pictures = Collections.emptyList()
+//	List<Map> pictures = Collections.emptyList()
 
 	// for some Category types, namely fashion
-	List<Map> variations
+	List<ItemVariation> variations = Collections.emptyList()
 }
