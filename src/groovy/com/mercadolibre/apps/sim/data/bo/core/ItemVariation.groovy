@@ -15,16 +15,23 @@ class ItemVariation implements Serializable {
 	// these are independent codes or id's *per Category*  "92028", "82059"
 	
 	ItemVariation(String primaryColorId = "92028", String secondaryColorId = "82059", 
-		          String sizeId, Integer quantity, BigDecimal aPrice, List pictures) {
+		          String size, Integer quantity, BigDecimal aPrice, List pictures) {
 
 		available_quantity = quantity
 		price = aPrice
 
 		attribute_combinations = []
+		
+		// Talle (Size) 34 36 38 
 		attribute_combinations.add(new VariationAttribute("83000", primaryColorId))
 		attribute_combinations.add(new VariationAttribute("73001", secondaryColorId))
-		attribute_combinations.add(new VariationAttribute("73002", sizeId))
-
+		attribute_combinations.add(new VariationAttribute("73002", null, size))
+		
+		
+/*		attribute_combinations.add(new VariationAttribute("83000", primaryColorId))
+		attribute_combinations.add(new VariationAttribute("73001", secondaryColorId))
+		attribute_combinations.add(new VariationAttribute("73002", size))
+*/
 		picture_ids = []
 		picture_ids.addAll(pictures)	// use addAll ( ) from the list
 	}
@@ -40,5 +47,11 @@ class VariationAttribute implements Serializable {
 		this.id = anId
 		this.value_id = aValueId
 		this.value_name = ""
+	}
+	
+	VariationAttribute(String anId, String aValueId, String aValueName) {
+		this.id = anId
+		this.value_id = aValueId
+		this.value_name = aValueName
 	}
 }

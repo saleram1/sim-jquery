@@ -12,8 +12,8 @@ class BootStrap {
 		JSON.registerObjectMarshaller(VariationAttribute, 3) {
 			def map = [:]
 			map.id = it.id
-			map.value_id = it.value_id ?:""
-
+			map.value_id = it.value_id ?: ""
+			map.value_name = it.value_name ?: ""
 			return map
 		}
 
@@ -34,12 +34,15 @@ class BootStrap {
 			def returnArray = [:]
 			returnArray["site_id"] = it.site_id
 			returnArray["category_id"] = it.category_id
-			returnArray["listing_type_id"] = it.listing_type_id
-			returnArray["currency_id"] = it.currency_id
-			returnArray["price"] = it.price
-			returnArray["available_quantity"] = it.available_quantity			
 			returnArray["title"] = it.title
+			returnArray["price"] = it.price
+			returnArray["currency_id"] = it.currency_id
+			returnArray["available_quantity"] = it.available_quantity			
+			returnArray["listing_type_id"] = it.listing_type_id
+			returnArray["condition"] = it.condition
+
 			returnArray["description"] = it.description
+			returnArray["accepts_mercadopago"] = "true"
 			returnArray["variations"] = it.variations
 
 			return returnArray

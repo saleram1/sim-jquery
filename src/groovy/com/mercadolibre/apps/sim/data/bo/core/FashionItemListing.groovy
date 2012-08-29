@@ -15,8 +15,7 @@ class FashionItemListing implements Serializable {
 	Integer available_quantity = 10
 	Double price = 529.99
 	String condition = "new"
-//	List<Map> pictures = Collections.emptyList()
 
-	// for some Category types, namely fashion
+	// for some Category types, namely ones of the Fashionista variety
 	List<ItemVariation> variations = Collections.emptyList()
 }
