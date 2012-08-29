@@ -1,0 +1,37 @@
+{
+  "site_id": "MLA",
+  "category_id": "MLA9997",
+  "listing_type_id": "bronze",
+  "currency_id": "ARS",
+  "price": 529.99,
+  "available_quantity": 10,
+  "title": "Test Botas per Fashionista MLA99997 - NO ofertar",
+  "description": "HTML is allowed <em>here in the description<\/em>",
+  "variations": 
+  [
+    {
+      "attribute_combinations": 
+      [
+        {
+          "id": "73001",
+          "value_id": "82059"
+        },
+        {
+          "id": "73002",
+          "value_id": "82068"
+        },
+        {
+          "id": "83000",
+          "value_id": "92028"
+        }
+      ],
+      "price": 199.95,
+      "available_quantity": 10,
+      "picture_ids": 
+      [
+        "http://farm7.staticflickr.com/6062/6087409376_f360493109_b.jpg"
+      ],
+      "seller_custom_field": ""
+    }
+  ]
+}
