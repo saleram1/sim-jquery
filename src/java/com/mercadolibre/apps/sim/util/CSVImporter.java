@@ -58,13 +58,21 @@ public class CSVImporter {
 	private static Map newItemMap( DataSet ds ) {
 		Map<String,Object> aMap = new HashMap<String,Object>();
 		aMap.put("gp_id", ds.getString("gp_id") );
-		aMap.put("site_id", ds.getString("site") );
+		aMap.put("site_id", ds.getString("site") );				/// no longer required
 		aMap.put("buying_mode", ds.getString("format") );
 		aMap.put("currency_id", ds.getString("currency") );
 		aMap.put("title", ds.getString("title") );
 		aMap.put("description", ds.getString("description") );
 		aMap.put("category_id", ds.getString("category") );
-		aMap.put("pictureURL", ds.getString("pictureURL") );
+		aMap.put("available_quantity", ds.getInt("available_quantity") );
+		aMap.put("duration", ds.getInt("duration") );
+		aMap.put("price", ds.getDouble("price") );
+		aMap.put("shippingCosts", ds.getDouble("shippingCosts") );
+		aMap.put("location", ds.getString("location") );
+		aMap.put("condition", ds.getString("condition") );
+		aMap.put("shipsFrom", ds.getString("shipsFrom") );
+
+		aMap.put("pictureURL", ds.getString("pictureURL") );	/// @TODO support multiple pictures - up to six
 		// 
 		// List pictures = new ArrayList()
 		// for (int i = 0; i < 6; i++) {
@@ -73,13 +81,6 @@ public class CSVImporter {
 		// 	}
 		// }
 		//aMap.put("pictures", pictures)		
-		aMap.put("available_quantity", ds.getInt("available_quantity") );
-		aMap.put("duration", ds.getInt("duration") );
-		aMap.put("price", ds.getDouble("price") );
-		aMap.put("shippingCosts", ds.getDouble("shippingCosts") );
-		aMap.put("location", ds.getString("location") );
-		aMap.put("condition", ds.getString("condition") );
-		aMap.put("shipsFrom", ds.getString("shipsFrom") );
 
 		return aMap;
 	}
