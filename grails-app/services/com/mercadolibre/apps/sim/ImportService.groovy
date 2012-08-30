@@ -32,7 +32,7 @@ class ImportService {
       items.eachWithIndex { it, idx ->
         Item aProperItem = newItemFromMap(it)
 
-        if (!itemExists(aProperItem) && aProperItem.validate()) {
+        if (aProperItem.validate()) {
           try {
             // @TODO support a 'required attribute' message in the output of ItemImport - such as options for Fashion
 
@@ -43,7 +43,7 @@ class ImportService {
 
               if (newItemId) {
                 count++
-                log.info(aProperItem.save(flush: true, failOnError: true))
+                log.info(aProperItem.save(flush: true))
               }
             }
             else {

@@ -27,7 +27,7 @@ class ImportToMarketPlaceService {
         whatsToImport.save()
       }
       whatsToImport.status = "COMPLETED"
-      whatsToImport.save(flush: true)
+      whatsToImport.save()
     }
     return
   }

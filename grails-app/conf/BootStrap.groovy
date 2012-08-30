@@ -53,7 +53,13 @@ class BootStrap {
 
 		JSON.registerObjectMarshaller(VanillaItemListing, 3) {
 			def map = getBaseItemMap(it)	
-			map["pictures"] = it.pictures
+            def pictureSources = []
+            it?.pictures?.each() { pic ->
+	            pictureSources.add([source: pic.toString()])
+            }
+            map["pictures"] = pictureSources
+			//			map["pictures"] = it.pictures
+
 			return map
 		}
 

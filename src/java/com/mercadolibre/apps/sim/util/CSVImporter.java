@@ -58,12 +58,12 @@ public class CSVImporter {
 	private static Map newItemMap( DataSet ds ) {
 		Map<String,Object> aMap = new HashMap<String,Object>();
 		aMap.put("gp_id", ds.getString("gp_id") );
-		aMap.put("site_id", ds.getString("site") );				/// no longer required
-		aMap.put("buying_mode", ds.getString("format") );
-		aMap.put("currency_id", ds.getString("currency") );
+		aMap.put("site", ds.getString("site") );				/// no longer required
+		aMap.put("format", ds.getString("format") );
+		aMap.put("currency", ds.getString("currency") );
 		aMap.put("title", ds.getString("title") );
 		aMap.put("description", ds.getString("description") );
-		aMap.put("category_id", ds.getString("category") );
+		aMap.put("category", ds.getString("category") );
 		aMap.put("available_quantity", ds.getInt("available_quantity") );
 		aMap.put("duration", ds.getInt("duration") );
 		aMap.put("price", ds.getDouble("price") );
