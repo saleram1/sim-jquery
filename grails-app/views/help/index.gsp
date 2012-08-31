@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html>
 	<head>
@@ -14,24 +13,18 @@
 		<div class="container section">		
 		<div id="hlpQ"><h2>Supported fields for Items Uploader CSV files</h2></div>
 		<div></div>
-		<div id="hlpA" class="article">A <em>CSV</em> (Comma Separated Values) file is a comma delimited database file. Commas are used to separate different fields in the database.  <br/> Valid fields that can be used in your Excel CSV format file are the following:
-
+		<div id="hlpA" class="article">A <em>CSV</em> (Comma Separated Values) file is a comma delimited database file. Commas are used to separate different fields in the database.  <br/>Fields that are <em>required</em> to be present in the Excel CSV format file are the following:
 		<ul>
 			<li>gp_id</li>
 			<li>site</li>
+			<li>category</li>
 			<li>format</li>
 			<li>currency</li>
 			<li>price</li>
 			<li>title</li>
 			<li>description</li>
-			<li>category</li>
 			<li>pictureURL</li>
-			<li>options</li>
-			<li>shippingCosts</li>
 			<li>available_quantity</li>
-			<li>location</li>
-			<li>countryOfOrigin</li>
-			<li>shipWeight</li>
 			<li>condition</li>
 		</ul>
 
@@ -48,15 +41,15 @@
 		</p>
 
 		<p><strong>gp_id</strong>
-		This is how the store refers to your item, If you do not specify an ID, your <strong>code</strong> will be used, with some substitutions. To maintain the greatest control over your store, we strongly suggest that you specify an ID for each of your items.
+		This is how the store refers to your item, such as a UPC code. To maintain the greatest control over your listings, we strongly suggest that you specify an ID for each of your items listed.
 		</p>
 
 		<p><strong>site</strong>
-		 	Markplace site Id - 'MLA' for Argentina site, 'MLB' for Brasil, 'MLC' for Chile etc.</code>
+		 	Marketplace site Id - 'MLA' for Argentina site, 'MLB' for Brasil, 'MLC' for Chile etc.</code>
 		</p>
 
 		<p><strong>format</strong>
-		 	Markplace engine supports the following codes: <code>auction, buy_it_now</code>
+		 	Marketplace engine supports the following codes: <code>auction, buy_it_now</code>
 		</p>
 
 		<p><strong>currency</strong>
@@ -83,7 +76,7 @@
 		</p>
 		
 		<p><strong>options</strong>
-		For items with multiple sizes, colors, etc this field is required.  In each set of options, the first word is the label (e.g Size) and the rest are the choices (36, 38, 42). Use a blank line to separate sets of options, and double-quotes to make several words be treated as a multiple-word phrase. Example:
+		For items with multiple sizes, colors, etc this field is required.  In each set of options, the first word is the label (e.g Size) and the rest are the choices (36, 38, 42). Use a blank line to separate sets of options, and double-quotes to make several words be treated as a multiple-word phrase. <br/>Example:
 		<code>Size 36 38 40 42</code><br/>
 		</p>
 
