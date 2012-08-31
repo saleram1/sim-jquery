@@ -22,8 +22,8 @@
 			<div class="span11">
 
 			<header class="jumbotron subhead" id="almost">
-			  <h1>Catalog Upload</h1>
-			  <p class="lead">Confirm these files are correct and click Continue.</p>
+			  <h1>Items Uploader</h1>
+			  <p class="lead">Confirm your files are correct and click Continue.</p>
 			</header>
 
 			<bootstrap:alert class="alert-info">

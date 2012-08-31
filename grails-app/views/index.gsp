@@ -6,7 +6,7 @@
 	</head>
 	<body>
 		<header class="jumbotron subhead" id="overview">
-		  <h1>Catalog Upload</h1>
+		  <h1>Items Uploader</h1>
 		  <p class="lead">Please select your country and click the button to begin.</p>
 		</header>
 

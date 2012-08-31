@@ -7,12 +7,12 @@
 	</head>	
 	<body>
 		<header class="jumbotron subhead" id="overview">
-		  <h1>Help</h1>
+		  <h1>Items Uploader - Help</h1>
 		  <p class="lead">Before creating your CSV file, please review the following field-level details below.</p>
 		</header>
 
 		<div class="container section">		
-		<div id="hlpQ"><h2>Supported fields for Catalog CSV files</h2></div>
+		<div id="hlpQ"><h2>Supported fields for Items Uploader CSV files</h2></div>
 		<div></div>
 		<div id="hlpA" class="article">A <em>CSV</em> (Comma Separated Values) file is a comma delimited database file. Commas are used to separate different fields in the database.  <br/> Valid fields that can be used in your Excel CSV format file are the following:
 
