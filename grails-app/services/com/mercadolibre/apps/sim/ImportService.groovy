@@ -1,8 +1,15 @@
 package com.mercadolibre.apps.sim
 
-import groovyx.net.http.ContentType
-import groovyx.net.http.HTTPBuilder
 import com.mercadolibre.apps.sim.util.CSVImporter
+
+import groovyx.net.http.ContentType
+import static groovyx.net.http.ContentType.JSON
+import groovyx.net.http.HTTPBuilder
+import groovyx.net.http.ParserRegistry
+import org.apache.http.entity.ContentProducer
+import org.apache.http.entity.EntityTemplate
+import org.apache.http.message.BasicHeader
+import grails.converters.JSON
 
 /**
  *
@@ -79,7 +86,7 @@ class ImportService {
   }
 
   /**
-     pushItemToMarketPlace transaction script :
+   pushItemToMarketPlace transaction script :
    *
    * @TODO pass the rowNumber to the ApiError Object
    *
@@ -117,6 +124,40 @@ class ImportService {
 
     }
     newItemId
+  }
+
+  /**
+   * Create an instance of HttpBuilder pre-configured to play nicely with Grails encode/decode of JSON
+   * @see
+   *
+   * @return HttpBuilder
+   */
+  def getHttpBuilderInstance() {
+    def builder = new HTTPBuilder()
+
+    // always Accept json
+    //builder.contentType = ContentType.JSON
+
+    // the closure that takes a HttpServletResponse and returns an object
+    def jsonParser = { response ->
+      grails.converters.JSON.parse(new InputStreamReader(response.entity.content, ParserRegistry.getCharset(response)))
+    }
+
+    // the closure that takes an object and returns an org.apache.http.HttpEntity
+    def jsonEncoder = { value ->
+      def json = value instanceof Closure ? new grails.web.JSONBuilder().build(value) : new grails.converters.JSON(value)
+      def producer = [writeTo: { OutputStream out -> out.withWriter { json.render(it) } }] as ContentProducer
+      def entity = new EntityTemplate(producer)
+      entity.contentType = new BasicHeader("Content-Type", JSON.toString())
+      entity
+    }
+
+    // for each JSON content type, install the handler
+    JSON.contentTypeStrings.each {
+      builder.parser."$it" = jsonParser
+      builder.encoder."$it" = jsonEncoder
+    }
+    return builder
   }
 
 
@@ -168,4 +209,5 @@ class ImportService {
       return ""
     }
   }
+
 }
