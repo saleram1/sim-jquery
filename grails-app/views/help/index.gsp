@@ -90,7 +90,7 @@
 		</p>
 
 		<p><strong>listing_level</strong>
-		 	Marketplace site specific listing level, from lowest to highest in terms of listing fees.  Please choose from <code>bronze, silver, gold, extra_gold</code> - defaults to 'bronze'.  See also 
+		 	Marketplace site specific listing level, from lowest to highest in terms of listing fees.  Please choose from <code>bronze, silver, gold, extra_gold</code> - defaults to 'bronze'.
 		</p>
 
 		<p>Please note that misnaming any of the above fields will cause the Items not be recognized upon upload. These field names are not case sensitive, but they must be spelled exactly as listed above. The order of your fields in the CSV file are not important.

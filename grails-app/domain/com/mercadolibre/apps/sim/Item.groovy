@@ -18,9 +18,9 @@ class Item implements Comparable {
 	Double shippingCosts
 	String pictureURL
 	Integer available_quantity
-	String listing_type_id = "silver"
-	String format  //  really buying_mode
-	Integer duration = 60		//   really start_time plus end_time - @TODO need to support this at item level
+	String listing_type_id = "bronze"	// unless Seller overrides
+	String format 						//  really buying_mode - most listings marked Buy_It_Now
+	Integer duration = 60				//   really start_time plus end_time - @TODO need to support this at item level
 	String location
 	String shipsFrom
 	String mercadoLibreItemId
