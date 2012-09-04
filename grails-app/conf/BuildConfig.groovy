@@ -45,6 +45,7 @@ grails.project.dependency.resolution = {
     compile ":activemq:0.4.1"
     compile ":bootstrap-file-upload:2.1.1"
     compile ":console:1.2"
+	compile ":csv:0.3.1"
     compile ":fields:1.1"
     compile ":jms:1.2"
     compile ":rest:0.7"
