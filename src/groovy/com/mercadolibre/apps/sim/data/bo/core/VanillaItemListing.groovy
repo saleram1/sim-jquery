@@ -5,23 +5,37 @@ package com.mercadolibre.apps.sim.data.bo.core
  *
  */ 
 class VanillaItemListing implements Serializable {
-	/*String site_id*/
+  String gp_id       // SKU
 	String category_id
-	String buying_mode = "buy_it_now"		// auction is permissable as well
-	String listing_type_id = "silver"
-	String currency_id = "USD"
+	String buying_mode
+  String listing_type_id = "bronze"
+	String currency_id
 	String title
 	String description
 	Integer available_quantity
 	Double price
 	String condition
-	List<Map> pictures = Collections.emptyList()
+  String pictureURL
+  String pictureURL2
+  String pictureURL3
+  String pictureURL4
+  String pictureURL5
+  String pictureURL6
+
+	List<String> getPictures() {
+    [pictureURL, pictureURL2, pictureURL3, pictureURL4, pictureURL5, pictureURL6].findAll { it != null }
+  }
+
+  void setPictures(List<String> somePictures) {
+    // read-only
+  }
 	
 	String getSite_id() {
 		return category_id?.substring(0, 3)
 	}
 	
 	void setSite_id(String aSiteId) {
+    // read-only
 		// this.site_id = 
 	}
 }

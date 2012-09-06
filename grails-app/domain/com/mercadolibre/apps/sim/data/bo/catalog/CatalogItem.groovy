@@ -55,14 +55,14 @@ class CatalogItem implements Comparable {
 	}
 
 	Map toMap() {
-		List props = ['site', 'format', 'listing_type_id', 'currency', 'title', 'description', 'category', 'available_quantity', 'price', 'condition']
+		List props = ['site', 'buying_mode', 'listing_type_id', 'currency_id', 'title', 'description', 'category_id', 'available_quantity', 'price', 'condition']
 		Map  domainAsMap = [:]
 		
 	    props.eachWithIndex() { aProp, idx -> 
-			if (aProp in ['site','category','currency']) {
+			if (aProp in ['site','category_id','currency_id']) {
 				domainAsMap["${aProp}_id"] = this."$aProp"
 			}
-			else if ('format' == aProp) {
+			else if ('buying_mode' == aProp) {
 				domainAsMap['buying_mode'] = this."$aProp"
 			}
 			else {
@@ -81,6 +81,6 @@ class CatalogItem implements Comparable {
 	}
 	
 	String toString() {
-		return "CatalogItem  -> [${id}] [${gp_id}] [${mercadoLibreItemId}] in category [${category}] - ${title} @ ${currency} ${price} \n";
+		return "CatalogItem  -> [${id}] [${gp_id}] [${mercadoLibreItemId}] in category_id [${category}] - ${title} @ ${currency} ${price} \n";
 	}	
 }

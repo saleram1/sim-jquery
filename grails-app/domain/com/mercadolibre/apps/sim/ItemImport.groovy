@@ -34,7 +34,7 @@ class ItemImport implements Comparable {
 	}
 
 	/** 
-	 * TO BE REMOVED - when the category field is eliminated
+	 * TO BE REMOVED - when the category_id field is eliminated
 	 */
 	String getSite() {
 		return category?.substring(0,3)

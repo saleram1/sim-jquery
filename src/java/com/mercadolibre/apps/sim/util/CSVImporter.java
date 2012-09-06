@@ -11,14 +11,17 @@ import net.sf.flatpack.ordering.OrderBy;
 import net.sf.flatpack.ordering.OrderColumn;
 
 /**
-* Utility class to turn Excel CSV format into a database or list of names
-* input files should be in format, as below, with Header row assumed
+* Utility class to turn Excel CSV buying_mode into a database or list of names
+* input files should be in buying_mode, as below, with Header row assumed
 *
 * 
 * 1:email,first_name,last_name,prefix,phone,fax,title,company
 * 2:james.simmons@boeing.com,James H,Simmons,Mr,+1 112-445-6684,,AP Lead,Boeing
 *
-* TODO: support Gmail contact format and Apple vCard for Address Book import/export
+* TODO: support Gmail contact buying_mode and Apple vCard for Address Book import/export
+ *
+ * THIS CLASS TO BE REMOVED
+ * @see com.mercadolibre.apps.sim.CsvParserService
 */
 public class CSVImporter {
 
@@ -58,22 +61,17 @@ public class CSVImporter {
 	private static Map newItemMap( DataSet ds ) {
 		Map<String,Object> aMap = new HashMap<String,Object>();
 		aMap.put("gp_id", ds.getString("gp_id") );
-		aMap.put("site", ds.getString("site") );				/// no longer required
-		aMap.put("format", ds.getString("format") );
-		aMap.put("currency", ds.getString("currency") );
+		aMap.put("buying_mode", ds.getString("format") );
+		aMap.put("currency_id", ds.getString("currency") );
 		aMap.put("title", ds.getString("title") );
 		aMap.put("description", ds.getString("description") );
-		aMap.put("category", ds.getString("category") );
+		aMap.put("category_id", ds.getString("category") );
 		aMap.put("available_quantity", ds.getInt("available_quantity") );
-		aMap.put("duration", ds.getInt("duration") );
 		aMap.put("price", ds.getDouble("price") );
-		aMap.put("shippingCosts", ds.getDouble("shippingCosts") );
-		aMap.put("location", ds.getString("location") );
 		aMap.put("condition", ds.getString("condition") );
-		aMap.put("shipsFrom", ds.getString("shipsFrom") );
-
 		aMap.put("pictureURL", ds.getString("pictureURL") );	/// @TODO support multiple pictures - up to six
-		// 
+
+		//
 		// List pictures = new ArrayList()
 		// for (int i = 0; i < 6; i++) {
 		// 	if (ds.getString("pictureURL"+ String.valueOf(i))) {
@@ -91,12 +89,11 @@ public class CSVImporter {
 		"	\"flatpack.dtd\" >\n " +
 		"<PZMAP>\n" +
 		"	<COLUMN name=\"gp_id\" />" +
-		"	<COLUMN name=\"site\" />" +
 		"	<COLUMN name=\"format\" />" +
 		"	<COLUMN name=\"currency\" />" +
 		"	<COLUMN name=\"title\" />" +
 		"	<COLUMN name=\"description\" />" +
-		"	<COLUMN name=\"category\" />" + 
+		"	<COLUMN name=\"category\" />" +
 		"	<COLUMN name=\"pictureURL\" />" +
 		"	<COLUMN name=\"available_quantity\" />" +
 		"	<COLUMN name=\"duration\" />" +
