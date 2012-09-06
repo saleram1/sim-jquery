@@ -1,16 +1,17 @@
 package com.mercadolibre.apps.sim
 
+import com.mercadolibre.apps.sim.data.bo.core.VanillaItemListing
 import com.mercadolibre.apps.sim.util.CSVImporter
-
-import groovyx.net.http.ContentType
 
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.ParserRegistry
-import org.apache.http.entity.ContentProducer
+import groovyx.net.http.ContentType
+import static groovyx.net.http.ContentType.JSON
+
 import org.apache.http.entity.EntityTemplate
+import org.apache.http.entity.StringEntity
+import org.apache.http.entity.ContentProducer
 import org.apache.http.message.BasicHeader
-import grails.converters.JSON
-import com.mercadolibre.apps.sim.data.bo.core.VanillaItemListing
 
 /**
  *
@@ -39,6 +40,8 @@ class ImportService {
 
       items.eachWithIndex { it, idx ->
         Item aProperItem = newItemFromMap(it)
+        VanillaItemListing properListing = new VanillaItemListing(it)
+
 
         if (aProperItem.validate()) {
           try {
@@ -46,12 +49,16 @@ class ImportService {
 
             // if user has not already uploaded and the Category is okay
             if (categoryService.isValidCategory(aProperItem.category_id) && !categoryService.isFunkyFashionFootwearCategory(aProperItem.category_id)) {
-              String newItemId = pushItemToMarketplace(itemImport, fileSource, idx, aProperItem, accessToken)
+              //String newItemId = pushItemToMarketplace(itemImport, fileSource, idx, aProperItem, accessToken)
+              String newItemId = pushItemToMarketplace(itemImport, fileSource, idx, properListing, accessToken)
               aProperItem.mercadoLibreItemId = newItemId
 
               if (newItemId) {
                 count++
                 log.info(aProperItem.save(flush: true))
+              }
+              else {
+                log.error("New Item was not listed in MLA/MLB")
               }
             }
             else {
@@ -94,18 +101,17 @@ class ImportService {
    * @param itemRef
    * @return /item/:id (as String) on successful POST
    */
-  String pushItemToMarketplace(ItemImport itemImport, ItemImportFileSource fileSource, Integer rowNumber, Item itemRef, String appUser) {
+  String pushItemToMarketplace(ItemImport itemImport, ItemImportFileSource fileSource, Integer rowNumber, Object itemRef, String appUser) {
     def newItemId = null
 
-    def builder = new HTTPBuilder()
-
-    builder.contentType = ContentType.JSON
+    // one HTTPBuilder customised to work w/ Grails converters
+    def builder = getHttpBuilderInstance()
     builder.request("https://api.mercadolibre.com",
         groovyx.net.http.Method.POST,
         groovyx.net.http.ContentType.JSON) {
       uri.path = '/items'
       uri.query = [access_token: appUser]
-      body = itemRef.toMap()
+      body = itemRef
 
       response.success = { resp, json ->
         newItemId = json['id']
@@ -124,8 +130,8 @@ class ImportService {
         anError.save()
         itemImport.addToErrs(anError)
       }
-
     }
+
     newItemId
   }
 
@@ -138,23 +144,6 @@ class ImportService {
   def getHttpBuilderInstance() {
     def builder = new HTTPBuilder()
 
-    // always Accept json
-    //builder.contentType = ContentType.JSON
-
-    // the closure that takes a HttpServletResponse and returns an object
-    def jsonParser = { response ->
-      grails.converters.JSON.parse(new InputStreamReader(response.entity.content, ParserRegistry.getCharset(response)))
-    }
-
-    // the closure that takes an object and returns an org.apache.http.HttpEntity
-    def jsonEncoder = { value ->
-      def json = value instanceof Closure ? new grails.web.JSONBuilder().build(value) : new grails.converters.JSON(value)
-      def producer = [writeTo: { OutputStream out -> out.withWriter { json.render(it) } }] as ContentProducer
-      def entity = new EntityTemplate(producer)
-      entity.contentType = new BasicHeader("Content-Type", JSON.toString())
-      entity
-    }
-
     // for each JSON content type, install the handler
     JSON.contentTypeStrings.each {
       builder.parser."$it" = jsonParser
@@ -164,6 +153,22 @@ class ImportService {
   }
 
 
+  // the closure that takes a HttpServletResponse and returns an object
+  def jsonParser = { response ->
+    grails.converters.JSON.parse(new InputStreamReader(response.entity.content, ParserRegistry.getCharset(response)))
+  }
+
+  // the closure that takes an object and returns an org.apache.http.HttpEntity
+  def jsonEncoder = { value ->
+    def json = value instanceof Closure ? new grails.web.JSONBuilder().build(value) : new grails.converters.JSON(value)
+
+    def entity = new StringEntity(json as String, "UTF-8")
+    entity.contentType = new BasicHeader("Content-Type", JSON.toString())
+    entity
+  }
+
+
+  //REMOVE
   def newItemFromMap(props) {
     Item anItem = new Item()
     props?.each() { key, val ->
