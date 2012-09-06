@@ -1,2 +1,2 @@
-gp_id,site,format,currency,title,description,category,pictureURL,available_quantity,duration,price,shippingCosts,location,condition,shipsFrom,options
-123456789099,MLA,buy_it_now,USD,Uploaded Item - Botas Urbanas Con Tachas Y Hebillas Taco Con Camara De Aire - NO Ofertar,HTML description coming here   <b>soon</b> note all quotes must be escaped,MLA78884,http://img1.mlstatic.com/s_MLA_v_O_f_141417155_2525.jpg,20,60,225.99,0,,new,90125,Size 36 38 39 40
+gp_id,format,currency,title,description,category,pictureURL,available_quantity,duration,price,shippingCosts,location,condition,shipsFrom,options
+123456789099,buy_it_now,USD,Uploaded Item - Botas Urbanas Con Tachas Y Hebillas Taco Con Camara De Aire - NO Ofertar,HTML description coming here   <b>soon</b> note all quotes must be escaped,MLA78884,http://img1.mlstatic.com/s_MLA_v_O_f_141417155_2525.jpg,20,60,225.99,0,,new,90125,Size 36 38 39 40
