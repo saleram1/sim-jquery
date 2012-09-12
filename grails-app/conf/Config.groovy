@@ -67,7 +67,8 @@ environments {
         grails.logging.jul.usebridge = true
     }
     production {
-        grails.logging.jul.usebridge = false
+        // whether to install the java.util.logging bridge for sl4j. Disable for AppEngine!
+		grails.logging.jul.usebridge = false
         grails.serverURL = "http://simplificar.elasticbeanstalk.com"
     }
 }
@@ -92,8 +93,9 @@ log4j = {
            'org.codehaus.groovy.grails.plugins',            // plugins
            'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
            'org.springframework',
-           'org.hibernate',
-           'net.sf.ehcache.hibernate'
+           'org.hibernate'
+
+	warn   'net.sf.ehcache.hibernate'
 }
 
 
