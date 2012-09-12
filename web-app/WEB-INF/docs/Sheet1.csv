@@ -1,2 +1,2 @@
-gp_id,site,format,currency,title,description,category,pictureURL,available_quantity,duration,price,shippingCosts,location,condition,shipsFrom
-UPC:2708164501,MLA,buy_it_now,USD,THursday Item - Botas Urbanas Con Tachas Y Hebillas Taco Con Camara De Aire - NO Ofertar,HTML description coming here   <b>soon</b>,MLA1458,http://img1.mlstatic.com/s_MLA_v_O_f_141417155_2525.jpg,20,60,225.99,10,,new,90125
+gp_id,format,currency,title,description,category,pictureURL,available_quantity,duration,price,shippingCosts,location,condition,shipsFrom,listing_type
+UPC:2708164501,buy_it_now,USD,Ruby Tues -- Botas Urbanas Con Tachas Y Hebillas Taco Con Camara De Aire - NO Ofertar,HTML description coming here   <b>soon</b>,MLA1458,http://img1.mlstatic.com/s_MLA_v_O_f_141417155_2525.jpg,20,60,225.99,10,,new,90125,gold_premium
