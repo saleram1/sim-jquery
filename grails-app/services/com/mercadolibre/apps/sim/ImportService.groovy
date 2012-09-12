@@ -42,8 +42,17 @@ class ImportService {
         Item aProperItem = newItemFromMap(it)
         VanillaItemListing properListing = new VanillaItemListing(it)
 
+        // WARN only
+        if (itemExists(aProperItem)) {
+          log.warn("An item was already found in catalog with gp_id : " + aProperItem.gp_id)
+        }
 
-        if (aProperItem.validate()) {
+        if (!aProperItem.validate()) {
+          aProperItem.errors.fieldErrors.each() {
+            log.error it
+          }
+        }
+        else {
           try {
             // @TODO support a 'required attribute' message in the output of ItemImport - such as options for Fashion
 
@@ -69,10 +78,7 @@ class ImportService {
             tr.printStackTrace()
           }
         }
-        else if (itemExists(aProperItem)) {
-          log.warn("An item was already found with id : " + aProperItem.gp_id)
-          log.warn("Update the quantity to new available_quantity !!") // @TODO
-        }
+
         //
       } // for each Item
     }
@@ -85,12 +91,12 @@ class ImportService {
    * @return
    */
   Boolean itemExists(Item aProperItem) {
-    def aPreviousItem = Item.createCriteria().get() {
+    def aPreviousItem = Item.createCriteria().list() {
       eq('gp_id', aProperItem?.gp_id)
       cache(true)
     }
 
-    return (aPreviousItem != null)
+    return (aPreviousItem?.size() > 0)
   }
 
   /**
@@ -103,6 +109,10 @@ class ImportService {
    */
   String pushItemToMarketplace(ItemImport itemImport, ItemImportFileSource fileSource, Integer rowNumber, Object itemRef, String appUser) {
     def newItemId = null
+
+    println ''
+    println (itemRef as grails.converters.JSON)
+    println ''
 
     // one HTTPBuilder customised to work w/ Grails converters
     def builder = getHttpBuilderInstance()

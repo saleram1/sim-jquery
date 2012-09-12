@@ -15,7 +15,7 @@ class Item implements Comparable {
   Double price
   String pictureURL
   Integer available_quantity
-  String listing_type_id = "bronze"  // unless Seller overrides
+  String listing_type_id
   String buying_mode
   String location
   String mercadoLibreItemId
@@ -36,7 +36,7 @@ class Item implements Comparable {
     description(blank: false, nullable: true, attributes: [listable: false], widget: "textarea")
     buying_mode(inList: ["buy_it_now", "auction"])
     gp_id(nullable: true, blank: true, display: false)
-    listing_type_id(inList: ["bronze", "silver", "gold"], attributes: [listable: false])
+    listing_type_id(inList: ["free", "bronze", "silver", "gold", "gold_premium"], attributes: [listable: false])
     location(nullable: true)
     mercadoLibreItemId(nullable: true)
     pictureURL(blank: false, nullable: true, url: true, attributes: [listable: false])

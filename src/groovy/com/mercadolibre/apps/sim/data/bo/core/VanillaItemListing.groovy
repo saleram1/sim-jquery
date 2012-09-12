@@ -5,10 +5,10 @@ package com.mercadolibre.apps.sim.data.bo.core
  *
  */ 
 class VanillaItemListing implements Serializable {
-  String gp_id       // SKU
+  String gp_id       // SKU or store code
 	String category_id
 	String buying_mode
-  String listing_type_id = "bronze"
+  String listing_type_id
 	String currency_id
 	String title
 	String description
