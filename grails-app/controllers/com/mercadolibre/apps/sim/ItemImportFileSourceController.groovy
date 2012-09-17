@@ -20,7 +20,8 @@ class ItemImportFileSourceController {
 			session.ml_access_token = command.access_token
 			session.ml_caller_id    = command.user_id
 			session.setMaxInactiveInterval(command.expires_in - 30)
-			log.warn "Storing session for User ${session.ml_caller_id} with token - ${session.ml_access_token}"
+            session.nickname = userService.getNickname(command.user_id)
+            log.warn "Storing session for User ${session.ml_caller_id} with token - ${session.ml_access_token}"
 			
 			if (!User.findByCallerId(session.ml_caller_id as Integer)) {
 				nextAction = [controller: "signup", action: "create"]
