@@ -110,10 +110,6 @@ class ImportService {
   String pushItemToMarketplace(ItemImport itemImport, ItemImportFileSource fileSource, Integer rowNumber, Object itemRef, String appUser) {
     def newItemId = null
 
-    println ''
-    println (itemRef as grails.converters.JSON)
-    println ''
-
     // one HTTPBuilder customised to work w/ Grails converters
     def builder = getHttpBuilderInstance()
     builder.request("https://api.mercadolibre.com",

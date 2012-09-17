@@ -7,7 +7,7 @@ class UserTagLib {
     def nickNameAndCompany = { attrs, body ->
         if (session.nickname != null && session.company != null) {
             def nickNameAndCompany = session.nickname + "@" + session.company
-            out << "Hola " + nickNameAndCompany
+            out << "Hello, " + nickNameAndCompany
         }
     }
 

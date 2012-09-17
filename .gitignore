@@ -48,4 +48,4 @@ test_app
 target
 *.iml
 stacktrace.log
-
+prodDb.h2.db
