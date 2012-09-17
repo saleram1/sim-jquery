@@ -53,6 +53,7 @@ class SignupController {
       password = command.password
       locale = Locale.US
       company = aShoppe
+      session.company = company.name
     }
     aUser
   }

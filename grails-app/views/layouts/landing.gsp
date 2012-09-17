@@ -27,6 +27,9 @@
 			<div class="navbar-inner">
 				<img width="125" height="75" src="${resource(dir: 'images', file:'ml-black.jpg')}" alt="logo" />
 			</div>
+            <div class="topright">
+                <g:nickNameAndCompany/>
+            </div>
 			<div class="navbar-inner">
 				<div class="container-fluid">
 					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
