@@ -16,6 +16,7 @@ class UrlMappings {
 		"/users/show/$id?"(controller: "user", action: "show")
 		"/uploads/new"(controller: "itemImportFileSource", action: "create")
 		"/uploads/next"(controller: "itemImport", action: "showUploadProgress")
+		"/logout"(controller: "signout", action: "index")
 		
 		"/"(view:"/index")
 		"500"(view:'/error')
