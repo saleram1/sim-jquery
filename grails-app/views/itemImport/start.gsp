@@ -4,7 +4,7 @@
 	<head>
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'itemImport.label', default: 'ItemImport')}" />
-		<title><g:message code="default.show.label" args="[entityName]" /></title>
+		<title>CBT</title>
 		<script type="text/javascript">
 		function disableStartButton(id) {
 		    document.getElementById("_action_start").disabled = true;

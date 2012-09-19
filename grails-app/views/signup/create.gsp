@@ -4,7 +4,7 @@
 	<head>
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'shoppeUser.label', default: 'ShoppeUser')}" />
-		<title><g:message code="default.create.label" args="[entityName]" /></title>
+		<title>CBT</title>
 		<script type="text/javascript">
 		function skipRegistration() {
 			alert('Coming soon!');

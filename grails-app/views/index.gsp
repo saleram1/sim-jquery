@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="landing">
-		<title>SIM</title>
+		<title>CBT</title>
 	</head>
 	<body>
 		<header class="jumbotron subhead" id="overview">
@@ -56,7 +56,7 @@
 
 		$(document).ready(function() {
 		    $('#get-access-token').click(function() {
-		        window.location.href = getCountryValue() + "/authorization?response_type=token&client_id=10751";
+		        window.location.href = getCountryValue() + "/authorization?response_type=token&client_id=12815";
 		    });
 		});
 		</script>
