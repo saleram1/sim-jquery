@@ -25,6 +25,7 @@ class ImportToMarketPlaceService {
         whatsToImport.errorItemsCount += arry[1] - arry[0]
         whatsToImport.status = "SENT_TO_MARKETPLACE"
         whatsToImport.save()
+        assert whatsToImport.id; println whatsToImport.id
       }
       whatsToImport.status = "COMPLETED"
       whatsToImport.save()

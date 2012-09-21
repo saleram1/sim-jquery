@@ -13,7 +13,7 @@ class ItemImport implements Comparable {
 	
 	static transients = ['compositeId', 'totalItemsProcessed', 'site']
 	
-	static hasMany = [files: ItemImportFileSource, errs: ApiError]
+	static hasMany = [files: ItemImportFileSource, errs: ApiError, listings: ItemListing]
 	
 	static constraints = {
 		id(display:false, attributes:[listable:false]) // do not show id anywhere
