@@ -18,7 +18,7 @@
 		</div>		
 		<div id="create-shoppeUser" class="content scaffold-create" role="main">
 			<h1>Get started – it’s free.</h1>
-			<h2>Registration provides further benefits to manage your Shoppe.</h2>
+			<h2>Registration provides further benefits to manage your Inventory.</h2>
 
 			<g:hasErrors bean="${shoppeUserInstance}">
 			<bootstrap:alert class="alert-error">

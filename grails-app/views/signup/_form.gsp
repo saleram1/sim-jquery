@@ -8,6 +8,14 @@
 	<g:textField name="companyName" required="" value="${shoppeUserInstance?.companyName}"/>
 </div>
 
+<div class="fieldcontain  required">
+	<label for="email">
+		EIN
+		<span class="required-indicator">*</span>
+	</label>
+	<input type="text" name="ein" required="" value="" />
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: shoppeUserInstance, field: 'firstName', 'error')} required">
 	<label for="firstName">
 		<g:message code="shoppeUser.firstName.label" default="First Name" />
@@ -38,4 +46,20 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:passwordField name="password" required="true" value="${shoppeUserInstance?.password}"/>
+</div>
+
+<div class="fieldcontain  required">
+	<label for="email">
+		Contact Phone
+		<span class="required-indicator">*</span>
+	</label>
+	<input type="text" name="ein" required="" value="" />
+</div>
+
+<div class="fieldcontain  required">
+	<label for="addy">
+		U.S. Home Office Address
+		<span class="required-indicator">*</span>
+	</label>
+	<g:textArea name="usAddress" rows="4" cols="32" />
 </div>
