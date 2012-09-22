@@ -29,6 +29,11 @@ class ItemsCallbackController {
     log.info 'This message was stored / updated from the MELI web:'
     log.info cm
 
+    if ('questions' == topic) {
+      def quest = questionService.storeOrAnswerQuestion(resource.split("/")[2] as Long)
+    }
+
+
     // need to change for Item resp ??
     def responseMap = ['message': "Items message processed", 'error': "none", 'status': 200, 'cause': []]
     response.status = 200
