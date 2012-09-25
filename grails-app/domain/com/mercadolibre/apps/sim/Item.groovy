@@ -1,5 +1,7 @@
 package com.mercadolibre.apps.sim
 
+import com.mercadolibre.apps.sim.data.bo.core.Question
+
 /**
  * Item contains a mapping between ML Item :id and the Sellers sku or global productId
  * @see ItemImport
@@ -23,6 +25,7 @@ class Item implements Comparable {
   Date dateCreated
   Date lastUpdated
 
+  static hasMany = [questions: Question]
 
   static transients = ['compositeId', "description", "condition", "currency_id", "pictureURL", "listing_type_id", "buying_mode"]
 

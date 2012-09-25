@@ -13,7 +13,7 @@ import groovy.transform.ToString
 
 @ToString
 class ConversationMessage {
-  Integer attempts = 0
+  Integer attempts
   String resource
   Date sentDate
   String topic

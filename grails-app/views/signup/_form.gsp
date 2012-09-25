@@ -51,15 +51,14 @@
 <div class="fieldcontain  required">
 	<label for="email">
 		Contact Phone
-		<span class="required-indicator">*</span>
 	</label>
-	<input type="text" name="ein" required="" value="" />
+	<input type="text" name="contactPhone" value="" />
 </div>
 
 <div class="fieldcontain  required">
 	<label for="addy">
-		U.S. Home Office Address
+		Home Office Address
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textArea name="usAddress" rows="4" cols="32" />
+	<g:textArea name="address1" rows="4" cols="32" />
 </div>
