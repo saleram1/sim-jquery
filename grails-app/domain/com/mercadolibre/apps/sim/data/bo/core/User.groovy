@@ -26,6 +26,8 @@ implements Serializable {
    */
   boolean verified
 
+  String refreshToken
+
   Date lastUpdated
   Date dateCreated
 
