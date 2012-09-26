@@ -27,7 +27,9 @@ class Question {
     status(nullable: true, blank: false)
     text()
   }
+
   static mapping = {
     id generator: "uuid"
+    answerText type: "text"
   }
 }
