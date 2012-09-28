@@ -51,12 +51,11 @@ implements Serializable {
     id(maxSize: 32)
     lastLogin(nullable: true)
     lastName(nullable: false, blank: false)
-//    lastPasswordResetRequest(nullable: true)
     lastUpdated(nullable:true)
     locale(nullable: false)
     oldEmail(nullable: true, blank: false, email: true)
-//    passwordResetToken(nullable: true, blank: false, minSize: 64, maxSize: 64)
     password(nullable: true, blank: false)
+    refreshToken(nullable: true, blank: false)
     timeZone(nullable: true)
   }
 
