@@ -70,7 +70,7 @@ class CategoryService {
    * @return
    */
   List findAllItemsByCategoryId(String siteId, String friendlyCategoryId, Integer limit = 200, Integer offset = 0) {
-    def items = []
+    def itemListings = []
 
     withHttp(uri: globalConfigService.get("config.apiBaseURL")) {
       def responseData = get(path: "/sites/${siteId}/search",

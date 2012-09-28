@@ -40,6 +40,8 @@ class ItemImportController {
 		if (command.action == "startUpload") {
 			// now we tell the world about it!!
 			sendQueueJMSMessage("queue.import.notification", ['importTicketId': command.id, 'accessToken': session.ml_access_token])
+            // save bsfuUUID to session in order to look up the latest upload
+            session.bsfuUUID = command.bsfuUUID
 		}
 		render "<strong>Upload started at ${new Date()}</strong>"
 	}

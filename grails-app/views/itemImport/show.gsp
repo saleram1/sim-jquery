@@ -46,7 +46,13 @@
 				</g:if>
 				
 				<hr />
-				
+
+                <g:link controller="itemListing" action="list">
+                    <i class="icon-plus icon-white"></i>
+                    <g:message code="default.receipt.label" />
+                </g:link>
+
+                <hr />
 				<g:if test="${itemImportInstance?.validItemsCount >= 0}">
 					<dt><g:message code="itemImport.validItemsCount.label" default="Listed Items" /></dt>
 					
