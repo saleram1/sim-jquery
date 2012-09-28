@@ -80,8 +80,9 @@ log4j = {
     //appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
-///
-///	debug  "org.apache.http.headers"
+
+	debug  "org.apache.http.headers",
+	       "org.apache.http.wire"
 
 	info   'grails.app'
     warn   'org.codehaus.groovy.grails.web.servlet',        // controllers
