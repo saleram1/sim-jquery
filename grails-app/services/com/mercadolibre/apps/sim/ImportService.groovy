@@ -2,6 +2,7 @@ package com.mercadolibre.apps.sim
 
 import com.mercadolibre.apps.sim.data.bo.core.VanillaItemListing
 import com.mercadolibre.apps.sim.util.CSVImporter
+import com.mercadolibre.apps.sim.data.bo.core.ItemListing
 
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.ParserRegistry
@@ -39,7 +40,8 @@ class ImportService {
       totalCount = items?.size()
 
       items.eachWithIndex { it, idx ->
-        Item aProperItem = newItemFromMap(it)
+        //Item aProperItem = newItemFromMap(it)
+        ItemListing aProperItem = newItemFromMap(it)
         VanillaItemListing properListing = new VanillaItemListing(it)
 
         // WARN only
@@ -90,8 +92,8 @@ class ImportService {
    * @param itemRef
    * @return
    */
-  Boolean itemExists(Item aProperItem) {
-    def aPreviousItem = Item.createCriteria().list() {
+  Boolean itemExists(ItemListing aProperItem) {
+    def aPreviousItem = ItemListing.createCriteria().list() {
       eq('gp_id', aProperItem?.gp_id)
       cache(true)
     }
@@ -118,6 +120,20 @@ class ImportService {
       uri.path = '/items'
       uri.query = [access_token: appUser]
       body = itemRef
+//
+//        println "************"
+//        println itemRef.category_id
+//        println itemRef.buying_mode
+//        println itemRef.listing_type_id
+//        println itemRef.currency_id
+//        println itemRef.title
+//        println itemRef.description
+//        println itemRef.available_quantity
+//        println itemRef.price
+//        println itemRef.condition
+//        println itemRef.pictureURL
+//        println "************"
+//
 
       response.success = { resp, json ->
         newItemId = json['id']
@@ -176,7 +192,7 @@ class ImportService {
 
   //REMOVE
   def newItemFromMap(props) {
-    Item anItem = new Item()
+    ItemListing anItem = new ItemListing()
     props?.each() { key, val ->
       try {
         anItem."$key" = val
