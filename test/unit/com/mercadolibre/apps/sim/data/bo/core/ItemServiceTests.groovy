@@ -18,6 +18,5 @@ class ItemServiceTests {
 
     void testValidItem() {
         assert itemService.getItemCommand("MLB233759102")
-        println itemService.getItemCommand("MLB233759102")
     }
 }
