@@ -33,8 +33,6 @@ class ItemListing {
 
   static hasMany = [questions: Question]
 
-  static fetchMode = [questions: 'eager']
-
   static transients = ["category_id", "title", "description", "condition", "currency_id", "price", "pictureURL", "available_quantity", "listing_type_id", "buying_mode", "location", "acceptsMercadoPago", "dateCreated", "lastUpdated"]
 
   static constraints = {
