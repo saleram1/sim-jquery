@@ -25,8 +25,6 @@ class Item implements Comparable {
   Date dateCreated
   Date lastUpdated
 
-  static hasMany = [questions: Question]
-
   static transients = ['compositeId', "description", "condition", "currency_id", "pictureURL", "listing_type_id", "buying_mode"]
 
   static constraints = {
