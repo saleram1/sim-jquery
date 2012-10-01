@@ -31,7 +31,7 @@ class SignupController {
       nextActionMap = [controller: "itemImportFileSource", action: "create"]
     }
     else {
-	  assert aUser.hasErrors() || command.hasErrors()	
+      assert aUser.hasErrors() || command.hasErrors()
       aUser.errors.fieldErrors.each() { FieldError anError ->
         command.errors.rejectValue(anError.field, anError.code, anError.defaultMessage)
       }
@@ -53,9 +53,10 @@ class SignupController {
       password = command.password
       locale = Locale.US
       company = aShoppe
-      session.company = company.name
     }
-    aUser
+    session.company = aUser.company.name  // this also must be done on existing login / auths
+
+    return aUser
   }
 }
 

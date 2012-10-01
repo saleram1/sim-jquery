@@ -9,6 +9,12 @@ implements Serializable {
    */
   boolean accountLocked = false
   Integer callerId
+
+  /**
+   * The Shoppe to which the User belongs
+   */
+  Shoppe company
+
   String email = ""
   boolean enabled = true
   String firstName = ""
@@ -30,11 +36,6 @@ implements Serializable {
 
   Date lastUpdated
   Date dateCreated
-
-  /**
-   * The Shoppe to which the User belongs
-   */
-  static belongsTo = [company: Shoppe]
 
 
   //GORM

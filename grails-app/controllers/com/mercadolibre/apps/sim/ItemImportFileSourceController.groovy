@@ -12,6 +12,7 @@ class ItemImportFileSourceController {
 
   UserService userService
 
+
   def authorize(AuthoriseCommand command) {
     def nextAction = [action: "create"]
 
@@ -22,20 +23,26 @@ class ItemImportFileSourceController {
       session.ml_caller_id = command.user_id
       session.setMaxInactiveInterval(command.expires_in - 30)
       session.nickname = userService.getNickname(command.user_id)
-      log.warn "Storing session for User ${session.ml_caller_id} with token - ${session.ml_access_token}"
+      log.info "Storing session for User ${session.ml_caller_id} nicknamed ${session.nickname} and token - ${session.ml_access_token}"
 
-      if (!User.findByCallerId(session.ml_caller_id as Integer)) {
+      User existingUser = User.findByCallerId(session.ml_caller_id as Integer)
+      if (!existingUser) {
         nextAction = [controller: "signup", action: "create"]
+      }
+      else {
+        session.company = existingUser.company.name  // this also must be done on signup controller
       }
     }
     redirect(nextAction)
   }
+
 
   def create() {
     def formDataModelMap = ['bsfuUUID': "${System.currentTimeMillis()}"]
     //[category: "Various2", description: "Shoes and Botas", ...]
     render(view: "create", model: [formDataModelMap: formDataModelMap])
   }
+
 
   def save() {
     switch (request.method) {
