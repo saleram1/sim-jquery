@@ -13,7 +13,8 @@ class ItemImport implements Comparable {
 	Integer validItemsCount = 0
 	
 	static transients = ['compositeId', 'totalItemsProcessed', 'site']
-	
+
+    // Adding ItemListing hasMany
 	static hasMany = [files: ItemImportFileSource, errs: ApiError, listings: ItemListing]
 	
 	static constraints = {
