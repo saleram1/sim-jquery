@@ -30,6 +30,7 @@ class Question {
 
   static mapping = {
     id generator: "uuid"
+    text  type:  "text"
     answerText type: "text"
   }
 }
