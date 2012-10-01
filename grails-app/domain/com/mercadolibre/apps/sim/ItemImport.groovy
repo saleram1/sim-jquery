@@ -1,6 +1,7 @@
 package com.mercadolibre.apps.sim
 
 import groovy.transform.ToString
+import com.mercadolibre.apps.sim.data.bo.core.ItemListing
 
 @ToString
 class ItemImport implements Comparable {
@@ -13,7 +14,7 @@ class ItemImport implements Comparable {
 	
 	static transients = ['compositeId', 'totalItemsProcessed', 'site']
 	
-	static hasMany = [files: ItemImportFileSource, errs: ApiError]
+	static hasMany = [files: ItemImportFileSource, errs: ApiError, listings: ItemListing]
 	
 	static constraints = {
 		id(display:false, attributes:[listable:false]) // do not show id anywhere
