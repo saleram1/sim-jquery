@@ -5,12 +5,11 @@ class Shoppe
 implements Serializable {
 
   //VARS
-  String            id
-  User	  		    manager
-  String            name
-  String            number
-  String 			webAddress
-
+  String id
+  User manager
+  String name
+  String number
+  String webAddress
 
   //GORM
   static hasMany = [locations: Location]
@@ -18,10 +17,10 @@ implements Serializable {
   static constraints = {
     id(maxSize: 32)
     locations(nullable: true)
-	manager(nullable: true)
+    manager(nullable: true)
     name(maxSize: 100, blank: false, nullable: false)
     number(maxSize: 20, blank: false, nullable: true)
-	webAddress(nullable: true, url: true)
+    webAddress(nullable: true, url: true)
   }
 
   static mapping = {

@@ -6,7 +6,7 @@ class UserTagLib {
 
   def nickNameAndCompany = { attrs, body ->
     if (session.nickname != null && session.company != null) {
-      def nickNameAndCompany = session.nickname + "@" + session.company
+      def nickNameAndCompany = session.nickname + " @ " + session.company
       out << "Hello, " + nickNameAndCompany
       out << "&nbsp;"
       out << "(<a href=\"${createLink(controller: 'signout')}\">Sign out</a>)"
