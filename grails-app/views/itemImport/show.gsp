@@ -61,7 +61,7 @@
 				
 				<hr />
 
-                <g:link controller="itemListing" action="list">
+                <g:link controller="itemListing" action="listForReceipt">
                     <i class="icon-plus icon-white"></i>
                     <g:message code="default.receipt.label" />
                 </g:link>

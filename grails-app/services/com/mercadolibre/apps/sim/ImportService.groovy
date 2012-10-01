@@ -67,6 +67,7 @@ class ImportService {
               if (newItemId) {
                 count++
                 log.info(aProperItem.save(flush: true))
+                itemImport.listings.add(aProperItem)
               }
               else {
                 log.error("New Item was not listed in MLA/MLB")
