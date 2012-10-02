@@ -9,10 +9,12 @@ import groovyx.net.http.ParserRegistry
 import groovyx.net.http.ContentType
 import static groovyx.net.http.ContentType.JSON
 
-import org.apache.http.entity.EntityTemplate
 import org.apache.http.entity.StringEntity
-import org.apache.http.entity.ContentProducer
+
 import org.apache.http.message.BasicHeader
+import com.mercadolibre.apps.sim.data.bo.errors.AccessViolationError
+import com.mercadolibre.apps.sim.data.bo.errors.ApiError
+import com.mercadolibre.apps.sim.data.bo.errors.NewUserListingUnsupportedError
 
 /**
  *
@@ -141,13 +143,19 @@ class ImportService {
       }
       response.failure = { resp, json ->
         //assert json.size() == 4
-        def anException = new ApiError(status: json['status'], error: json['error'], message: json['message'], originalFilename: fileSource.originalFilename)
+        def anException = new ApiError(status: json['status'], error: json['error'], message: json['message'], cause: json['cause'] ?: "",
+            originalFilename: fileSource.originalFilename)
         log.error anException
         anException.save()
         itemImport.addToErrs(anException)
       }
+      response.'402' = { resp, json ->
+        def anError = new NewUserListingUnsupportedError(fileSource.originalFilename, itemRef.listing_type_id)
+        log.error anError
+        anError.save()
+        itemImport.addToErrs(anError)
+      }
       response.'403' = { resp, json ->
-        //assert json.size() == 4
         def anError = new AccessViolationError(fileSource.originalFilename)
         log.error anError
         anError.save()

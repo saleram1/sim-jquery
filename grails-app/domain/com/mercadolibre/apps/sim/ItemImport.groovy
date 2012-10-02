@@ -2,6 +2,7 @@ package com.mercadolibre.apps.sim
 
 import groovy.transform.ToString
 import com.mercadolibre.apps.sim.data.bo.core.ItemListing
+import com.mercadolibre.apps.sim.data.bo.errors.ApiError
 
 @ToString
 class ItemImport implements Comparable {
