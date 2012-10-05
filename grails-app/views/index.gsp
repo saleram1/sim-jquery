@@ -56,7 +56,7 @@
 
 		$(document).ready(function() {
 		    $('#get-access-token').click(function() {
-		        window.location.href = getCountryValue() + "/authorization?response_type=token&client_id=12815";
+		        window.location.href = getCountryValue() + "/authorization?response_type=token&client_id=10751";
 		    });
 		});
 		</script>
