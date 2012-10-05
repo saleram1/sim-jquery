@@ -21,30 +21,43 @@ class CsvParserServiceTests implements ApplicationContextAware {
   }
 
 
-  void testCsvParseStrippedFromBootStrap() {
-    assert true
-    /*
-        // appropriate for the BootStrap
-        ApplicationContext applicationContext = servletContext.getAttribute(GrailsApplicationAttributes.APPLICATION_CONTEXT)
-        CsvParserService csvParser = (CsvParserService) applicationContext.getBean("csvParserService")
-        println csvParser
-      */
-  }
-
+  @Test
   void testSystemUnderTestGetsInjected() {
     assert applicationContext
     assert csvParserService
   }
 
+
+  @Test
   void testAllSamplesCanBeParsedToMaps() {
     File csvDirectory = applicationContext.getResource(File.separator + "WEB-INF" + File.separator + "docs").getFile();
     csvDirectory.list().each { csvFile ->
       if (csvFile.endsWith(".csv")) {
         def myFile = new File("${csvDirectory.path}/${csvFile}")
-        println myFile.path
-        assert myFile.exists()
-        assert (csvParserService.parseItemInventoryFile(myFile).size() > 0)
+
+        //assertTrue("Service returns a List of HashMap",
+        assert ((csvParserService.parseItemInventoryFile(myFile)) instanceof java.util.List)
+        assert ((csvParserService.parseItemInventoryFile(myFile)).get(0) instanceof java.util.Map)
+
+        //assertTrue("List size is greater than zero and throws no exceptions"
+        assert (csvParserService.parseItemInventoryFile(myFile).size() >= 1)
       }
+    }
+  }
+
+
+  @Test
+  void testNullInputFileThrowsException() {
+    shouldFail {
+      csvParserService.parseItemInventoryFile(null)
+    }
+  }
+
+
+  @Test
+  void testBogusFileThrowsException() {
+    shouldFail {
+      csvParserService.parseItemInventoryFile(new File("/tmp/this/cannot/be/aFile/named/bogon.flux"))
     }
   }
 
