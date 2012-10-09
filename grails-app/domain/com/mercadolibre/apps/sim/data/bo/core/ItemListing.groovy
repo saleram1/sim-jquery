@@ -12,6 +12,8 @@ class ItemListing {
 
   def ItemService
 
+  ItemInfo itemInfo
+
   String gp_id    // assigned sku or UPC
   String mercadoLibreItemId    // use this to lookup most of the attributes
 
@@ -36,6 +38,7 @@ class ItemListing {
   static transients = ["category_id", "title", "description", "condition", "currency_id", "price", "pictureURL", "available_quantity", "listing_type_id", "buying_mode", "location", "acceptsMercadoPago", "dateCreated", "lastUpdated"]
 
   static constraints = {
+    itemInfo(nullable: true)
     id(display: false, attributes: [listable: false]) // do not show id anywhere
     gp_id(nullable: true, blank: true, display: false)
     mercadoLibreItemId(nullable: true)
