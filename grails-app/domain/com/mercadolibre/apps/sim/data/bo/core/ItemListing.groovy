@@ -12,6 +12,7 @@ class ItemListing {
 
   def ItemService
 
+  // Non-meli attributes that come from PB
   ItemInfo itemInfo
 
   String gp_id    // assigned sku or UPC

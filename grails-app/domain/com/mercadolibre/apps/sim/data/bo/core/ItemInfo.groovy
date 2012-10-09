@@ -1,6 +1,7 @@
 package com.mercadolibre.apps.sim.data.bo.core
 
 class ItemInfo {
+  // These attributes come from PB
 
   static belongsTo = [itemListing: ItemListing]
 
