@@ -17,6 +17,7 @@ implements Serializable {
 
   String email = ""
   boolean enabled = true
+  boolean isInternational = true
   String firstName = ""
   String id
   Date lastLogin
