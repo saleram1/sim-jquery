@@ -20,9 +20,8 @@ class CatalogItem implements Comparable {
   BigDecimal shippingCosts
 	String pictureURL
 	Integer available_quantity
-	Location location
-	String shipsFrom
-	String mercadoLibreItemId
+	Location shipsFromLocation
+	String mercadoLibreItemId         // this is actually a one-to-many potentially listing to MLA/MLB for example
 	Boolean acceptsMercadoPago = true
   PackageDimension dimension
   BigDecimal weight
@@ -33,17 +32,17 @@ class CatalogItem implements Comparable {
 
 	static constraints = {
     acceptsMercadoPago()
-    available_quantity(min:1, max:100000)
+    available_quantity(min:0, max:100000)
     category()
-    currency(blank: false, nullable: false, inList: ["ARS", "BRL", "USD"])
+    currency(nullable: false, inList: ["ARS", "BRL", "USD"])
     description(blank: false, nullable: true, widget: "textarea")
     dimension(nullable:  true)
     id(display:false, attributes:[listable:false]) // do not show id anywhere
-    location(nullable: false)
     mercadoLibreItemId(nullable: true)
     pictureURL(blank: false, nullable: true, url: true, attributes:[listable:false])
     price()  // establish reasonable min and max
     shippingCosts(nullable: false)
+    shipsFromLocation(nullable: false)
     sku(nullable: true, blank: true, display:false)
     title(nullable: false, blank: false)
     weightUOM(nullable: true, blank: false)
