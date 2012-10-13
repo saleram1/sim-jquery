@@ -1,4 +1,4 @@
-<%@ page import="com.mercadolibre.apps.sim.ItemImport" %>
+<%@ page import="com.mercadolibre.apps.sim.data.bo.imports.ItemImport" %>
 <!doctype html>
 <html>
 	<head>

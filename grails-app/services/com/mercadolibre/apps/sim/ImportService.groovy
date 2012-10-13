@@ -15,6 +15,8 @@ import org.apache.http.message.BasicHeader
 import com.mercadolibre.apps.sim.data.bo.errors.AccessViolationError
 import com.mercadolibre.apps.sim.data.bo.errors.ApiError
 import com.mercadolibre.apps.sim.data.bo.errors.NewUserListingUnsupportedError
+import com.mercadolibre.apps.sim.data.bo.imports.ItemImport
+import com.mercadolibre.apps.sim.data.bo.imports.ItemImportFileSource
 
 /**
  *

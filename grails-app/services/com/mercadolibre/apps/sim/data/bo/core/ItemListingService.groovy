@@ -1,6 +1,6 @@
 package com.mercadolibre.apps.sim.data.bo.core
 
-import com.mercadolibre.apps.sim.ItemImport
+import com.mercadolibre.apps.sim.data.bo.imports.ItemImport
 
 class ItemListingService {
 

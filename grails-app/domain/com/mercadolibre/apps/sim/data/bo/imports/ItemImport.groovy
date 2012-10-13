@@ -1,4 +1,4 @@
-package com.mercadolibre.apps.sim
+package com.mercadolibre.apps.sim.data.bo.imports
 
 import groovy.transform.ToString
 import com.mercadolibre.apps.sim.data.bo.core.ItemListing

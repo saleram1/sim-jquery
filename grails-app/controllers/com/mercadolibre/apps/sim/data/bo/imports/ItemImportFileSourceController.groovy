@@ -1,4 +1,4 @@
-package com.mercadolibre.apps.sim
+package com.mercadolibre.apps.sim.data.bo.imports
 
 import com.mercadolibre.apps.sim.data.bo.core.User
 import com.mercadolibre.apps.sim.util.FileHelper
@@ -7,6 +7,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest
 import org.springframework.web.multipart.MultipartFile
 
 import grails.converters.JSON
+import com.mercadolibre.apps.sim.data.bo.imports.ItemImportFileSource
+import com.mercadolibre.apps.sim.UserService
 
 class ItemImportFileSourceController {
 
@@ -90,6 +92,7 @@ class ItemImportFileSourceController {
     }
   }
 }
+
 
 /*
 	domains: bit.ly

@@ -1,4 +1,7 @@
-package com.mercadolibre.apps.sim
+package com.mercadolibre.apps.sim.data.bo.imports
+
+import com.mercadolibre.apps.sim.data.bo.imports.ItemImport
+import com.mercadolibre.apps.sim.data.bo.imports.ItemImportFileSource
 
 
 class ItemImportController {
@@ -47,6 +50,11 @@ class ItemImportController {
 	}
 }
 
+
+
+/*
+	Each file in the batch will contain same bsfu ID or bootStrapFileUpload ID
+*/
 
 class StartUploadCommand {
 	String action

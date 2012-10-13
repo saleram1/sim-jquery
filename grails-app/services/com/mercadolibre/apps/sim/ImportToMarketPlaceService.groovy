@@ -1,5 +1,8 @@
 package com.mercadolibre.apps.sim
 
+import com.mercadolibre.apps.sim.data.bo.imports.ItemImport
+import com.mercadolibre.apps.sim.data.bo.imports.ItemImportFileSource
+
 /**
  *   ImportToMarketPlaceService
  *
