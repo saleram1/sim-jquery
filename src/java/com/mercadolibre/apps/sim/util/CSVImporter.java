@@ -77,6 +77,14 @@ public class CSVImporter {
     aMap.put("condition", ds.getString("condition"));
     aMap.put("pictureURL", ds.getString("pictureURL"));  /// @TODO support multiple pictures - up to six
 
+    
+    aMap.put("location_addressLine1", ds.getString("location_address_line_1"));
+    aMap.put("location_addressLine2", ds.getString("location_address_line_2"));
+    aMap.put("location_city", ds.getString("location_city"));
+    aMap.put("location_state", ds.getString("location_state"));
+    aMap.put("location_zipCode", ds.getString("location_zipCode"));
+    aMap.put("location_country", ds.getString("location_country"));
+
     // PICS up to six
     //
     // List pictures = new ArrayList()
@@ -117,6 +125,12 @@ public class CSVImporter {
       "	<COLUMN name=\"condition\" />" +
       "	<COLUMN name=\"shipsFrom\" />" +
       "	<COLUMN name=\"listing_type\" />" +
+      "	<COLUMN name=\"location_address_line_1\" />" +
+      "	<COLUMN name=\"location_address_line_2\" />" +
+      "	<COLUMN name=\"location_city\" />" +
+      "	<COLUMN name=\"location_state\" />" +
+      "	<COLUMN name=\"location_zipCode\" />" +
+      "	<COLUMN name=\"location_country\" />" +
   "</PZMAP>\n";
 
 }

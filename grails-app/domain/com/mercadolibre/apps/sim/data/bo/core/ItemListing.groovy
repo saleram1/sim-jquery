@@ -14,7 +14,11 @@ class ItemListing {
 
   // Non-meli attributes that come from PB
   ItemInfo itemInfo
-
+  // Can't get this to work for some weird reason.  Will try this again later
+  //ItemWarehouseLocation itemWarehouseLocation
+  
+  // In lieu of using the above ItemWarehouse, I will just put the address attributes in ItemListing
+  
   String gp_id    // assigned sku or UPC
   String mercadoLibreItemId    // use this to lookup most of the attributes
 
@@ -40,6 +44,7 @@ class ItemListing {
 
   static constraints = {
     itemInfo(nullable: true)
+    itemWarehouseLocation(nullable: true)
     id(display: false, attributes: [listable: false]) // do not show id anywhere
     gp_id(nullable: true, blank: true, display: false)
     mercadoLibreItemId(nullable: true)
