@@ -19,6 +19,13 @@ class ItemListing {
   
   // In lieu of using the above ItemWarehouse, I will just put the address attributes in ItemListing
   
+  String location_addressLine1
+  String location_addressLine2
+  String location_city
+  String location_state
+  String location_zipCode
+  String location_country
+  
   String gp_id    // assigned sku or UPC
   String mercadoLibreItemId    // use this to lookup most of the attributes
 
@@ -44,7 +51,7 @@ class ItemListing {
 
   static constraints = {
     itemInfo(nullable: true)
-    itemWarehouseLocation(nullable: true)
+    //itemWarehouseLocation(nullable: true)
     id(display: false, attributes: [listable: false]) // do not show id anywhere
     gp_id(nullable: true, blank: true, display: false)
     mercadoLibreItemId(nullable: true)

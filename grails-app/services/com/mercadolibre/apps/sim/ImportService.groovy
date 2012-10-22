@@ -47,7 +47,7 @@ class ImportService {
       items.eachWithIndex { it, idx ->
         //Item aProperItem = newItemFromMap(it)
         ItemListing aProperItem = newItemFromMap(it)
-        ItemWarehouseLocation itemWarehouseLocation = newItemWarehouseLocationFromMap(it)
+        //ItemWarehouseLocation itemWarehouseLocation = newItemWarehouseLocationFromMap(it)
         
         VanillaItemListing properListing = newVanillaItemFromMap(it)
 
@@ -73,9 +73,9 @@ class ImportService {
 
               if (newItemId) {
                 count++
-                println "About to save itemWarehouseLocation"
-                itemWarehouseLocation.save(flush:true)
-                aProperItem.itemWarehouseLocation = itemWarehouseLocation
+                //println "About to save itemWarehouseLocation"
+                //itemWarehouseLocation.save(flush:true)
+                //aProperItem.itemWarehouseLocation = itemWarehouseLocation
                 println "About to save aProperItem"
                 log.info(aProperItem.save(flush: true))
                 println "After saving aProperItem"
@@ -222,42 +222,74 @@ class ImportService {
 //    }
 //    return anItem
 //  }
+//  def newItemFromMap(props) {
+//	  println "Start of newItemFromMap"
+//    ItemListing anItem = new ItemListing()
+//	
+//    props?.each() { key, val ->
+//    
+//      try {
+//        if (!key.startsWith("location_")) {    
+//          println "Inside newItemMap regular"
+//          anItem."$key" = val
+//        }
+//      } catch (org.codehaus.groovy.runtime.typehandling.GroovyCastException gce) {
+//        // property is null
+//      }
+//    }      
+//    return anItem
+//  }
+//  
+//  def newItemWarehouseLocationFromMap(props) {
+//	  println "Start of newItemWarehouseLocationFromMap"
+//	
+//    ItemWarehouseLocation itemWarehouseLocation = null
+//    
+//    props?.each() { key, val ->
+//      try {
+//        if (key.startsWith("location_")) {
+//          if (itemWarehouseLocation == null) {
+//            itemWarehouseLocation = new ItemWarehouseLocation() // lazy instantiate
+//          }
+//        }
+//      } catch (org.codehaus.groovy.runtime.typehandling.GroovyCastException gce) {
+//      // property is null
+//      }
+//    }
+//    return itemWarehouseLocation
+//  }
+//  
+//  def newVanillaItemFromMap(props) {
+//    println "Start of newVanillaItemFromMap"
+//    VanillaItemListing aVanillaItem = new VanillaItemListing()
+//	
+//    props?.each() { key, val ->
+//      try {		
+//        if (!key.startsWith("location_")){
+//          println "Inside newItemMap vanilla"
+//          aVanillaItem."$key" = val
+//        }
+//      } catch (org.codehaus.groovy.runtime.typehandling.GroovyCastException gce) {
+//      // property is null
+//      }
+//    }
+//    return aVanillaItem
+//  }
+//  
+ 
   def newItemFromMap(props) {
-	  println "Start of newItemFromMap"
     ItemListing anItem = new ItemListing()
-	
     props?.each() { key, val ->
-    
       try {
-        if (!key.startsWith("location_")) {    
-          println "Inside newItemMap regular"
-          anItem."$key" = val
-        }
+        anItem."$key" = val
       } catch (org.codehaus.groovy.runtime.typehandling.GroovyCastException gce) {
         // property is null
       }
-    }      
+    }
     return anItem
   }
   
-  def newItemWarehouseLocationFromMap(props) {
-	  println "Start of newItemWarehouseLocationFromMap"
-	
-    ItemWarehouseLocation itemWarehouseLocation = null
-    
-    props?.each() { key, val ->
-      try {
-        if (key.startsWith("location_")) {
-          if (itemWarehouseLocation == null) {
-            itemWarehouseLocation = new ItemWarehouseLocation() // lazy instantiate
-          }
-        }
-      } catch (org.codehaus.groovy.runtime.typehandling.GroovyCastException gce) {
-      // property is null
-      }
-    }
-    return itemWarehouseLocation
-  }
+
   
   def newVanillaItemFromMap(props) {
     println "Start of newVanillaItemFromMap"
@@ -276,15 +308,14 @@ class ImportService {
     return aVanillaItem
   }
   
-  
   /**
    * Create an authorized token for write access to be used for /item/id   - this is to be used when the server
    * requires access without the JS tools
    *
    * @param apiKey
    * @param sharedSecret
-   * @return
-   */
+   * @return 
+  */
   String setupMercadoApiAccess(Integer apiKey = 7418, String sharedSecret = "Spz9fcrMyPQo9cD8ZJtbdn8Kk46fy2Z3") {
     Boolean success = false
     String appUser = null
