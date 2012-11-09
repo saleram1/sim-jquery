@@ -4,7 +4,7 @@
 	<head>
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'itemImportSource.label', default: 'ItemImportSource')}" />
-		<title>CBT</title>
+		<title>M2M</title>
 	</head>
 	<body>
 		<header class="jumbotron subhead" id="overview">

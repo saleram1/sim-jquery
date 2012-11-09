@@ -33,7 +33,7 @@
 					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 						<span class="icon-bar"></span>
 					</a>					
-					<a class="brand" href="${createLink(uri: '/')}">International Seller Mgmt (CBT)</a>
+					<a class="brand" href="${createLink(uri: '/')}">MercadoLibre Connect (M2M)</a>
 					<div class="nav-collapse">
 						<ul class="nav">
 							<li<%= request.forwardURI == "${createLink(uri: '/help')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/help')}">Help</a></li>

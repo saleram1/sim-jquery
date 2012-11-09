@@ -2,12 +2,12 @@
 <html>
 	<head>
 		<meta name="layout" content="landing">
-		<title>CBT</title>
+		<title>M2M</title>
 	</head>
 	<body>
 		<header class="jumbotron subhead" id="overview">
-		  <h1>Items Uploader</h1>
-		  <p class="lead">Please select your country and click the button to begin.</p>
+		  <h1>Add Listings  - Login</h1>
+		  <p class="lead">Please select your country and click the 'Sign in' button to begin.</p>
 		</header>
 
 		<div class="container section">
@@ -56,7 +56,7 @@
 
 		$(document).ready(function() {
 		    $('#get-access-token').click(function() {
-		        window.location.href = getCountryValue() + "/authorization?response_type=token&client_id=10751";
+		        window.location.href = getCountryValue() + "/authorization?response_type=token&client_id=12815";
 		    });
 		});
 		</script>

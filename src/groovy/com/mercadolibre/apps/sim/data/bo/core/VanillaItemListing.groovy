@@ -12,6 +12,7 @@ class VanillaItemListing implements Serializable {
 	String currency_id
 	String title
 	String description
+  String seller_custom_field
 	Integer available_quantity
 	Double price
 	String condition

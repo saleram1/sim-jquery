@@ -28,7 +28,7 @@ class SignupController {
     if (aUser.validate() && command.validate()) {
       aUser.save(flush: true)
       log.info aUser
-      nextActionMap = [controller: "itemImportFileSource", action: "create"]
+      nextActionMap = [controller: "magentoItemImport", action: "create"]
     }
     else {
       assert aUser.hasErrors() || command.hasErrors()
@@ -75,6 +75,6 @@ class NewSignupCommand {
     firstName(nullable: false, blank: false)
     lastName(nullable: false, blank: false)
     email(nullable: false, blank: false)
-    password(nullable: false, blank: false, minSize: 6, maxSize: 25)
+    password(nullable: false, blank: false, minSize: 8, maxSize: 100)
   }
 }

@@ -3,6 +3,7 @@ import com.mercadolibre.apps.sim.data.bo.core.ItemVariation
 import com.mercadolibre.apps.sim.data.bo.core.VanillaItemListing
 import com.mercadolibre.apps.sim.data.bo.core.VariationAttribute
 import grails.converters.JSON
+import com.mercadolibre.apps.sim.data.bo.errors.ApiError
 
 class BootStrap {
 
@@ -23,6 +24,7 @@ class BootStrap {
   }
 
   def init = { servletContext ->
+
     JSON.registerObjectMarshaller(VariationAttribute, 3) {
       def map = [:]
       map.id = it.id
@@ -30,6 +32,7 @@ class BootStrap {
       map.value_name = it.value_name ?: ""
       return map
     }
+
 
     // Deep workaround...
     JSON.registerObjectMarshaller(ItemVariation, 3) {
@@ -44,11 +47,13 @@ class BootStrap {
       return map
     }
 
+
     JSON.registerObjectMarshaller(FashionItemListing, 2) {
       def map = getBaseItemMap(it)
       map["variations"] = it.variations
       return map
     }
+
 
     JSON.registerObjectMarshaller(VanillaItemListing, 3) {
       def map = getBaseItemMap(it)
@@ -59,6 +64,26 @@ class BootStrap {
       map["pictures"] = pictureSources
       //			map["pictures"] = it.pictures
 
+      return map
+    }
+
+
+    JSON.registerObjectMarshaller(ApiError, 3) {
+      def map = [:]
+      /*
+          {
+            "message": "Category not found: MLA78884",
+            "error": "not_found",
+            "status": 404,
+            "cause": [
+            ],
+          }
+
+      */
+      map.message = it.message
+      map.error   = it.error
+      map.status  = it.status
+      map.cause   = []
       return map
     }
 

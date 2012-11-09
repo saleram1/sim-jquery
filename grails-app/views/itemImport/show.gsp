@@ -5,7 +5,7 @@
 		<meta name="layout" content="main">
 		<meta http-equiv="refresh" content="10" />
 		<g:set var="entityName" value="${message(code: 'itemImport.label', default: 'ItemImport')}" />
-		<title>CBT</title>
+		<title>M2M</title>
 	</head>
 	<body>
 		<div class="row-fluid">

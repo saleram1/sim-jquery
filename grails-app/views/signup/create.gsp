@@ -4,7 +4,6 @@
 	<head>
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'shoppeUser.label', default: 'ShoppeUser')}" />
-		<title>CBT</title>
 		<script type="text/javascript">
 		function skipRegistration() {
 			alert('Coming soon!');
@@ -17,8 +16,8 @@
 			<p></p>
 		</div>		
 		<div id="create-shoppeUser" class="content scaffold-create" role="main">
-			<h1>Get started – it’s free.</h1>
-			<h2>Registration provides further benefits to manage your Inventory.</h2>
+			<h1>Get started on MercadoLibre – it’s free.</h1>
+			<h2>M2M provides further benefits to manage your store inventory using Magento Community or Enterprise</h2>
 
 			<g:hasErrors bean="${shoppeUserInstance}">
 			<bootstrap:alert class="alert-error">

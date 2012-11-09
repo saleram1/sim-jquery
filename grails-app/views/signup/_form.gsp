@@ -8,14 +8,6 @@
 	<g:textField name="companyName" required="" value="${shoppeUserInstance?.companyName}"/>
 </div>
 
-<div class="fieldcontain  required">
-	<label for="email">
-		EIN
-		<span class="required-indicator">*</span>
-	</label>
-	<input type="text" name="ein" required="" value="" />
-</div>
-
 <div class="fieldcontain ${hasErrors(bean: shoppeUserInstance, field: 'firstName', 'error')} required">
 	<label for="firstName">
 		<g:message code="shoppeUser.firstName.label" default="First Name" />
@@ -32,28 +24,30 @@
 	<g:textField name="lastName" required="" value="${shoppeUserInstance?.lastName}"/>
 </div>
 
+<div class="fieldcontain  required">
+	<label for="magentoStoreURI">
+		Magento Store
+	</label>
+	<input class="input-xlarge" type="text" name="magentoStoreURI" value="http://ec2-107-22-49-30.compute-1.amazonaws.com/magento/index.php/" />
+</div>
+
 <div class="fieldcontain ${hasErrors(bean: shoppeUserInstance, field: 'email', 'error')} required">
 	<label for="email">
-		<g:message code="shoppeUser.email.label" default="Email" />
+		<g:message code="shoppeUser.email.label" default="Api Key" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:textField name="email" required="" value="${shoppeUserInstance?.email}"/>
+	<input type="text" name="apiKey" />
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: shoppeUserInstance, field: 'password', 'error')} required">
 	<label for="password">
-		<g:message code="shoppeUser.password.label" default="Password" />
+		<g:message code="shoppeUser.password.label" default="Shared Secret" />
 		<span class="required-indicator">*</span>
 	</label>
 	<g:passwordField name="password" required="true" value="${shoppeUserInstance?.password}"/>
 </div>
 
-<div class="fieldcontain  required">
-	<label for="email">
-		Contact Phone
-	</label>
-	<input type="text" name="contactPhone" value="" />
-</div>
+<input type="hidden" name="email" value="test301210_333@robot.com" />
 
 <div class="fieldcontain  required">
 	<label for="addy">

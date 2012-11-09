@@ -16,7 +16,7 @@ class ItemImportFileSourceController {
 
 
   def authorize(AuthoriseCommand command) {
-    def nextAction = [action: "create"]
+    def nextAction = [controller: "magentoItemImport", action: "create"]
 
     // Use MELI.login to test if the client has a valid access_token
 
