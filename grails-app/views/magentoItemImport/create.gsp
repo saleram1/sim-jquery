@@ -28,9 +28,6 @@
 				<bootstrap:alert class="alert-info">${flash.message}</bootstrap:alert>
 				</g:if>
 
-                <div id="updateMe"></div>
-
-
 				<g:hasErrors bean="${magentoItemImportInstance}">
 				<bootstrap:alert class="alert-error">
 				<ul>
@@ -42,7 +39,7 @@
 				</g:hasErrors>
 
 				<fieldset>
-					<g:formRemote name="startMagentoPull" url="[controller:'magentoItemImport', action:'startImport']" update="updateMe" onSuccess="_after(e)" class="form-horizontal">
+					<g:formRemote name="startMagentoPull" url="[controller:'magentoItemImport', action:'startImport']" update="updateMe" class="form-horizontal">
                         <fieldset class="form">
                             <g:render template="form"/>
 							<div class="form-actions">

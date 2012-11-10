@@ -51,8 +51,7 @@
 
 <div class="fieldcontain  required">
 	<label for="addy">
-		Home Office Address
-		<span class="required-indicator">*</span>
+		Company Address
 	</label>
 	<g:textArea name="address1" rows="4" cols="32" />
 </div>

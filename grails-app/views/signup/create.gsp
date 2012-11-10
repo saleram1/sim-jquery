@@ -16,8 +16,8 @@
 			<p></p>
 		</div>		
 		<div id="create-shoppeUser" class="content scaffold-create" role="main">
-			<h1>Get started on MercadoLibre – it’s free.</h1>
-			<h2>M2M provides further benefits to manage your store inventory using Magento Community or Enterprise</h2>
+			<h1>Welcome to MercadoLibre! </h1>                                    <br/>
+			<h2>M2M provides further benefits to manage your store inventory using Magento Community or Enterprise and it's free.</h2>
 
 			<g:hasErrors bean="${shoppeUserInstance}">
 			<bootstrap:alert class="alert-error">

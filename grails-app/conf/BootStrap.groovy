@@ -4,8 +4,12 @@ import com.mercadolibre.apps.sim.data.bo.core.VanillaItemListing
 import com.mercadolibre.apps.sim.data.bo.core.VariationAttribute
 import grails.converters.JSON
 import com.mercadolibre.apps.sim.data.bo.errors.ApiError
+import com.mercadolibre.apps.sim.data.bo.imports.MagentoStoreService
 
 class BootStrap {
+
+  MagentoStoreService magentoStoreService
+
 
   def getBaseItemMap(it) {
     def map = [:]
@@ -86,6 +90,8 @@ class BootStrap {
       map.cause   = []
       return map
     }
+
+    println(magentoStoreService.getMagentoProductsByUserAndCategory(1234, 5L))
 
 // The Advanced requirements will use / register a Marshaller
 //		JSON.registerObjectMarshaller(Item, 3) { ItemMarshaller.marshall(it) }
