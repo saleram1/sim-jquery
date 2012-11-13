@@ -5,6 +5,8 @@ import grails.converters.JSON
 import com.mercadolibre.apps.sim.CategoryService
 import com.mercadolibre.apps.sim.ImportService
 import com.mercadolibre.apps.sim.data.bo.core.VanillaItemListing
+import org.json.simple.ItemList
+import com.mercadolibre.apps.sim.data.bo.core.ItemListing
 
 /**
  * Created with IntelliJ IDEA.
@@ -36,14 +38,13 @@ class MagentoItemImportController {
     def meliItemIds = []
 
     if (categoryService.isValidCategory(command.meliCategory)) {
-      // getMagentoProduct(command)
-      //def aProduct = JSON.parse(MageSimpleProduct.productSampleProAudio) as Map
       def allProduct = null
-
-      if (command.productSelection.startsWith("All")) {
+      if (command.productSelection?.toUpperCase().startsWith("ALL")) {
+        log.info "Retrieving ALL products in Magento Store"
         allProduct = magentoStoreService.getMagentoProductsByUser(session.ml_caller_id)
       }
       else {
+        log.info "Retrieving filtered by CategoryId: ${command.storeCategory}"
         allProduct = magentoStoreService.getMagentoProductsByUserAndCategory(session.ml_caller_id, command.storeCategory as Long)
       }
       log.info("Products found: " + allProduct.size())
@@ -57,8 +58,10 @@ class MagentoItemImportController {
           condition: "new", pictureURL: aProduct['image_url']
         )
 
-        meliItemIds << importService.pushItemToMarketplace2(listing, session.ml_access_token)
+        def newListingId = importService.pushItemToMarketplace2(listing, session.ml_access_token)
 
+        meliItemIds << newListingId
+        saveNewListing(newListingId)
       }
     }
     else {
@@ -66,6 +69,22 @@ class MagentoItemImportController {
     }
 
     return meliItemIds
+  }
+
+  def saveNewListing(String itemId) {
+    log.info "Saving item listing for: ${itemId}\n\n"
+
+    ItemListing.withTransaction(){
+      def il = new ItemListing(mercadoLibreItemId: itemId)
+      if (il.validate()) {
+        il.save(flush:  true)
+      }
+      else {
+        il.errors.fieldErrors.each {
+          log.error it
+        }
+      }
+    }
   }
 }
 

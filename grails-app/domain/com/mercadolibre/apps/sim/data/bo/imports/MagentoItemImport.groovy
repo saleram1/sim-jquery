@@ -12,7 +12,6 @@ import groovy.transform.ToString
 
 @ToString
 class MagentoItemImport implements Comparable {
-
   String listingType = 'bronze'
   String storeCategory
   String meliCategory
@@ -25,7 +24,7 @@ class MagentoItemImport implements Comparable {
     buyingMode(nullable:  false, inList: ['auction', 'buy_it_now'])
     listingType(nullable: false, inList: ['free', 'bronze', 'silver', 'gold'])
     meliCategory()
-    productSelection(nullable:  false, inList: ['All Products', 'Selected Category Ids'])
+    productSelection(nullable:  false, inList: ['All Products', 'Products in Selected Categories'])
     storeCategory(nullable: true, blank: true)
 	}
 
@@ -33,7 +32,6 @@ class MagentoItemImport implements Comparable {
     version false
 	}
 
-//  static transients = ['listingType', 'storeCategory', 'meliCategory', 'buyingMode', 'currency']
 
 	public int compareTo(Object o) {
 		// TODO: change id to fitting order property

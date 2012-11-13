@@ -37,11 +37,15 @@
 					</a>					
 					<a class="brand" href="${createLink(uri: '/')}">MercadoLibre Connect (M2M)</a>
 					<div class="nav-collapse">
-						<ul class="nav">
-							<li<%= request.forwardURI == "${createLink(uri: '/help')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/help')}">Help</a></li>
-
-						</ul>
-					</div>
+                        <ul class="nav">
+                            <li<%= request.forwardURI == "${createLink(uri: '/magentoItem/list')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/magentoItem/list')}">Listings</a></li>
+                            <li>
+                                <g:link target="_blank" absolute="true" url="https://questions.mercadolibre.com.ar/seller">Questions</g:link>
+                            </li>
+                            <li<%= request.forwardURI == "${createLink(uri: '/help')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/help')}">Help</a></li>
+                            <li<%= request.forwardURI == "${createLink(uri: '/about')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/about')}">About</a></li>
+                        </ul>
+                    </div>
 				</div>
 			</div>	
 		</nav>
