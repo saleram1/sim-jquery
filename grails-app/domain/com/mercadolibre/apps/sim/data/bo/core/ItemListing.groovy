@@ -24,6 +24,7 @@ class ItemListing {
   String description
   String condition
   String currency_id
+  String status
   Double price
   String pictureURL
   Integer available_quantity
@@ -36,7 +37,7 @@ class ItemListing {
 
   static hasMany = [questions: Question]
 
-  static transients = ["category_id", "title", "description", "condition", "currency_id", "price", "pictureURL", "available_quantity", "listing_type_id", "buying_mode", "location", "acceptsMercadoPago", "dateCreated", "lastUpdated"]
+  static transients = ["category_id", "title", "description", "condition", "currency_id", "price", "pictureURL", "available_quantity", "listing_type_id", "buying_mode", "location", "acceptsMercadoPago", "dateCreated", "lastUpdated", "status"]
 
   static constraints = {
     itemInfo(nullable: true)
@@ -63,6 +64,7 @@ class ItemListing {
     acceptsMercadoPago = itemCommand.acceptsMercadoPago
     dateCreated = itemCommand.dateCreated
     lastUpdated = itemCommand.lastUpdated
+    status = itemCommand.status
   }
 
   static ItemListing getComposite(String compositeId) {

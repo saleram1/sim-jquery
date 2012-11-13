@@ -8,52 +8,49 @@ import org.joda.time.LocalTime
 
 class ItemService {
 
-    ItemCommand getItemCommand(String itemId) {
+  ItemCommand getItemCommand(String itemId) {
 
-        ItemCommand itemCommand = new ItemCommand()
+    ItemCommand itemCommand = new ItemCommand()
 
-        def builder = new HTTPBuilder("https://api.mercadolibre.com")
+    def builder = new HTTPBuilder("https://api.mercadolibre.com")
 
-        try {
-            builder.contentType = ContentType.JSON
-            builder.get(path: "/items/${itemId}") { resp, json ->
-                itemCommand.category_id = json['category_id']
-                itemCommand.title = json['title']
-                itemCommand.condition = json['condition']
-                itemCommand.currency_id = json['currency_id']
-                itemCommand.price = json['price']
-                itemCommand.available_quantity = json['available_quantity']
-                itemCommand.listing_type_id = json['listing_type_id']
-                itemCommand.buying_mode = json['buying_mode']
-                itemCommand.acceptsMercadoPago = json['accepts_mercadopago']
+    try {
+      builder.contentType = ContentType.JSON
+      builder.get(path: "/items/${itemId}") { resp, json ->
+        itemCommand.category_id = json['category_id']
+        itemCommand.title = json['title']
+        itemCommand.condition = json['condition']
+        itemCommand.currency_id = json['currency_id']
+        itemCommand.price = json['price']
+        itemCommand.available_quantity = json['available_quantity']
+        itemCommand.listing_type_id = json['listing_type_id']
+        itemCommand.buying_mode = json['buying_mode']
+        itemCommand.acceptsMercadoPago = json['accepts_mercadopago']
+        itemCommand.status = json['status']
 
-                //itemCommand.description = json['descriptions']  // this is a list TODO: later
-                //itemCommand.pictureURL = json['pictures'] // this is a list TODO: later
-                // itemCommand.location = json['location']  // this is a list TODO: later
+        String dateCreatedString = json['date_created']
+        DateTimeFormatter parser = ISODateTimeFormat.dateTime()
+        org.joda.time.DateTime dt = parser.parseDateTime(dateCreatedString)
+        Date dateCreated = dt.toDate()
 
-                String dateCreatedString = json['date_created']
-                DateTimeFormatter parser = ISODateTimeFormat.dateTime()
-                org.joda.time.DateTime dt = parser.parseDateTime(dateCreatedString)
-                Date dateCreated = dt.toDate()
+        String lastUpdatedString = json['date_created']
+        dt = parser.parseDateTime(lastUpdatedString)
+        Date lastUpdated = dt.toDate()
 
-                String lastUpdatedString = json['date_created']
-                dt = parser.parseDateTime(lastUpdatedString)
-                Date lastUpdated = dt.toDate()
+        itemCommand.dateCreated = dateCreated
+        itemCommand.lastUpdated = lastUpdated
 
-                itemCommand.dateCreated = dateCreated
-                itemCommand.lastUpdated = lastUpdated
-
-            }
-        }
-        catch (Exception ex) {
-            if (ex?.message == 'Not Found') {
-                log.warn "User ${itemId} not found !!"
-            }
-            else {
-                log.error ex.message, ex
-            }
-        }
-        itemCommand
+      }
     }
+    catch (Exception ex) {
+      if (ex?.message == 'Not Found') {
+        log.warn "User ${itemId} not found !!"
+      }
+      else {
+        log.error ex.message, ex
+      }
+    }
+    itemCommand
+  }
 
 }
