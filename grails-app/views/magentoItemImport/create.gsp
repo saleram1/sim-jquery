@@ -5,6 +5,16 @@
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'magentoItemImport.label', default: 'MagentoItemImport')}" />
 		<title><g:message code="default.create.label" args="[entityName]" /></title>
+		
+        <g:javascript>
+            $(document).ready(function() {
+               $('#meliCategory').autocomplete({
+                 source: '<g:createLink controller='category' action='search'/>',
+				 minLength: 4,
+				 maxRows: 10
+               });
+            });        
+        </g:javascript>
 	</head>
 	<body>
 		<div class="row-fluid">

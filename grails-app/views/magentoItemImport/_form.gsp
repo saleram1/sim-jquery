@@ -22,7 +22,7 @@
         <label for="meliCategory">
             <g:message code="magentoItemImport.meliCategory.label" default="MLCategory" />
         </label>
-        <g:textField class="input-small" name="meliCategory" value="${magentoItemImportInstance?.meliCategory}"/>
+        <g:textField id="meliCategory" class="input-small" name="meliCategory" value="${magentoItemImportInstance?.meliCategory}"/>
     </div>
 
 </fieldset>
