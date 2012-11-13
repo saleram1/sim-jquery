@@ -16,11 +16,12 @@ class SignupController {
   def save(NewSignupCommand command) {
     def nextActionMap
 
-    Shoppe aShoppe = new Shoppe(name: command.companyName)
+    Shoppe aShoppe = new Shoppe(name: params.companyName, webAddress: params.magentoStoreURI, apiKey: params.apiKey, sharedSecret: params.password)
     if (!aShoppe.save(flush: true)) {
       render(view: "create", model: ['shoppeUserInstance': command])
       return
     }
+    println aShoppe
 
     User aUser = newUserFromCommand(command, aShoppe)
 
@@ -62,6 +63,8 @@ class SignupController {
 
 
 class NewSignupCommand {
+  String apiKey
+  String magentoStoreURI
   Integer callerId
   String companyName
   String firstName
@@ -71,10 +74,12 @@ class NewSignupCommand {
 
   static constraints = {
     callerId()
+    apiKey(nullable:  true)
     companyName(nullable: false, blank: false)
+    email(nullable: false, blank: false)
     firstName(nullable: false, blank: false)
     lastName(nullable: false, blank: false)
-    email(nullable: false, blank: false)
+    magentoStoreURI(nullable:  true)
     password(nullable: false, blank: false, minSize: 8, maxSize: 100)
   }
 }
