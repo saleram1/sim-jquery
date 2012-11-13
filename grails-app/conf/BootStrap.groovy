@@ -91,8 +91,6 @@ class BootStrap {
       return map
     }
 
-    println(magentoStoreService.getMagentoProductsByUserAndCategory(1234, 5L))
-
 // The Advanced requirements will use / register a Marshaller
 //		JSON.registerObjectMarshaller(Item, 3) { ItemMarshaller.marshall(it) }
   }
