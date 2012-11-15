@@ -29,9 +29,9 @@ class OAuthService {
   }
 
   // Step 3
-  Token setAuthorizationCode(String authorizationUrl, Token requestToken) {
+  Token setAuthorizationCode(String authorizationCode, Token requestToken) {
     
-    Token accessToken = oAuthAuthenticator.setAuthorizationCode(authorizationUrl, requestToken)
+    Token accessToken = oAuthAuthenticator.setAuthorizationCode(authorizationCode, requestToken)
     acessToken
   }
   
