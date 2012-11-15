@@ -16,6 +16,10 @@ implements Serializable {
   String apiKey
   String sharedSecret
   String webAddress
+  String accessToken
+  String accessTokenSecret
+
+  static transients = ["apiKey", "sharedSecret"]
 
   //GORM
   static hasMany = [locations: Location]
@@ -29,6 +33,8 @@ implements Serializable {
     number(maxSize: 20, blank: false, nullable: true)
     sharedSecret(nullable: true)
     webAddress(nullable: true, url: true)
+    accessToken(nullable: true)
+    accessTokenSecret(nullable: true)
   }
 
   static mapping = {
