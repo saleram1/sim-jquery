@@ -22,15 +22,20 @@ class OAuthServiceTests {
   void testAuthGetAuthorizationUrl() {
     Token requestToken = oAuthService.getRequestToken("43adm7jjkff1adm0gxs301oykmvyx8v7", "gxmkqpd0304csrn19tchcbw11pmz5ay4", "http://ec2-23-23-25-84.compute-1.amazonaws.com/magento/index.php/")
     String authorizationUrl = oAuthService.getAuthorizationUrl(requestToken)
-    
-    println "*************************  this is hte AuthorizationUrl ***************"
-    println authorizationUrl
-//    Token accessToken = oAuthService.setAuthorizationCode(authorizationUrl, requestToken)
-    
-    
-//    oAuthService.getProducts(token)
+	println authorizationUrl
+
+    assertNotNull authorizationUrl
+	assertTrue  "Looks like a URL", authorizationUrl.startsWith("http://")
   }
-  
-    
-  
+
+/*  void testValidAccessToken() {
+    Token requestToken = oAuthService.getRequestToken("43adm7jjkff1adm0gxs301oykmvyx8v7", "gxmkqpd0304csrn19tchcbw11pmz5ay4", "http://ec2-23-23-25-84.compute-1.amazonaws.com/magento/index.php/")
+    String authorizationUrl = oAuthService.getAuthorizationUrl(requestToken)
+
+	/// NEEDS TO run in browser unless we want to use HtmlUnit to scrape the verifier
+    Token accessToken = oAuthService.setAuthorizationCode(authorizationUrl, requestToken)
+
+    println oAuthService.getProducts(token)
+  } 
+*/
 }
