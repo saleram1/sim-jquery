@@ -45,7 +45,14 @@
 		<span class="required-indicator">*</span>
 	</label>
 	<g:passwordField name="password" required="true" value="${shoppeUserInstance?.password}"/>
+	
+	<button id="newButton" class="link">
+      <g:link controller="verify" action="index">Connect&hellip;</g:link>
+    </button>
 </div>
+
+<input type="text" name="verifyOrAuthsCode" />
+
 
 <input type="hidden" name="email" value="test301210_333@robot.com" />
 
