@@ -1,8 +1,9 @@
 package com.mercadolibre.apps.magento
 
-import org.scribe.model.Token
-import org.scribe.model.Response
 import org.scribe.model.OAuthRequest
+import org.scribe.model.Response
+import org.scribe.model.Token
+import org.scribe.model.Verb
 
 class MagentoService {
 
