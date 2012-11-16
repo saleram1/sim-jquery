@@ -22,8 +22,11 @@ class VerifyController {
 			Token requestToken = authService.getRequestToken(command.apiKey, command.sharedSecret, command.apiBaseURL)
 		    authorizationUrl = authService.getAuthorizationUrl(requestToken)
 			session.ml_request_token = requestToken
+			
+			log.info session.ml_request_token
+			
 		}
-		log.info "authorizationUrl: ${authorizationUrl}"
+		log.info "popup will redirect to authorizationUrl: ${authorizationUrl}"
 
 		redirect ([url: authorizationUrl])	    
 	}
