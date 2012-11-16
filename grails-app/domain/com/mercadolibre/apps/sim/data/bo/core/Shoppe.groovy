@@ -40,4 +40,12 @@ implements Serializable {
   static mapping = {
     id generator: "uuid"
   }
+
+  Boolean hasValidToken() {
+	return this.accessToken && this.accessTokenSecret
+  }
+
+  org.scribe.model.Token getValidToken() {
+	return new org.scribe.model.Token(this.accessToken, this.accessTokenSecret)
+  }
 }
