@@ -6,4 +6,10 @@ beans = {
 	  bean.autowire = 'byName'
 	  authService = ref(authService)
 	}
+	'SignupController'(com.mercadolibre.apps.sim.data.bo.core.SignupController) { bean ->
+	  bean.autowire = 'byName'
+	  authService = ref(authService)
+	}
+	/// and many more !!!
+	
 }
