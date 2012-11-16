@@ -72,6 +72,7 @@ class BootStrap {
     }
 
 
+    // NON-Listing related like errors
     JSON.registerObjectMarshaller(ApiError, 3) {
       def map = [:]
       /*
@@ -90,6 +91,16 @@ class BootStrap {
       map.cause   = []
       return map
     }
+
+    JSON.registerObjectMarshaller(CategoryConfirmResponse, 3) {
+      def map = [:]
+
+      map.id = it.id
+      map.categoryType = it.categoryType
+      map.isFashion = it.isFashion
+      return map
+    }
+
 
 // The Advanced requirements will use / register a Marshaller
 //		JSON.registerObjectMarshaller(Item, 3) { ItemMarshaller.marshall(it) }
