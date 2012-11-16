@@ -1,5 +1,8 @@
 package com.mercadolibre.apps.sim.data.bo.core
 
+import com.mercadolibre.apps.auth.OAuthService
+
+import org.scribe.model.Token;
 import org.springframework.validation.FieldError
 
 /**
@@ -8,12 +11,15 @@ import org.springframework.validation.FieldError
  *
  */
 class SignupController {
+	
+  OAuthService authService
 
   def create() {
     [shoppeUserInstance: new NewSignupCommand()]
   }
 
   def save(NewSignupCommand command) {
+	
     def nextActionMap
 
     Shoppe aShoppe = new Shoppe(name: params.companyName, webAddress: params.magentoStoreURI, apiKey: params.apiKey, sharedSecret: params.password)
@@ -51,7 +57,7 @@ class SignupController {
       firstName = command.firstName
       lastName = command.lastName
       email = command.email
-      password = command.password
+      password = "password123"
       locale = Locale.US
       company = aShoppe
     }
@@ -64,22 +70,12 @@ class SignupController {
 
 class NewSignupCommand {
   String apiKey
-  String magentoStoreURI
   Integer callerId
   String companyName
+  String email
   String firstName
   String lastName
-  String email
-  String password
-
-  static constraints = {
-    callerId()
-    apiKey(nullable:  true)
-    companyName(nullable: false, blank: false)
-    email(nullable: false, blank: false)
-    firstName(nullable: false, blank: false)
-    lastName(nullable: false, blank: false)
-    magentoStoreURI(nullable:  true)
-    password(nullable: false, blank: false, minSize: 8, maxSize: 100)
-  }
+  String magentoStoreURI
+  String sharedSecret
+  String verifierAuthCode
 }

@@ -1,8 +1,16 @@
 
-import  com.mercadolibre.apps.auth.OAuthService
+import com.mercadolibre.apps.auth.OAuthService
 import grails.converters.JSON
 import org.scribe.model.Token;
 
+
+/**
+ * Takes the user to initialize OAuth flow to the Magento store 
+ * if the required params are not present, takes you to the home page
+ *
+ *
+ *  curl -v -k -X GET "http://localhost:8080/sim/verify?apiKey=k6jcg57urgrpx3tdocwehmk7jnytvyfv&sharedSecret=j7epse81i2nmkv95e2l5ozbg5vb2hvqp&apiBaseURL=http://ec2-107-22-49-30.compute-1.amazonaws.com/magento/index.php/"
+ */
 class VerifyController {
 	
 	OAuthService authService
