@@ -1,6 +1,7 @@
 package com.mercadolibre.apps.sim.data.bo.core
 
 import com.mercadolibre.apps.auth.OAuthService
+import com.mercadolibre.apps.magento.MagentoService
 
 import org.scribe.model.Token;
 import org.springframework.validation.FieldError
@@ -13,28 +14,32 @@ import org.springframework.validation.FieldError
 class SignupController {
 	
   OAuthService authService
+  MagentoService magentoService
 
   def create() {
     [shoppeUserInstance: new NewSignupCommand()]
   }
 
   def save(NewSignupCommand command) {
-	
-    def nextActionMap
+	def nextActionMap
+// compare what's in Session to the previous version
+	log.info command.verifierAuthCode
+	log.info session.ml_request_token
 
-    Shoppe aShoppe = new Shoppe(name: params.companyName, webAddress: params.magentoStoreURI, apiKey: params.apiKey, sharedSecret: params.password)
+
+    Shoppe aShoppe = new Shoppe(name: command.companyName, webAddress: command.magentoStoreURI, apiKey: command.apiKey, sharedSecret: command.sharedSecret, accessToken: "aToken.token", accessTokenSecret: "aToken.secret")
     if (!aShoppe.save(flush: true)) {
       render(view: "create", model: ['shoppeUserInstance': command])
       return
     }
-    println aShoppe
+//    println aShoppe
 
     User aUser = newUserFromCommand(command, aShoppe)
 
     // must test for User to be saved properly - transfer errors back to Command if not
     if (aUser.validate() && command.validate()) {
       aUser.save(flush: true)
-      log.info aUser
+//      log.info aUser
       nextActionMap = [controller: "magentoItemImport", action: "create"]
     }
     else {

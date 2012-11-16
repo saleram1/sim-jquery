@@ -14,8 +14,7 @@ class OAuthService {
   }
   
   // Step 1
-  Token getRequestToken(String magentoApiKey, String magentoApiSecret, String magentoBaseUrlOauth) {
-           
+  Token getRequestToken(String magentoApiKey, String magentoApiSecret, String magentoBaseUrlOauth) {       
     Token requestToken = oAuthAuthenticator.getRequestToken(magentoApiKey, magentoApiSecret, magentoBaseUrlOauth)
     requestToken
   }
@@ -28,8 +27,7 @@ class OAuthService {
 
   // Step 3
   Token setAuthorizationCode(String authorizationCode, Token requestToken) {
-    
     Token accessToken = oAuthAuthenticator.setAuthorizationCode(authorizationCode, requestToken)
-    acessToken
+    accessToken
   }
 }
