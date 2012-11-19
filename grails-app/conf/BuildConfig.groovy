@@ -51,17 +51,19 @@ grails.project.dependency.resolution = {
     compile ":activemq:0.4.1"
     compile ":bootstrap-file-upload:2.1.1"
     compile ":console:1.2"
-	compile ":csv:0.3.1"
+    compile ":csv:0.3.1"
     compile ":fields:1.1"
     compile ":jms:1.2"
     compile ":rest:0.7"
     compile ":joda-time:1.4"
+    compile ":ws-client:1.0"
 
       runtime ":hibernate:$grailsVersion"
 //    runtime ":jquery:1.7.2"
 //
 //	compile ":cache-headers:1.1.5"
 //	runtime ":cached-resources:1.0"
+    runtime ":database-migration:1.1"
     runtime ":resources:1.1.6"
     runtime ":twitter-bootstrap:2.0.2.25"
 
@@ -70,8 +72,6 @@ grails.project.dependency.resolution = {
     //runtime ":yui-minify-resources:0.1.4"
 
     build ":tomcat:$grailsVersion"
-
-    runtime ":database-migration:1.1"
 
     compile ':cache:1.0.0'
   }
