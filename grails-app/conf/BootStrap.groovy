@@ -1,15 +1,20 @@
+
+import com.mercadolibre.apps.sim.CategoryService
 import com.mercadolibre.apps.sim.data.bo.core.FashionItemListing
 import com.mercadolibre.apps.sim.data.bo.core.ItemVariation
 import com.mercadolibre.apps.sim.data.bo.core.VanillaItemListing
 import com.mercadolibre.apps.sim.data.bo.core.VariationAttribute
-import grails.converters.JSON
 import com.mercadolibre.apps.sim.data.bo.errors.ApiError
 import com.mercadolibre.apps.sim.data.bo.imports.MagentoStoreService
+import com.mercadolibre.apps.sim.data.bo.imports.meli.Category
 
+import grails.converters.JSON
+
+/// mostly used to load custom marshallers for JSON over HttpBuilder library
 class BootStrap {
 
   MagentoStoreService magentoStoreService
-
+  CategoryService categoryService
 
   def getBaseItemMap(it) {
     def map = [:]
@@ -101,6 +106,9 @@ class BootStrap {
       return map
     }
 
+    if (Category.count() == 0) {
+      categoryService.loadMeliCategories()
+    }
 
 // The Advanced requirements will use / register a Marshaller
 //		JSON.registerObjectMarshaller(Item, 3) { ItemMarshaller.marshall(it) }
