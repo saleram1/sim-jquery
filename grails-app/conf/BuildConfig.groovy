@@ -57,6 +57,7 @@ grails.project.dependency.resolution = {
     compile ":rest:0.7"
     compile ":joda-time:1.4"
     compile ":ws-client:1.0"
+    compile ":quartz2:0.2.3"
 
       runtime ":hibernate:$grailsVersion"
 //    runtime ":jquery:1.7.2"
