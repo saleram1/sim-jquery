@@ -88,12 +88,13 @@ class SignupController {
 
 class NewSignupCommand {
   String apiKey
-  Integer callerId
   String companyName
   String email
   String firstName
   String lastName
   String magentoStoreURI
-  String sharedSecret
-  String verifierAuthCode
+  String username
+  /*
+  String verifierAuthCode          // to be determined Magento 1.7 and above feature OAuth and REST
+   */
 }
