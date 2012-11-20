@@ -1,52 +1,91 @@
 <%@ page import="com.mercadolibre.apps.sim.data.bo.imports.MagentoItemImport" %>
-
-
 <fieldset class="fieldset" name="meli">
-    <legend>Manage Products</legend>
-
-    <div class="fieldcontain ${hasErrors(bean: magentoItemImportInstance, field: 'productSelection', 'error')} ">
-        <label for="productSelection">
-            <g:message code="magentoItemImport.productSelection.label" default="Store Selector" />
-        </label>
-        <g:select name="productSelection" from="${magentoItemImportInstance.constraints.productSelection.inList}" value="${magentoItemImportInstance?.productSelection}" valueMessagePrefix="magentoItemImport.productSelection" noSelection="['': '']"/>
-    </div>
-
-
-    <div class="fieldcontain ${hasErrors(bean: magentoItemImportInstance, field: 'storeCategory', 'error')} ">
-        <label for="storeCategory">
-            <g:message code="magentoItemImport.storeCategory.label" default="Store Category" />
-        </label>
-        <g:textField class="input-small" name="storeCategory" value="${magentoItemImportInstance?.storeCategory}"/>
-
-
-        <label for="meliCategory">
-            <g:message code="magentoItemImport.meliCategory.label" default="MLCategory" />
-        </label>
-        <g:textField id="meliCategory" class="input-small" name="meliCategory" value="${magentoItemImportInstance?.meliCategory}"/>
-    </div>
-
+	<legend>Manage Products</legend>
+	<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'productSelection', 'error')}">
+		<label for="productSelection" class="control-label">
+			<g:message code="magentoItemImport.productSelection.label" default="Store Selector" />
+		</label>
+		<div class="controls">
+			<g:select name="productSelection" from="${magentoItemImportInstance.constraints.productSelection.inList}" value="${magentoItemImportInstance?.productSelection}" valueMessagePrefix="magentoItemImport.productSelection" noSelection="['': '']" />
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span5">
+			<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'storeCategory', 'error')}">
+				<label for="storeCategory" class="control-label">
+					<g:message code="magentoItemImport.storeCategory.label" default="Store Category" />
+				</label>
+				<div class="controls">
+					<g:textField class="input-small" name="storeCategory" value="${magentoItemImportInstance?.storeCategory}" />
+				</div>
+			</div>
+		</div>
+		<div class="span7">
+			<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'meliCategory', 'error')}">
+				<label for="meliCategory" class="control-label">
+					<g:message code="magentoItemImport.meliCategory.label" default="MLCategory" />
+				</label>
+				<div class="controls">
+					<div class="input-append">
+						<g:textField id="meliCategory" class="input-small" name="meliCategory" value="${magentoItemImportInstance?.meliCategory}" /><button id="confirm-category" type="button" class="btn btn-small" style="padding: 4px 9px 3px;">Confirm</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid">
+		<div class="span10 offset1">
+			<table class="categories-table table table-striped hide">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Value</th>
+						<th rel="tooltip" title="Check this if the attribute is &lt;br/&gt; appended to the product SKU">In SKU</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Talle</td>
+						<td>
+							<select>
+								<option>Size</option>
+							</select>
+						</td>
+						<td>
+							<input type="checkbox" />
+						</td>
+					</tr>
+					<tr>
+						<td>Color Primario</td>
+						<td>
+							<select>
+								<option>Color</option>
+							</select>
+						</td>
+						<td>
+							<input type="checkbox" />
+						</td>
+					</tr>
+			</table>
+		</div>
+	</div>
 </fieldset>
-
-
 <fieldset class="fieldset" name="meli">
-    <legend>ML Marketplace</legend>
-    <div class="fieldcontain ${hasErrors(bean: magentoItemImportInstance, field: 'listingType', 'error')} ">
-        <label for="listingType">
-            <g:message code="magentoItemImport.listingType.label" default="Listing Type" />
-        </label>
-        <g:select name="listingType" from="${magentoItemImportInstance.constraints.listingType.inList}" value="${magentoItemImportInstance?.listingType}" valueMessagePrefix="magentoItemImport.listingType" noSelection="['': '']"/>
-    </div>
-
-    <div class="fieldcontain ${hasErrors(bean: magentoItemImportInstance, field: 'buyingMode', 'error')} ">
-        <label for="buyingMode">
-            <g:message code="magentoItemImport.buyingMode.label" default="Mode" />
-        </label>
-        <g:select name="buyingMode" from="${magentoItemImportInstance.constraints.buyingMode.inList}" value="${magentoItemImportInstance?.buyingMode}" valueMessagePrefix="magentoItemImport.buyingMode" noSelection="['': '']"/>
-    </div>
-
-    <div>
-        <label for="updateMe"></label>
-        <div id="updateMe">&nbsp;</div>
-    </div>
-
+	<legend>ML Marketplace</legend>
+	<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'listingType', 'error')}">
+		<label for="listingType" class="control-label">
+			<g:message code="magentoItemImport.listingType.label" default="Listing Type" />
+		</label>
+		<div class="controls">
+			<g:select name="listingType" from="${magentoItemImportInstance.constraints.listingType.inList}" value="${magentoItemImportInstance?.listingType}" valueMessagePrefix="magentoItemImport.listingType" noSelection="['': '']"/>
+		</div>
+	</div>
+	<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'buyingMode', 'error')}">
+		<label for="buyingMode" class="control-label">
+			<g:message code="magentoItemImport.buyingMode.label" default="Mode" />
+		</label>
+		<div class="controls">
+			<g:select name="buyingMode" from="${magentoItemImportInstance.constraints.buyingMode.inList}" value="${magentoItemImportInstance?.buyingMode}" valueMessagePrefix="magentoItemImport.buyingMode" noSelection="['': '']"/>
+		</div>
+	</div>
 </fieldset>

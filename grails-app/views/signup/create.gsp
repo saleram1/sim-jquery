@@ -6,25 +6,8 @@
 		<g:set var="entityName" value="${message(code: 'shoppeUser.label', default: 'ShoppeUser')}" />
 		<script type="text/javascript">
 			document.addEventListener("DOMContentLoaded", function(e) {
-				$('.oauth-verify').click(function(e) {
-					var oauthUrl = $('a.oauth-link').attr('href'),
-						params = {
-							apiBaseURL: $('[name="magentoStoreURI"]').val().trim(),
-							apiKey: $('[name="apiKey"]').val().trim(),
-							sharedSecret: $('[name="sharedSecret"]').val().trim()
-						};
-						
-					var missing = false;
-					for (var k in params) {
-						if (params[k].length === 0) {
-							missing = true;
-							$('[name="' + k + '"]').closest('.control-group').addClass('error');
-						}
-					}
-					if (missing) return;
-					
-					oauthUrl += '?' + $.param(params);
-					window.open(oauthUrl, 'magento-oauth', 'width=650,height=500,menubar=no,location=no,resizable=no,scrollbars=no,status=no');
+				$('.verify-api').click(function(e) {
+					$(this).addClass('btn-success').attr('disabled', 'disabled').html('<i class="icon-ok icon-white"></i>');
 				});
 				
 				$('.form-horizontal input[type="text"]').change(function(e) {
@@ -55,8 +38,8 @@
 			<g:render template="form"/>
 			<div class="row-fluid">
 				<div class="form-actions">
-  	  			  <button type="button" class="btn">Skip</button>
-				  <g:submitButton name="create" class="btn btn-primary save" value="${'Save'}" />
+					<g:link controller="magentoItemImport" action="create" class="btn">Skip</g:link>
+					<g:submitButton name="create" class="btn btn-primary save" value="${'Save'}" />
 				</div>
 			</div>
 		</g:form>
