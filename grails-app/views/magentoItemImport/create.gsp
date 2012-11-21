@@ -5,29 +5,7 @@
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'magentoItemImport.label', default: 'MagentoItemImport')}" />
 		<title><g:message code="default.create.label" args="[entityName]" /></title>
-		
-        <g:javascript>
-            $(document).ready(function() {
-               $('#meliCategory').autocomplete({
-                 source: '<g:createLink controller='category' action='search'/>',
-				 minLength: 4,
-				 maxRows: 10
-               });
-			   
-			   $('#confirm-category').click(function(e) {
-				   $('form table').removeClass('hide');
-			   });
-			   
-			   $('[rel="tooltip"]').tooltip();
-            });
-			
-			function _after(response) {
-				alert( response.responseText ); // OK!
-				var codigos = eval('(' + response.responseText + ')');
-				// here I can process the json object ...
-			}
-		</g:javascript>
-		<style>
+		<style type="text/css">
 			.categories-table th, .categories-table td {
 				text-align: center !important;
 			}
@@ -35,6 +13,32 @@
 				background: none;
 			}
 		</style>
+		
+		<g:javascript>
+			$(document).ready(function() {
+				$('#meliCategory').autocomplete({
+					source: '<g:createLink controller='category' action='search'/>',
+					minLength: 4,
+					maxRows: 10
+				});
+			   
+				$('#confirm-category').click(function(e) {
+					$('form table').removeClass('hide');
+				});
+			   
+				$('[rel="tooltip"]').tooltip();
+			});
+			
+			function _after(response) {
+				alert( response.responseText ); // OK!
+				var codigos = eval('(' + response.responseText + ')');
+				// here I can process the json object ...
+			}
+			
+			function demoProgress() {
+				$('.progress-modal').modal();
+			}
+		</g:javascript>
 	</head>
 	<body>
 		<div class="page-header">
