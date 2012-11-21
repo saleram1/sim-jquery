@@ -12,27 +12,29 @@ implements Serializable {
   User manager
   String name
   String number
+
   // supplied by Mage Admin
-  String apiKey
-  String sharedSecret
+  String apiUser
+  String apiKey         // password for the API user
   String webAddress
+
+  // OAuth 1.0a support coming in rev 1.8
   String accessToken
   String accessTokenSecret
 
-  static transients = ["apiKey", "sharedSecret"]
 
   //GORM
   static hasMany = [locations: Location]
 
   static constraints = {
     id(maxSize: 32)
-    apiKey(nullable: true)
+    apiKey(nullable: false)
+    apiUser(nullable: false)
     locations(nullable: true)
     manager(nullable: true)
     name(maxSize: 100, blank: false, nullable: false)
     number(maxSize: 20, blank: false, nullable: true)
-    sharedSecret(nullable: true)
-    webAddress(nullable: true, url: true)
+    webAddress(nullable: false, url: true)
     accessToken(nullable: true)
     accessTokenSecret(nullable: true)
   }
