@@ -19,6 +19,6 @@ class Category {
   }
   
   String toString() {
-    return "Category Name: " + name + " - " + "Meli Id: " + meliId
+    "Category: ${meliId} - ${name} ${fqn}"
   }
 }
