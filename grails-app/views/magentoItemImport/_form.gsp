@@ -1,4 +1,5 @@
 <%@ page import="com.mercadolibre.apps.sim.data.bo.imports.MagentoItemImport" %>
+<% attributeNames = ['size', 'marca', 'description', 'name', 'qty', 'price', 'color', 'weight', '_category', '_attribute_set', '_type', '_store'] %>
 <fieldset class="fieldset" name="meli">
 	<legend>Manage Products</legend>
 	<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'productSelection', 'error')}">
@@ -47,23 +48,19 @@
 					<tr>
 						<td>Talle</td>
 						<td>
-							<select>
-								<option>Size</option>
-							</select>
+							<g:select name="sizeAttributeName" from="${attributeNames}" value="size" />
 						</td>
 						<td>
-							<input type="checkbox" />
+							<g:checkBox name="sizeAppendedToSKU" />
 						</td>
 					</tr>
 					<tr>
 						<td>Color Primario</td>
 						<td>
-							<select>
-								<option>Color</option>
-							</select>
+							<g:select name="colorAttributeName" from="${attributeNames}" value="color" />
 						</td>
 						<td>
-							<input type="checkbox" />
+							<g:checkBox name="colorAppendedToSKU"/>
 						</td>
 					</tr>
 			</table>

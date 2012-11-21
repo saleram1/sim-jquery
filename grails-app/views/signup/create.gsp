@@ -1,11 +1,10 @@
-
 <!doctype html>
 <html>
 	<head>
 		<meta name="layout" content="main">
 		<g:set var="entityName" value="${message(code: 'shoppeUser.label', default: 'ShoppeUser')}" />
-		<script type="text/javascript">
-			document.addEventListener("DOMContentLoaded", function(e) {
+		<g:javascript>
+			$(document).ready(function(e) {
 				$('.verify-api').click(function(e) {
 					$(this).addClass('btn-success').attr('disabled', 'disabled').html('<i class="icon-ok icon-white"></i>');
 				});
@@ -16,7 +15,7 @@
 					else $el.closest('.control-group').removeClass('error');
 				});
 			});
-		</script>
+		</g:javascript>
 	</head>
 	<body>
 		<div class="page-header">
