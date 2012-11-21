@@ -106,7 +106,8 @@ class BootStrap {
       return map
     }
 
-    if (Category.count() == 0) {
+    if (!System.getProperty("meli.category.load.skip") &&
+        Category.count() == 0) {
       categoryService.loadMeliCategories()
     }
 
