@@ -23,15 +23,16 @@ class SignupController {
   def save(NewSignupCommand command) {
     def nextActionMap
 
-// compare what's in Session to the previous version
-    log.info command.verifierAuthCode
-    log.info session.ml_request_token
+    log.info command.magentoStoreURI
+    log.info command.username
 
+/*
     Token freshAccessToken =
       authService.setAuthorizationCode(command.verifierAuthCode, session.ml_request_token)
+*/
 
-    Shoppe aShoppe = new Shoppe(name: command.companyName, webAddress: command.magentoStoreURI, apiKey: command.apiKey, sharedSecret: command.sharedSecret,
-        accessToken: freshAccessToken.token, accessTokenSecret: freshAccessToken.secret)
+    Shoppe aShoppe =
+      new Shoppe(name: command.companyName, webAddress: command.magentoStoreURI, apiUser: command.username, apiKey: command.apiKey)
 
     aShoppe.validate()
 
