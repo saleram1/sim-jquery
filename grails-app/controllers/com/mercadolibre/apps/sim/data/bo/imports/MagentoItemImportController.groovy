@@ -24,11 +24,19 @@ class MagentoItemImportController {
   ImportService importService
   MagentoStoreService magentoStoreService
 
-  def startImport(StartMageCatalogSlurpCommand command) {
+
+  def startImport() {
+    params.each() { param ->
+      log.info param
+    }
+
+/*
     def newItemId = importListingsFromMage(command)
     newItemId.each() {
       log.info "ML item listed https://api.mercadolibre.com/items/${it}"
     }
+*/
+    def newItemId = "['item_not_found']"
     render newItemId as String
   }
 
@@ -38,7 +46,7 @@ class MagentoItemImportController {
     def meliItemIds = []
 
     if (categoryService.isValidCategory(command.meliCategory)) {
-      def allProduct = null
+
       if (command.productSelection?.toUpperCase().startsWith("ALL")) {
         log.info "Retrieving ALL products in Magento Store"
         allProduct = magentoStoreService.getMagentoProductsByUser(session.ml_caller_id)
