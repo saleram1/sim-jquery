@@ -109,31 +109,4 @@ class MagentoStoreService {
       ""
     }
   }
-  
-  // Note: productId and itemId are equal in the catalog_product_entity and cataloginventory_stock_item tables in Magento's mysql db
-  Double getInventoryForItem(Long itemId) {
-    Double inventoryQty = 0
-
-    def builder = new HTTPBuilder()
-    try {
-      builder.request(canonical_test_store_base,
-          groovyx.net.http.Method.GET,
-          groovyx.net.http.ContentType.JSON) {
-        uri.path = "/magento/api/rest/stockitems/${itemId}"
-        uri.query = [type: 'rest']
-        headers.'Accept' = "*/*"
-
-        response.success = { resp, json ->
-          inventoryQty = (json['qty']) as Long
-        }
-        response.failure = { resp, json ->
-          log.error resp.status
-        }
-      }
-    }
-    catch (Exception ex) {
-      log.error ex.message, ex
-    }
-    return inventoryQty
-  }
 }
