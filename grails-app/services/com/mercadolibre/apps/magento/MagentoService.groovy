@@ -52,6 +52,8 @@ class MagentoService {
     // TODO: Instead of returning json probably worth returning this as a product representation?
     // If it's variable, then, I dunno.
     responseBody
+    
+    // need to convert to json and parse everything out
   } 
   
   def getProductCategory(Token accessToken, String magentoRestApiUrl, String productId) {
@@ -78,8 +80,28 @@ class MagentoService {
   }
   
   def getProductInventory(Token accessToken, String magentoRestApiUrl, String productId) {
-  
-    null
+      // TODO: Need some dependency injection here.
+    OAuthRequest request = new OAuthRequest(Verb.GET, MAGENTO_REST_API_URL+ "/products/${productId}/categories?type=rest")
+		service.signRequest(accessToken, request)
+		Response response = request.send()
+    
+    println response.getCode()
+    
+    if (response.getCode() >= 300) {
+      throw RuntimeException("Could not get Products from Magento")
+    }  // TODO:  Move this into it's own typed runtime exception.
+    
+    String responseBody = response.getBody()
+		println responseBody
+    
+    println "End getProduct"
+    
+    // TODO: Instead of returning json probably worth returning this as a product representation?
+    // If it's variable, then, I dunno.
+    responseBody
+    
+    // need to parse out JSON and pull the 'qty'
+    
   }
   // More APIs
 }
