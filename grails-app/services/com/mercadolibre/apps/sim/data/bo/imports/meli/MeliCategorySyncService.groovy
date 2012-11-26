@@ -22,6 +22,11 @@ class MeliCategorySyncService {
     downloadCategoryZipFileFromMeli("https://api.mercadolibre.com/sites/MLA/categories/all")
   }
   
+  
+  def isMeliCategoryInSync() {
+    return false 
+ }
+  
 //  private downloadCategoryZipFileOLD2(address)
 //  {
 //    def file = new FileOutputStream("/tmp/MeliCategoryZipFile.gz")
