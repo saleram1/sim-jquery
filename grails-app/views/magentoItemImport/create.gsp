@@ -15,29 +15,41 @@
 		</style>
 		
 		<g:javascript>
+			function categoryError($input, errorMsg) {
+				if (errorMsg === null) $input.siblings('.help-inline').text('').closest('.control-group').removeClass('error');
+				else $input.siblings('.help-inline').text(errorMsg).closest('.control-group').addClass('error');
+			}
+			
 			$(document).ready(function() {
 				$('#meliCategory').autocomplete({
-					source: '<g:createLink controller='category' action='search'/>',
+					maxRows: 10,
 					minLength: 4,
-					maxRows: 10
-				});
-			   
-				$('#confirm-category').click(function(e) {
-					$('form table').removeClass('hide');
+					source: '<g:createLink controller="category" action="search" />',
+					select: function(e, ui) {
+						var match = ui.item.value.match(/^\w{3}\d+/);
+						if ($.isArray(match) && match.length) ui.item.value = match[0];
+					},
+					change: function(e, ui) {
+						var $input = $(e.target);
+						
+						var cat = (ui.item || e.target).value.trim(),
+							url = (/^\/sim/.test(document.location.pathname) ? '/sim' : '') + '/categoryConfirm';
+						if (/^\w{3}\d+$/.test(cat)) {
+							categoryError($input, null);
+							$.getJSON(url, {category: cat}, function(data, status, $xhr) {
+								var $table = $('form table').addClass('hide');
+									
+								if (data.error) categoryError($input, data.message);
+								else if (data.isFashion === true) $table.removeClass('hide');
+							});
+						} else {
+							categoryError($input, '<g:message code="magentoItemImport.meliCategory.invalidCategory" default="Invalid category code." />');
+						}
+					}
 				});
 			   
 				$('[rel="tooltip"]').tooltip();
 			});
-			
-			function _after(response) {
-				alert( response.responseText ); // OK!
-				var codigos = eval('(' + response.responseText + ')');
-				// here I can process the json object ...
-			}
-			
-			function demoProgress() {
-				$('.progress-modal').modal();
-			}
 		</g:javascript>
 	</head>
 	<body>

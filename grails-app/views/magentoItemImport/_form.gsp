@@ -27,9 +27,8 @@
 					<g:message code="magentoItemImport.meliCategory.label" default="MLCategory" />
 				</label>
 				<div class="controls">
-					<div class="input-append">
-						<g:textField id="meliCategory" class="input-small" name="meliCategory" value="${magentoItemImportInstance?.meliCategory}" /><button id="confirm-category" type="button" class="btn btn-small" style="padding: 4px 9px 3px;">Confirm</button>
-					</div>
+					<g:textField id="meliCategory" class="input-small" name="meliCategory" value="${magentoItemImportInstance?.meliCategory}" />
+					<span class="help-inline"></span>
 				</div>
 			</div>
 		</div>
