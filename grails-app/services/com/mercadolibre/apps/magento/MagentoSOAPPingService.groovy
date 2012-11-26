@@ -14,7 +14,7 @@ class MagentoSOAPPingService extends MagentoSOAPBase {
     String sessionId = null
 
     try {
-      if ((sessionId = initMagentoProxyForStore(storeUrl))) {
+      if ((sessionId = initMagentoProxyForStore(storeUrl, username, password))) {
         log.info "Got Session: ${sessionId}"
         return [status: "OK", message: "${storeUrl} is alive"]
       }
