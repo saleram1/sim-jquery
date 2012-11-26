@@ -19,7 +19,7 @@ class CategoryService {
   Boolean isValidCategory(String categoryId) {
     Boolean valid = false
 
-    def builder = new HTTPBuilder("https://api.mercadolibre.com")
+    def builder = new HTTPBuilder("https://v1.api.mercadolibre.com")
 
     try {
       builder.contentType = ContentType.JSON
@@ -30,7 +30,7 @@ class CategoryService {
     catch (Exception ex) {
       if (ex?.message == 'Not Found') {
         valid = false
-        log.warn "Category ${categoryId} not found !!"
+        log.warn "Category '${categoryId}' not found !!"
       }
       else {
         log.error ex.message, ex
@@ -82,14 +82,16 @@ class CategoryService {
   }
 
   /**
-   * Test category validity by its id and name
-   * @param categoryId
-   * @return
+   * Test category validity by its id and name - Fashion based category will have
+   * under it some very strange bits for the Required extra fields
+   *
+   * @param categoryId - e.g. MLA1458
+   * @return  true if a child of 'Ropa' , false otherwise
    */
   Boolean isFunkyFashionFootwearCategory(String categoryId) {
     Boolean isFunky = false
 
-    def builder = new HTTPBuilder("https://api.mercadolibre.com")
+    def builder = new HTTPBuilder("https://v1.api.mercadolibre.com")
     try {
       builder.contentType = ContentType.JSON
       builder.get(path: "/categories/${categoryId}/attributes") { resp, json ->
@@ -103,8 +105,21 @@ class CategoryService {
   }
 
 
+  String getCategoryNotFoundMessage(String category = "MLX123") {
+    def notFound = """{
+        "message": "Category not found: ${category}",
+        "error": "not_found",
+        "status": 404,
+        "cause": [
+        ],
+      }"""
+
+    return notFound
+  }
+
+
   /**
-   * Search by category id instead of query string
+   * Search by category id instead of query string - this returns a subset / paged results
    * @param siteId
    * @param friendlyCategoryId
    * @param limit
