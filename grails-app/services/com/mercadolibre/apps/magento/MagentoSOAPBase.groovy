@@ -31,22 +31,23 @@ abstract class MagentoSOAPBase {
       log.info "Trying to connect API v2 endpoint: ${storeURL} with user ${username.toLowerCase()}"
     }
 
-    mageProxy = new magento.MagentoService(realStoreURL)
-    mageProxy.getMageApiModelServerWsiHandlerPort().startSession()
-
-    LoginParam lp = new LoginParam()
-    lp.username = username
-    lp.apiKey = password
-
-    String session = ""
     try {
-      session = mageProxy.getMageApiModelServerWsiHandlerPort().login(lp).result
+      mageProxy = new magento.MagentoService(realStoreURL)
+      mageProxy.getMageApiModelServerWsiHandlerPort().startSession()
+
+      LoginParam lp = new LoginParam()
+      lp.username = username
+      lp.apiKey = password
+
+      String session =
+        mageProxy.getMageApiModelServerWsiHandlerPort().login(lp).result
       saveSessionForFutureUse(mageProxy, session, storeURL)
 
       return session
     }
     catch (Throwable throwable) {
-      return throwable.message
+      throw new RuntimeException(throwable.message, throwable)
+      //return throwable.message
     }
   }
 

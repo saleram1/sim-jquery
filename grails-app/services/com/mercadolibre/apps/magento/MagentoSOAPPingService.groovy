@@ -19,12 +19,12 @@ class MagentoSOAPPingService extends MagentoSOAPBase {
         return [status: "OK", message: "${storeUrl} is alive"]
       }
       else {
-        return [status: "ERROR", message: "Cannot reach ${storeUrl}", cause: "${sessionId}"]
+        return [status: "ERROR", message: "Cannot reach ${storeUrl}", cause: ""]
       }
     }
     catch (Throwable tr) {
       log.error tr.message
-      return [status: "ERROR", message: "Cannot reach ${storeUrl}", cause: ["Caused by ${tr.message}"]]
+      return [status: "ERROR", message: tr.message, cause: ["Cannot reach ${storeUrl} - Caused by ${tr.message}"]]
     }
   }
 }
