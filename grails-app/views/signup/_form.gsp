@@ -34,7 +34,7 @@
 		</div>
 	</div>
 </fieldset>
-<fieldset>
+<fieldset class="magento-api">
 	<legend>Your Magento Store</legend>
 	<div class="control-group ${hasErrors(bean: shoppeUserInstance, field: 'magentoStoreURI', 'error')}">
 		<label for="magentoStoreURI" class="control-label">
@@ -58,7 +58,8 @@
 		</label>
 		<div class="controls">
 			<div class="input-append">
-				<g:textField name="apiKey" class="input-xxlarge" required="required" value="${shoppeUserInstance?.apiKey ?: 'k6jcg57urgrpx3tdocwehmk7jnytvyfv'}" /><button class="verify-api btn btn-small" type="button" style="padding: 4px 9px 3px;">Verify</button>
+				<g:textField name="apiKey" class="input-xxlarge" required="required" value="${shoppeUserInstance?.apiKey ?: '2dxkp14lggreh7f5m8ejqmzyskwhzoj0'}" /><button class="verify-api btn btn-small" type="button" style="padding: 4px 9px 3px;" disabled="disabled">Verify</button>
+			    <span class="help-inline"></span>
 			</div>
 		</div>
 	</div>
