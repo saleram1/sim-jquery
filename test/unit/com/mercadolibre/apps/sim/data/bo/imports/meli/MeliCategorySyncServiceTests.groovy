@@ -1,4 +1,4 @@
-package com.mercadolibre.apps.sim.data.bo..imports.meli
+package com.mercadolibre.apps.sim.data.bo.imports.meli
 
 import static org.junit.Assert.*
 
@@ -11,7 +11,7 @@ import org.junit.*
  */
 @TestMixin(GrailsUnitTestMixin)
 class MeliCategorySyncServiceTests {
-    
+ 
   def meliCategorySyncService
     @Before
     void setUp() {
