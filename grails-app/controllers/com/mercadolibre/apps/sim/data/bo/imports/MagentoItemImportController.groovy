@@ -1,11 +1,9 @@
 package com.mercadolibre.apps.sim.data.bo.imports
 
-import com.mercadolibre.apps.sim.data.bo.errors.ApiError
-import grails.converters.JSON
 import com.mercadolibre.apps.sim.CategoryService
 import com.mercadolibre.apps.sim.ImportService
 import com.mercadolibre.apps.sim.data.bo.core.VanillaItemListing
-import org.json.simple.ItemList
+
 import com.mercadolibre.apps.sim.data.bo.core.ItemListing
 
 /**
@@ -25,9 +23,9 @@ class MagentoItemImportController {
   MagentoStoreService magentoStoreService
 
 
-  def startImport() {
-    params.each() { param ->
-      log.info param
+  def startImport(StartMagentoExportCommand command) {
+    command.properties.each() {
+      println it
     }
 
 /*
@@ -40,7 +38,7 @@ class MagentoItemImportController {
     render newItemId as String
   }
 
-  def importListingsFromMage(StartMageCatalogSlurpCommand command) {
+  def importListingsFromMage(StartMagentoExportCommand command) {
     log.info "importListingsFromMage:  using accessToken: " + session.ml_access_token
 
     def meliItemIds = []
@@ -98,21 +96,28 @@ class MagentoItemImportController {
 
 
 /*
-	Each of these will trigger listings to Magentooo
+  Each of these will trigger an export of Stock Items from Magento and create new listings on ML
 
-	listingType=bronze
-	productSelection=Selected Category Ids
-	storeCategory=
-	meliCategory=MLA78884
-	buyingMode=buy_it_now=
+    productSelection=Products in Selected Categories
 
-*/
+    sizeAttributeName=size
+    sizeAppendedToSKU=on
+    colorAttributeName=color
+    storeCategory=3
+    meliCategory=MLA9997
+    buyingMode=buy_it_now
+    action=startImport
+    controller=magentoItemImport
 
-class StartMageCatalogSlurpCommand {
-	String action
+ */
+class StartMagentoExportCommand {
   String buyingMode
   String listingType
   String meliCategory
   String productSelection
   String storeCategory
+  String sizeAttributeName
+  Boolean sizeAppendedToSKU
+  Boolean colorAppendedToSKU
+  String colorAttributeName
 }
