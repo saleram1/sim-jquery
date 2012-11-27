@@ -86,7 +86,10 @@ class SignupController {
   }
 }
 
-
+/**
+ * Register new Shoppe and user on the M2M app
+ *
+ */
 class NewSignupCommand {
   String apiKey
   String companyName
@@ -95,7 +98,4 @@ class NewSignupCommand {
   String lastName
   String magentoStoreURI
   String username
-  /*
-  String verifierAuthCode          // to be determined Magento 1.7 and above feature OAuth and REST
-   */
 }

@@ -25,7 +25,7 @@ class VerifyController {
 
 		if (command.validate()) {
       pingResult =
-        magentoSOAPPingService.pingMagentoStore(command.apiBaseURL, command.username, command.apiKey)
+        magentoSOAPPingService.pingMagentoStore(command.magentoStoreURI, command.username, command.apiKey)
 
 /*
 			Token requestToken = authService.getRequestToken(command.apiKey, command.username, command.apiBaseURL)
@@ -41,15 +41,17 @@ class VerifyController {
 	}
 }
 
-
+/**
+ * Subset of NewSignupCommand to capture only magentoStoreURI, user and password
+ */
 class VerifyCommand implements Serializable {
-	String apiBaseURL
-	String apiKey
+  String apiKey             /// 25-character password
+  String magentoStoreURI
 	String username
 	
 	static constraints = {
-		apiBaseURL(nullable: false, blank: false)
 		apiKey(nullable: false, blank: false)
-		username(nullable: false, blank: false)
+    magentoStoreURI(nullable: false, blank: false)
+    username(nullable: false, blank: false)
 	}
 }
