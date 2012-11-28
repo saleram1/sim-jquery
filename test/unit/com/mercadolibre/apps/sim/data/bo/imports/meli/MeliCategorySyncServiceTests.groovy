@@ -21,4 +21,8 @@ class MeliCategorySyncServiceTests {
     void testSyncMeliCategoryZipFile() {
       meliCategorySyncService.syncCategoryZipFile()
     }
+
+	void testCheckMeliCategoryMD5() {
+      meliCategorySyncService.saveMeliCategoryMD5()
+	}
 }
