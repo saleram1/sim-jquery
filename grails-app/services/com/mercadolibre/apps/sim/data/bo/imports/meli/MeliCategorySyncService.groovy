@@ -17,6 +17,11 @@ import java.util.zip.*
 
 import com.mercadolibre.apps.sim.data.bo.imports.meli.CategoryVersion
 
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
+import java.util.zip.GZIPInputStream
+
 class MeliCategorySyncService {
 
   def syncCategoryZipFile() {
@@ -167,7 +172,33 @@ class MeliCategorySyncService {
     }
   }
 
+  private static final String INPUT_GZIP_FILE = "/tmp/myCatFile2.gz"
+  private static final String OUTPUT_FILE = "/tmp/myCatFile2.txt"
+
   def unzipCategoryZipFileFromMeli(String locationOfFile) {
-	// TODO:
+	
+	byte[] buffer = new byte[1024];
+
+     try{
+
+    	 GZIPInputStream gzis = 
+    		new GZIPInputStream(new FileInputStream(INPUT_GZIP_FILE));
+
+    	 FileOutputStream out = 
+            new FileOutputStream(OUTPUT_FILE);
+
+        int len;
+        while ((len = gzis.read(buffer)) > 0) {
+        	out.write(buffer, 0, len);
+        }
+
+        gzis.close();
+    	out.close();
+
+    	System.out.println("Done");
+
+    }catch(IOException ex){
+       ex.printStackTrace();   
+    }
   }
 }
