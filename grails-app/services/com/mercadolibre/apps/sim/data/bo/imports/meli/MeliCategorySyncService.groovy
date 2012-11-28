@@ -4,6 +4,9 @@ import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.ContentType
 import net.sf.json.JSONArray
 
+import groovyx.net.http.RESTClient
+import groovy.util.slurpersupport.GPathResult
+import static groovyx.net.http.ContentType.URLENC 
     
 import org.apache.http.HttpResponse
 import org.apache.http.client.HttpClient
@@ -12,20 +15,62 @@ import org.apache.http.impl.client.DefaultHttpClient
 
 import java.util.zip.*
 
+import com.mercadolibre.apps.sim.data.bo.imports.meli.CategoryVersion
+
 class MeliCategorySyncService {
 
   def syncCategoryZipFile() {
     // TODO:  put this URL in config
-//    downloadCategoryZipFileOLD2("https://api.mercadolibre.com/sites/MLA/categories/all")
-//    downloadCategoryZipFile("https://api.mercadolibre.com/sites/MLA/categories/all")
-//    downloadCategoryZipFile9("https://api.mercadolibre.com/sites/MLA/categories/all")
     downloadCategoryZipFileFromMeli("https://api.mercadolibre.com/sites/MLA/categories/all")
   }
   
-  
   def isMeliCategoryInSync() {
+	
+    CategoryVersion categoryVersion = CategoryVersion.get(1)
+	println "This is the categoryVersion from the lookup: " + categoryVersion
+	if (categoryVersion.md5 == getMeliCategoryMD5()) {
+      return true
+	} 
     return false 
- }
+  }
+
+  def getMeliCategoryMD5() {
+	String md5
+	RESTClient meliRestClient = new RESTClient( 'https://api.mercadolibre.com/sites/MLA/categories/' )
+
+	Object blah = meliRestClient.head( path : 'all' )
+
+	blah.getHeaders().each { 
+	  String meliHeader = it
+	  if (meliHeader.substring(0,13).equals("X-Content-MD5")) {
+		md5 = meliHeader.substring(14).trim()
+	  }
+	}
+	md5
+  }
+
+  def saveMeliCategoryMD5() {
+	/*RESTClient meliRestClient = new RESTClient( 'https://api.mercadolibre.com/sites/MLA/categories/' )
+
+		Object blah = meliRestClient.head( path : 'all' )
+
+		blah.getHeaders().each { 
+		  String meliHeader = it
+		  if (meliHeader.substring(0,13).equals("X-Content-MD5")) {
+			// save X-Content-MD5 value to the database - CategoryVersion domain object
+			String md5 = meliHeader.substring(14).trim()
+			//println "md5: " + md5
+			CategoryVersion categoryVersion = new CategoryVersion()
+			categoryVersion.md5 = md5*/
+		
+		CategoryVersion categoryVersion = new CategoryVersion()
+		categoryVersion.md5 = getMeliCategoryMD5()
+		println "Here is the md5: " + categoryVersion.md5	
+		categoryVersion.save(flush: true)
+		//println it
+	  /*}
+	  	}*/
+  }
   
 //  private downloadCategoryZipFileOLD2(address)
 //  {
@@ -120,5 +165,9 @@ class MeliCategorySyncService {
         if (output != null) try { output.close() } catch (IOException logOrIgnore) {}
         if (input != null) try { input.close() } catch (IOException logOrIgnore) {}
     }
+  }
+
+  def unzipCategoryZipFileFromMeli(String locationOfFile) {
+	// TODO:
   }
 }
