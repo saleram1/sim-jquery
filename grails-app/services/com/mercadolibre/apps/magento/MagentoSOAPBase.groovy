@@ -47,7 +47,6 @@ abstract class MagentoSOAPBase {
     }
     catch (Throwable throwable) {
       throw new RuntimeException(throwable.message, throwable)
-      //return throwable.message
     }
   }
 
