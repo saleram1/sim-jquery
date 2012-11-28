@@ -18,6 +18,9 @@ class UrlMappings {
 		"/uploads/new"(controller: "itemImportFileSource", action: "create")
 		"/uploads/next"(controller: "itemImport", action: "showUploadProgress")
 		"/logout"(controller: "signout", action: "index")
+
+    // Magento catalog synch
+    "/magento/import/new"(controller: "magentoCatalogImportJob", action: "create")
 		
 		"/"(view:"/index")
 		"500"(view:'/error')
