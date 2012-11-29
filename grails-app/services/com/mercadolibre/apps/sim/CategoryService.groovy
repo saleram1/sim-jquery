@@ -152,6 +152,8 @@ class CategoryService {
     String aLine
 
     BufferedReader bufferedReader = new BufferedReader(new StringReader(MeliFlatCategories.categoryIds))
+    //BufferedReader bufferedReader = new BufferedReader(new StringReader(MeliFlatCategories.categoryIds))
+	// TODO: modify this to get from file system
     while ( (aLine = bufferedReader.readLine()) != null ) {
       Category cat =
         getCategory(aLine.trim())
