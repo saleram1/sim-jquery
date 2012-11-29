@@ -109,6 +109,9 @@ class BootStrap {
     if (!System.getProperty("meli.category.load.skip") &&
         Category.count() == 0) {
       categoryService.loadMeliCategories()
+	  //TODO:  need to modify above to call teh MeliCategorySyncService.isMeliCategoryInSync() method to determine if our Meli Category tree
+	  // is in sync.  if it is, we don't need to do another load on startup
+	  // for now I am letting it do this on startup since we are still using an in-memory database
     }
 
 // The Advanced requirements will use / register a Marshaller
