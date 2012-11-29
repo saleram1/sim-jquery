@@ -24,40 +24,57 @@ class MagentoItemImportController {
 
 
   def startImport(StartMagentoExportCommand command) {
-    command.properties.each() {
-      println it
-    }
-
-/*
     def newItemId = importListingsFromMage(command)
     newItemId.each() {
       log.info "ML item listed https://api.mercadolibre.com/items/${it}"
     }
-*/
-    def newItemId = "['item_not_found']"
     render newItemId as String
   }
 
+
   def importListingsFromMage(StartMagentoExportCommand command) {
     log.info "importListingsFromMage:  using accessToken: " + session.ml_access_token
-
     def meliItemIds = []
 
-    if (categoryService.isValidCategory(command.meliCategory)) {
-
-      if (command.productSelection?.toUpperCase().startsWith("ALL")) {
+/* CANNOT SUPPORT ALL PRODUCT atm --   if (command.productSelection?.toUpperCase().startsWith("ALL")) {
         log.info "Retrieving ALL products in Magento Store"
         allProduct = magentoStoreService.getMagentoProductsByUser(session.ml_caller_id)
       }
-      else {
-        log.info "Retrieving filtered by CategoryId: ${command.storeCategory}"
-        allProduct = magentoStoreService.getMagentoProductsByUserAndCategory(session.ml_caller_id, command.storeCategory as Long)
-      }
+      else {  */
+
+    if (categoryService.isValidCategory(command.meliCategory)) {
+      log.info "Retrieving filtered by CategoryId: ${command.storeCategory}"
+      def allProduct = magentoStoreService.getMagentoProductsByUserAndCategory(session.ml_caller_id, command.storeCategory)
+
       log.info("Products found: " + allProduct.size())
+/////////////////////////////////////
+//      allProduct.each() { k,v ->
+//        def aProduct = v
+/////////////////////////////////////
+      allProduct.each { aProduct ->
 
-      allProduct.each() { k,v ->
-        def aProduct = v
+        // Step 1 - get associated products if configurable type
 
+
+        // Step 2 - retrieve details for each of that collection and store as a ItemVariation
+
+        // Step 3 - Map size and color to the ML codes tables for each of the variations
+
+
+        // Step 4 [FINAL] - combine 'parent' configurable product PLUS associated and pass all those with non
+        // non-zero qty to the Meli listing
+
+      }
+    } //endif
+    else {
+      log.warn "Cannot support category_id id: ${command.meliCategory} in the current version. Please upgrade to 1.1"
+    }
+
+    return meliItemIds
+  }
+
+
+/*
         VanillaItemListing listing = new VanillaItemListing(category_id: command.meliCategory, listing_type_id: command.listingType,
           currency_id: "ARS", price: aProduct['regular_price_without_tax'], available_quantity: aProduct['is_saleable'] as Integer,
           title: aProduct['short_description'], description: aProduct['description'], seller_custom_field: aProduct['sku'],
@@ -68,14 +85,7 @@ class MagentoItemImportController {
 
         meliItemIds << newListingId
         saveNewListing(newListingId)
-      }
-    }
-    else {
-      log.warn "Cannot support category_id id: ${command.meliCategory} in the current version"
-    }
-
-    return meliItemIds
-  }
+*/
 
   def saveNewListing(String itemId) {
     log.info "Saving item listing for: ${itemId}\n\n"
@@ -115,7 +125,7 @@ class StartMagentoExportCommand {
   String listingType
   String meliCategory
   String productSelection
-  String storeCategory
+  Integer storeCategory
   String sizeAttributeName
   Boolean sizeAppendedToSKU
   Boolean colorAppendedToSKU
