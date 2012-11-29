@@ -19,14 +19,22 @@ class MeliCategorySyncServiceTests {
     }
 
     void testSyncMeliCategoryZipFile() {
-      meliCategorySyncService.syncCategoryZipFile()
+      meliCategorySyncService.syncCategoryZipFile("https://api.mercadolibre.com/sites/MLA/categories/all", "/tmp/mercadoCatFile.gz")
     }
 
-	void testCheckMeliCategoryMD5() {
-      meliCategorySyncService.saveMeliCategoryMD5()
+	void testGetMeliCategoryMD5() {
+		meliCategorySyncService.getMeliCategoryMD5("https://api.mercadolibre.com/sites/MLA/categories/")
 	}
 	
+/*	void testSaveMeliCategoryMD5() {
+      meliCategorySyncService.saveMeliCategoryMD5()
+	}*/
+	
 	void testUnzipCategoryZipFileFromMeli() {
-	  meliCategorySyncService.unzipCategoryZipFileFromMeli()
+	  meliCategorySyncService.unzipCategoryZipFileFromMeli("/tmp/mercadoCatFile.gz", "/tmp/mercadoCatFile.txt")
+	}
+	
+	void testParseMeliCategoryIdsIntoFile() {
+		meliCategorySyncService.parseMeliCategoryIdsIntoFile("/tmp/mercadoCatFile.txt", "/tmp/mercadoCatFileIds.txt")
 	}
 }
