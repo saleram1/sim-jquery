@@ -22,26 +22,28 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.zip.GZIPInputStream
 
+import groovy.json.JsonSlurper
+
 class MeliCategorySyncService {
 
-  def syncCategoryZipFile() {
+  def syncCategoryZipFile(String url, String zipFileLocation) {
     // TODO:  put this URL in config
-    downloadCategoryZipFileFromMeli("https://api.mercadolibre.com/sites/MLA/categories/all")
+    //downloadCategoryZipFileFromMeli("https://api.mercadolibre.com/sites/MLA/categories/all", "/tmp/mercadoCatFile.gz")
+	downloadCategoryZipFileFromMeli(url, zipFileLocation)
   }
   
   def isMeliCategoryInSync() {
-	
     CategoryVersion categoryVersion = CategoryVersion.get(1)
 	println "This is the categoryVersion from the lookup: " + categoryVersion
-	if (categoryVersion.md5 == getMeliCategoryMD5()) {
+	if (categoryVersion.md5 == getMeliCategoryMD5("https://api.mercadolibre.com/sites/MLA/categories/")) {
       return true
 	} 
     return false 
   }
 
-  def getMeliCategoryMD5() {
+  def getMeliCategoryMD5(String url) {
 	String md5
-	RESTClient meliRestClient = new RESTClient( 'https://api.mercadolibre.com/sites/MLA/categories/' )
+	RESTClient meliRestClient = new RESTClient(url)
 
 	Object blah = meliRestClient.head( path : 'all' )
 
@@ -55,28 +57,83 @@ class MeliCategorySyncService {
   }
 
   def saveMeliCategoryMD5() {
-	/*RESTClient meliRestClient = new RESTClient( 'https://api.mercadolibre.com/sites/MLA/categories/' )
-
-		Object blah = meliRestClient.head( path : 'all' )
-
-		blah.getHeaders().each { 
-		  String meliHeader = it
-		  if (meliHeader.substring(0,13).equals("X-Content-MD5")) {
-			// save X-Content-MD5 value to the database - CategoryVersion domain object
-			String md5 = meliHeader.substring(14).trim()
-			//println "md5: " + md5
-			CategoryVersion categoryVersion = new CategoryVersion()
-			categoryVersion.md5 = md5*/
-		
 		CategoryVersion categoryVersion = new CategoryVersion()
-		categoryVersion.md5 = getMeliCategoryMD5()
+		categoryVersion.md5 = getMeliCategoryMD5("https://api.mercadolibre.com/sites/MLA/categories/")
 		println "Here is the md5: " + categoryVersion.md5	
 		categoryVersion.save(flush: true)
-		//println it
-	  /*}
-	  	}*/
   }
   
+  private downloadCategoryZipFileFromMeli(url, fileLocation) {
+    
+    HttpClient client = new DefaultHttpClient()
+    HttpGet get = new HttpGet("https://api.mercadolibre.com/sites/MLA/categories/all")
+    HttpResponse response = client.execute(get)
+    
+    InputStream input = null
+    OutputStream output = null
+    byte[] buffer = new byte[1024]
+
+    try {
+      input = response.getEntity().getContent()
+        output = new FileOutputStream(fileLocation)
+        for (int length; (length = input.read(buffer)) > 0;) {
+            output.write(buffer, 0, length)
+        }
+    } finally {
+        if (output != null) try { output.close() } catch (IOException logOrIgnore) {}
+        if (input != null) try { input.close() } catch (IOException logOrIgnore) {}
+    }
+  }
+
+  def unzipCategoryZipFileFromMeli(String inputGzipFile, String outputFile) {
+	
+	byte[] buffer = new byte[1024];
+
+     try{
+
+    	 GZIPInputStream gzis = 
+    		new GZIPInputStream(new FileInputStream(inputGzipFile));
+
+    	 FileOutputStream out = 
+            new FileOutputStream(outputFile);
+
+        int len;
+        while ((len = gzis.read(buffer)) > 0) {
+        	out.write(buffer, 0, len);
+        }
+
+        gzis.close();
+    	out.close();
+
+    	System.out.println("Done");
+
+    }catch(IOException ex){
+       ex.printStackTrace();   
+    }
+  }
+
+  def parseMeliCategoryIdsIntoFile(String categoryFileLocation, String outputFile) {
+    
+	def jsonSlurper = new JsonSlurper();
+	
+	//Read the JSON from the file system
+	def reader = new BufferedReader(new FileReader(categoryFileLocation))
+	def parsedData = jsonSlurper.parse(reader)
+	parsedData.each { id, data ->
+		println data.id	
+	}
+	
+	writeToFile(outputFile, parsedData)
+  }
+
+  private void writeToFile(def fileName, def infoList) {
+    new File("$fileName").withWriter { out ->
+      infoList.each { id, data ->
+        out.println data.id
+      }
+    }
+  }
+
 //  private downloadCategoryZipFileOLD2(address)
 //  {
 //    def file = new FileOutputStream("/tmp/MeliCategoryZipFile.gz")
@@ -101,7 +158,7 @@ class MeliCategorySyncService {
 ////    out.flush()
 ////    out.close()
 //  }
- 
+
 //  private downloadCategoryZipFile(url) {
 //    
 //    def http = new HTTPBuilder("https://api.mercadolibre.com")
@@ -149,56 +206,4 @@ class MeliCategorySyncService {
 //    }
 //
 //  }
-  
-  private downloadCategoryZipFileFromMeli(url) {
-    
-    HttpClient client = new DefaultHttpClient()
-    HttpGet get = new HttpGet("https://api.mercadolibre.com/sites/MLA/categories/all")
-    HttpResponse response = client.execute(get)
-    
-    InputStream input = null
-    OutputStream output = null
-    byte[] buffer = new byte[1024]
-
-    try {
-      input = response.getEntity().getContent()
-        output = new FileOutputStream("/tmp/mercadoCatFile.gz")
-        for (int length; (length = input.read(buffer)) > 0;) {
-            output.write(buffer, 0, length)
-        }
-    } finally {
-        if (output != null) try { output.close() } catch (IOException logOrIgnore) {}
-        if (input != null) try { input.close() } catch (IOException logOrIgnore) {}
-    }
-  }
-
-  private static final String INPUT_GZIP_FILE = "/tmp/myCatFile2.gz"
-  private static final String OUTPUT_FILE = "/tmp/myCatFile2.txt"
-
-  def unzipCategoryZipFileFromMeli(String locationOfFile) {
-	
-	byte[] buffer = new byte[1024];
-
-     try{
-
-    	 GZIPInputStream gzis = 
-    		new GZIPInputStream(new FileInputStream(INPUT_GZIP_FILE));
-
-    	 FileOutputStream out = 
-            new FileOutputStream(OUTPUT_FILE);
-
-        int len;
-        while ((len = gzis.read(buffer)) > 0) {
-        	out.write(buffer, 0, len);
-        }
-
-        gzis.close();
-    	out.close();
-
-    	System.out.println("Done");
-
-    }catch(IOException ex){
-       ex.printStackTrace();   
-    }
-  }
 }
