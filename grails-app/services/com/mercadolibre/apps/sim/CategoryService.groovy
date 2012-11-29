@@ -148,23 +148,26 @@ class CategoryService {
    *
    * @return number of categories loaded
    */
-  Integer loadMeliCategories() {
-    String aLine
+  def loadMeliCategories() {
+	
+	runAsync {
+      String aLine
 
-    BufferedReader bufferedReader = new BufferedReader(new StringReader(MeliFlatCategories.categoryIds))
-    //BufferedReader bufferedReader = new BufferedReader(new StringReader(MeliFlatCategories.categoryIds))
-	// TODO: modify this to get from file system
-    while ( (aLine = bufferedReader.readLine()) != null ) {
-      Category cat =
-        getCategory(aLine.trim())
+      BufferedReader bufferedReader = new BufferedReader(new FileReader("/tmp/mercadoCatFileIds.txt"))
+      //BufferedReader bufferedReader = new BufferedReader(new StringReader(MeliFlatCategories.categoryIds))
+	
+	  // TODO: check to see if we have the latest category tree from meli
+      while ( (aLine = bufferedReader.readLine()) != null ) {
+        Category cat =
+          getCategory(aLine.trim())
 
-      if (cat?.save(flush: true)) {
-        log.info "Saved ${cat}"
-      }
+          if (cat?.save(flush: true)) {
+            log.info "Saved ${cat}"
+          }
+        }
+  	  }
     }
   }
-
-}
 
 
 final class MeliFlatCategories {
