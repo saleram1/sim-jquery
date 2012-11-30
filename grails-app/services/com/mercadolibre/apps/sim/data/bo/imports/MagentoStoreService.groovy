@@ -5,57 +5,37 @@ import groovyx.net.http.ContentType
 import net.sf.json.JSONArray
 import com.mercadolibre.apps.sim.data.bo.errors.ApiError
 import com.mercadolibre.apps.sim.data.bo.core.User
+import com.mercadolibre.apps.magento.MagentoSOAPCatalogService
 
 
 class MagentoStoreService {
 
-  final static String canonical_test_store_base = "http://ec2-107-22-49-30.compute-1.amazonaws.com/"
+  MagentoSOAPCatalogService magentoSOAPCatalogService
+
+  final static String dev_and_test_store_base = "http://ec2-107-22-49-30.compute-1.amazonaws.com/"
 
 
-  /**
-   * Returns a list of Map with the entityId (catalog_product.id) as Key and the entity data (all available)
-   * as the value in the map
-   *
-   * @param userId - user where we retrieve their Magento store
-   * @param limit  - max number of products
-   * @param offset
-   * @return
-   */
-  Map<String,Map> getMagentoProductsByUser(Integer userId, Integer limit = 100) {
-    def productMap = [:]
+  List getMagentoProductsByUserAndCategory(Integer callerId, Integer categoryId) {
+    def magentoBaseURI = null
+    def apiUser
+    def apiKey
 
-    def builder = new HTTPBuilder()
-    try {
-      builder.request(canonical_test_store_base,
-          groovyx.net.http.Method.GET,
-          groovyx.net.http.ContentType.JSON) {
-        uri.path = "/magento/api/rest/products"
-        uri.query = [type: 'rest', limit: Math.min(limit,100)]
-        headers.'Accept' = "*/*"
+    User.withTransaction() {
+      if (User.findByCallerId(callerId)) {
+        User shoppeUser = User.findByCallerId(callerId)
+        magentoBaseURI = shoppeUser.company.webAddress
+        apiUser = shoppeUser.company.apiUser
+        apiKey  = shoppeUser.company.apiKey
 
-        response.success = { resp, json ->
-          json.each() {
-            (it.value as Map).put("category_id", getCategoryIdForProduct(it.key as Long))
-            productMap[it.key] = it.value
-          }
-        }
-        response.failure = { resp, json ->
-          log.error resp.status
-        }
+        log.info "Shoppe URL is ${magentoBaseURI} ... connecting as user ${apiUser}"
+        log.info "Mage Category Id is ${categoryId}"
+        // logging
       }
     }
-    catch (Exception ex) {
-      log.error ex.message, ex
-    }
-    //println productMap.'3'
-    //return productMap.'3'
 
-    productMap
-  }
+    def productStubs =
+      magentoSOAPCatalogService.getProductIdsInCategory(magentoBaseURI, apiUser, apiKey, categoryId)
 
-
-  def getMagentoProductsByUserAndCategory(Integer userId, Long categoryId) {
-    return getMagentoProductsByUser(userId).findAll { it.value['category_id'] == categoryId }
   }
 
 

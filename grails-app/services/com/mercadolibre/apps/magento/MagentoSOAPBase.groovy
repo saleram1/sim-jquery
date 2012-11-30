@@ -28,7 +28,7 @@ abstract class MagentoSOAPBase {
       realStoreURL = new URL("${storeURL}/api/v2_soap?wsdl=1")
     }
     finally  {
-      log.info "Trying to connect API v2 endpoint: ${storeURL} with user ${username.toLowerCase()}"
+      log.info "Trying to connect API v2 endpoint: ${realStoreURL} with user ${username.toLowerCase()}"
     }
 
     try {
