@@ -66,7 +66,7 @@ class MeliCategorySyncService {
   private downloadCategoryZipFileFromMeli(url, fileLocation) {
     
     HttpClient client = new DefaultHttpClient()
-    HttpGet get = new HttpGet("https://api.mercadolibre.com/sites/MLA/categories/all")
+    HttpGet get = new HttpGet(url)
     HttpResponse response = client.execute(get)
     
     InputStream input = null
