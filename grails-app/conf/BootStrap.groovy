@@ -118,8 +118,8 @@ class BootStrap {
 		meliCategorySyncService.syncCategoryZipFile("https://api.mercadolibre.com/sites/MLA/categories/all", "/tmp/mercadoCatFile.gz")
 		meliCategorySyncService.unzipCategoryZipFileFromMeli("/tmp/mercadoCatFile.gz", "/tmp/mercadoCatFile.txt")
 		meliCategorySyncService.parseMeliCategoryIdsIntoFile("/tmp/mercadoCatFile.txt", "/tmp/mercadoCatFileIds.txt")
-		categoryService.loadMeliCategories()
 		meliCategorySyncService.saveMeliCategoryMD5()
+		categoryService.loadMeliCategories()
 	  }
 	  //TODO:  need to modify above to call the MeliCategorySyncService.isMeliCategoryInSync() method to determine if our Meli Category tree
 	  // is in sync.  if it is, we don't need to do another load on startup
