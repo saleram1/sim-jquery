@@ -7,6 +7,7 @@ import com.mercadolibre.apps.sim.data.bo.core.VariationAttribute
 import com.mercadolibre.apps.sim.data.bo.errors.ApiError
 import com.mercadolibre.apps.sim.data.bo.imports.MagentoStoreService
 import com.mercadolibre.apps.sim.data.bo.imports.meli.Category
+import com.mercadolibre.apps.sim.data.bo.imports.meli.MeliCategorySyncService
 
 import grails.converters.JSON
 
@@ -15,6 +16,7 @@ class BootStrap {
 
   MagentoStoreService magentoStoreService
   CategoryService categoryService
+  MeliCategorySyncService meliCategorySyncService
 
   def getBaseItemMap(it) {
     def map = [:]
@@ -108,8 +110,18 @@ class BootStrap {
 
     if (!System.getProperty("meli.category.load.skip") &&
         Category.count() == 0) {
-      categoryService.loadMeliCategories()
-	  //TODO:  need to modify above to call teh MeliCategorySyncService.isMeliCategoryInSync() method to determine if our Meli Category tree
+      
+	  //  Check to see if we have the latest version of the category tree
+	  if (!meliCategorySyncService.isMeliCategoryInSync()) {
+		// TODO: clean this stuff up later, PLEASE!!!
+		// pull down the latest version of the category tree zip file
+		meliCategorySyncService.syncCategoryZipFile("https://api.mercadolibre.com/sites/MLA/categories/all", "/tmp/mercadoCatFile.gz")
+		meliCategorySyncService.unzipCategoryZipFileFromMeli("/tmp/mercadoCatFile.gz", "/tmp/mercadoCatFile.txt")
+		meliCategorySyncService.parseMeliCategoryIdsIntoFile("/tmp/mercadoCatFile.txt", "/tmp/mercadoCatFileIds.txt")
+		categoryService.loadMeliCategories()
+		meliCategorySyncService.saveMeliCategoryMD5()
+	  }
+	  //TODO:  need to modify above to call the MeliCategorySyncService.isMeliCategoryInSync() method to determine if our Meli Category tree
 	  // is in sync.  if it is, we don't need to do another load on startup
 	  // for now I am letting it do this on startup since we are still using an in-memory database
     }
