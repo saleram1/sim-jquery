@@ -25,9 +25,6 @@ class MagentoItemImportController {
 
   def startImport(StartMagentoExportCommand command) {
     def newItemId = importListingsFromMage(command)
-    newItemId.each() {
-      log.info "ML item listed https://api.mercadolibre.com/items/${it}"
-    }
     render newItemId as String
   }
 
@@ -52,6 +49,7 @@ class MagentoItemImportController {
 //        def aProduct = v
 /////////////////////////////////////
       allProduct.each { aProduct ->
+        meliItemIds << (aProduct.sku.toString())
 
         // Step 1 - get associated products if configurable type
 
