@@ -76,3 +76,26 @@
 	</body>
 </html>
 </g:if>
+
+<g:else>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script type="text/javascript">
+<!--
+function redirectToHomePage(){
+	window.location = '<g:createLink uri="/" />';
+}
+//-->
+</script>
+</head>
+
+<body onLoad="setTimeout('redirectToHomePage()', 2000);">
+	<center>
+		<font face="sans-serif,Helvetica,Verdana" size="+1">
+			Please wait&hellip;
+		</font>
+	</center>
+</body>
+</html>
+</g:else>
