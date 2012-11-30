@@ -33,6 +33,7 @@ abstract class MagentoSOAPBase {
 
     try {
       mageProxy = new magento.MagentoService(realStoreURL)
+      println mageProxy.ports.next().toString()
       mageProxy.getMageApiModelServerWsiHandlerPort().startSession()
 
       LoginParam lp = new LoginParam()

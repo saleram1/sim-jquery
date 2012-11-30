@@ -13,6 +13,7 @@ import magento.ComplexFilter
 import magento.AssociativeArray
 import magento.ComplexFilterArray
 import magento.CatalogProductEntity
+import com.mercadolibre.apps.sim.data.bo.core.Shoppe
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,7 +23,10 @@ import magento.CatalogProductEntity
  * To change this template use File | Settings | File Templates.
  */
 class MagentoSOAPCatalogService extends MagentoSOAPBase {
-
+  //
+  // Should return only productId as related to SIMPLE product - such that inventory data can be retrieved
+  // getSimpleProductIdsByCategory( storeURL, apiUsername, apiKey, categoryId )
+  //
   List getProductIdsInCategory(storeUrl, apiUser, apiKey, categoryId) {
     String sessionId = null
 
@@ -51,10 +55,12 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     CatalogCategoryAssignedProductsResponseParam responseParam =
       mageProxy.getMageApiModelServerWsiHandlerPort().catalogCategoryAssignedProducts(cap)
 
-    responseParam.result.complexObjectArray.each() { CatalogAssignedProduct product ->
-      println "Got Product? type=${product.type}  Entity ID ${product.productId}   sku = ${product.sku}"
+    // this list should be ALL - let the caller prune out the Configurable if desired
+    responseParam.result?.complexObjectArray?.each() { CatalogAssignedProduct product ->
+      println "Product? type=${product.type}  Entity ID ${product.productId}   sku = ${product.sku}"
 
-      getRelatedProductsForProductId(cap.sessionId, product.sku).each { CatalogProductEntity prod ->
+      def related = getRelatedProductsForProductId(cap.sessionId, product.sku)
+      related?.each { CatalogProductEntity prod ->
         println "    -->>  Child Product? type=${prod.type}  Quantity: ${prod.name}  sku = ${prod.sku} size = ${prod.websiteIds.toString()} "
       }
     }
@@ -63,7 +69,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
   }
 
   /**
-   * Critical call to retrieve actual Saleable product id's
+   * Critical call to retrieve actual SIMPLE Saleable product id's
    *
    * @param sessionId
    * @param sku
@@ -89,5 +95,16 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 
     mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductList(cplp).result.complexObjectArray.toList()
 
+  }
+
+
+  /**
+   *
+   * @param sessionId
+   * @param sku
+   * @return
+   */
+  Map getSimpleProductDetailsForProductId(String sessionId, String sku) {
+    return [:]
   }
 }
