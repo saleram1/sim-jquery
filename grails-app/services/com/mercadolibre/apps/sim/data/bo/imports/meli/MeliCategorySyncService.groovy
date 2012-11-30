@@ -34,6 +34,7 @@ class MeliCategorySyncService {
   
   def isMeliCategoryInSync() {
     CategoryVersion categoryVersion = CategoryVersion.get(1)
+	if (categoryVersion == null) return false
 	println "This is the categoryVersion from the lookup: " + categoryVersion
 	if (categoryVersion.md5 == getMeliCategoryMD5("https://api.mercadolibre.com/sites/MLA/categories/")) {
       return true
@@ -57,7 +58,8 @@ class MeliCategorySyncService {
   }
 
   def saveMeliCategoryMD5() {
-		CategoryVersion categoryVersion = new CategoryVersion()
+		CategoryVersion categoryVersion = CategoryVersion.get(1)
+		if (categoryVersion == null) categoryVersion = new CategoryVersion()
 		categoryVersion.md5 = getMeliCategoryMD5("https://api.mercadolibre.com/sites/MLA/categories/")
 		println "Here is the md5: " + categoryVersion.md5	
 		categoryVersion.save(flush: true)
@@ -105,8 +107,6 @@ class MeliCategorySyncService {
         gzis.close();
     	out.close();
 
-    	System.out.println("Done");
-
     }catch(IOException ex){
        ex.printStackTrace();   
     }
@@ -119,9 +119,9 @@ class MeliCategorySyncService {
 	//Read the JSON from the file system
 	def reader = new BufferedReader(new FileReader(categoryFileLocation))
 	def parsedData = jsonSlurper.parse(reader)
-	parsedData.each { id, data ->
-		println data.id	
-	}
+	//parsedData.each { id, data ->
+	//	println data.id	
+	//}
 	
 	writeToFile(outputFile, parsedData)
   }
