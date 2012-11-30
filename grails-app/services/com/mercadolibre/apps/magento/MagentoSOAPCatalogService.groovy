@@ -12,6 +12,7 @@ import magento.AssociativeEntity
 import magento.ComplexFilter
 import magento.AssociativeArray
 import magento.ComplexFilterArray
+import magento.CatalogProductEntity
 
 /**
  * Created with IntelliJ IDEA.
@@ -52,24 +53,34 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 
     responseParam.result.complexObjectArray.each() { CatalogAssignedProduct product ->
       println "Got Product? type=${product.type}  Entity ID ${product.productId}   sku = ${product.sku}"
+
+      getRelatedProductsForProductId(cap.sessionId, product.sku).each { CatalogProductEntity prod ->
+        println "    -->>  Child Product? type=${prod.type}  Quantity: ${prod.name}  sku = ${prod.sku} size = ${prod.websiteIds.toString()} "
+      }
     }
 
     return responseParam.result.complexObjectArray.toList()
   }
 
-
-  List getRelatedProductsForProductId(String sessionId, Integer entityId, String sku) {
+  /**
+   * Critical call to retrieve actual Saleable product id's
+   *
+   * @param sessionId
+   * @param sku
+   * @return
+   */
+  List getRelatedProductsForProductId(String sessionId, String sku) {
+/*
+    CatalogProductLinkListRequestParam linkListRequestParam = new CatalogProductLinkListRequestParam()
+    linkListRequestParam.sessionId = sessionId
+    linkListRequestParam.productId = entityId as String
+    linkListRequestParam.type = "related"
+    mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductLinkList(linkListRequestParam).result.complexObjectArray.toList()
+*/
     Filters filters = new Filters()
-    filters.filter  = new AssociativeArray()
-    filters.filter.complexObjectArray.add(new AssociativeEntity(key: "type_id", value: "simple"))
-
-    AssociativeEntity likeThisSkuFilter = new AssociativeEntity(key: "like", value: "${sku}%")
-    def filterWhereClause = new AssociativeArray()
-    filterWhereClause.complexObjectArray.add(likeThisSkuFilter)
-
-    // it is complex this time
+    // it is OVERcomplex this time
     filters.complexFilter = new ComplexFilterArray()
-    filters.complexFilter.complexObjectArray.add(new ComplexFilter(key: "sku", value: likeThisSkuFilter))
+    filters.complexFilter.complexObjectArray.add(new ComplexFilter(key: "sku", value: new AssociativeEntity(key: "like", value: "${sku}%")))
 
     def cplp = new CatalogProductListRequestParam()
     cplp.sessionId = sessionId
@@ -77,5 +88,6 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     cplp.store = ""
 
     mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductList(cplp).result.complexObjectArray.toList()
+
   }
 }
