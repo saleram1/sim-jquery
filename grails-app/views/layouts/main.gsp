@@ -43,7 +43,6 @@
                                 <g:link target="_blank" absolute="true" url="https://questions.mercadolibre.com.ar/seller">Questions</g:link>
                             </li>
                             <li<%= request.forwardURI == "${createLink(uri: '/help')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/help')}">Help</a></li>
-                            <li<%= request.forwardURI == "${createLink(uri: '/about')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/about')}">About</a></li>
 						</ul>
 					</div>
 				</div>
