@@ -1,20 +1,12 @@
 package com.mercadolibre.apps.sim.data.bo.imports
 
-import org.springframework.dao.DataIntegrityViolationException
+import grails.converters.JSON
+import com.mercadolibre.apps.sim.CategoryService
 
 class MagentoCatalogImportJobController {
+  CategoryService categoryService
 
-  def save() {
-    def myJob = new MagentoCatalogImportJob(params).save(flush: true)
-    println myJob.id
-
-
-
-    redirect(actionName: "show", params: ['id': myJob.id])
-  }
-
-
-  static allowedMethods = [create: ['GET', 'POST'], edit: ['GET', 'POST'], delete: 'POST']
+  static allowedMethods = [create: ['GET', 'POST'], edit: ['GET', 'POST'], save: 'POST']
 
   def index() {
     redirect action: 'list', params: params
@@ -23,6 +15,29 @@ class MagentoCatalogImportJobController {
   def list() {
     params.max = Math.min(params.max ? params.int('max') : 10, 100)
     [magentoCatalogImportJobInstanceList: MagentoCatalogImportJob.list(params), magentoCatalogImportJobInstanceTotal: MagentoCatalogImportJob.count()]
+  }
+
+  def save() {
+    def newJob = new MagentoCatalogImportJob(params)
+    newJob.errorItemsCount = 0
+    def theRealJob
+
+    if (newJob.validate()) {
+      theRealJob = newJob.save(flush: true)
+    }
+    else {
+      log.error("Errors in saving catalogImportJob: ${newJob.errors.fieldErrorCount}")
+    }
+    redirect(controller: "magentoCatalogImportJob", action: "show", params: ['id': theRealJob.id])
+  }
+
+  def status() {
+    if (params.id && params.long('id') > 0) {
+      render MagentoCatalogImportJob.get(params.id) as JSON
+    }
+    else {
+      render "ERROR"
+    }
   }
 
   def create() {

@@ -15,22 +15,20 @@ import com.mercadolibre.apps.sim.data.bo.core.ItemListing
 class MagentoCatalogImportJob {
 
   String buyingMode
-  Boolean colorAppendedToSKU = false
+  Boolean colorAppendedToSKU
   String colorAttributeName
   String description
-  String listingTypeId
+  // errs.size
+  Integer errorItemsCount
+  String listingType
   String meliCategory
   String productSelection
-  Boolean sizeAppendedToSKU  = false
+  Boolean sizeAppendedToSKU
   String sizeAttributeName
   String status = "PENDING"
   Long storeCategory
-
-  // errs.size
-  Integer errorItemsCount = 0
-
-  // listings.size
-  Integer validItemsCount = 0
+  Integer totalItemsCount = 100
+  Integer validItemsCount = 0    // listings.size
 
   Date dateCreated
   Date lastUpdated
@@ -44,7 +42,7 @@ class MagentoCatalogImportJob {
     colorAppendedToSKU(nullable: true)
     colorAttributeName(nullable: true, blank: false)
     description(nullable: true)
-    listingTypeId()
+    listingType()
     meliCategory()
     productSelection()
     sizeAppendedToSKU(nullable: true)
