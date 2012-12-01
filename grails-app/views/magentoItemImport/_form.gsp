@@ -32,6 +32,25 @@
 				</div>
 			</div>
 		</div>
+
+%{--
+        <div class="span5">
+            <div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'storeCategory', 'error')}">
+                <label for="storeCategory" class="control-label">
+                    <g:message code="magentoItemImport.storeCategory.label" default="Stock %" />
+                </label>
+                <div class="controls">
+                    <g:textField class="input-small" name="stockPercent" value="${magentoItemImportInstance?.storeCategory}" />
+                </div>
+                <label for="storeCategory" class="control-label">
+                    <g:message code="magentoItemImport.storeCategory.label" default="Mark-Up %" />
+                </label>
+                <div class="controls">
+                    <g:textField class="input-small" name="markUpPercent" value="${magentoItemImportInstance?.storeCategory}" />
+                </div>
+            </div>
+        </div>
+--}%
 	</div>
 	<div class="row-fluid">
 		<div class="span10 offset1">
