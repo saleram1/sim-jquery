@@ -13,7 +13,7 @@
 			<div class="span9">
 				
 				<div class="page-header">
-					<h3>Catalog Imports</h3>
+					<h1>Import Jobs</h1>
 				</div>
 
 				<g:if test="${flash.message}">
@@ -28,7 +28,7 @@
 
                             <g:sortableColumn property="buyingMode" title="${message(code: 'magentoCatalogImportJob.buyingMode.label', default: 'Buying Mode')}" />
 
-                            <g:sortableColumn property="listingTypeId" title="${message(code: 'magentoCatalogImportJob.listingTypeId.label', default: 'Listing Type Id')}" />
+                            <g:sortableColumn property="listingType" title="${message(code: 'magentoCatalogImportJob.listingTypeId.label', default: 'Listing Type Id')}" />
 
                             <g:sortableColumn property="meliCategory" title="${message(code: 'magentoCatalogImportJob.meliCategory.label', default: 'Meli Category')}" />
 
@@ -47,7 +47,7 @@
 
                             <td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "buyingMode")}</td>
 
-                            <td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "listingTypeId")}</td>
+                            <td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "listingType")}</td>
 
                             <td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "meliCategory")}</td>
 

@@ -70,14 +70,17 @@
 				</bootstrap:alert>
 			</g:hasErrors>
 		</div>
-		<g:formRemote name="startMagentoPull" url="[controller:'magentoItemImport', action:'startImport']" update="updateMe" class="form-horizontal">
-			<g:render template="form"/>
-			<div class="form-actions">
-				<button type="submit" class="btn btn-primary">
-					<i class="icon-ok icon-white"></i>
-					<g:message code="default.button.create.label" default="Create" />
-				</button>
-			</div>
-		</g:formRemote>
+        <g:form class="form-horizontal" action="save" controller="magentoCatalogImportJob" >
+            <g:render template="form"/>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="icon-ok icon-white"></i>
+                    Next -&gt;
+%{--
+                    <g:message code="default.button.create.label" default="Save" />
+--}%
+                </button>
+            </div>
+        </g:form>
 	</body>
 </html>
