@@ -43,20 +43,21 @@ class MagentoItemImportController {
       log.info "Retrieving filtered by CategoryId: ${command.storeCategory}"
       def allProduct = magentoStoreService.getMagentoProductsByUserAndCategory(session.ml_caller_id, command.storeCategory)
 
-      log.info("Products found: " + allProduct.size())
+      log.info("Products found: " + allProduct?.size())
 /////////////////////////////////////
 //      allProduct.each() { k,v ->
 //        def aProduct = v
 /////////////////////////////////////
-      allProduct.each { aProduct ->
+      allProduct?.each { aProduct ->
         meliItemIds << (aProduct.sku.toString())
 
-        // Step 1 - get associated products if configurable type
+        // Step 1 - get associated products OF configurable type
 
+        // Step 2 - get related product where skus are children
 
-        // Step 2 - retrieve details for each of that collection and store as a ItemVariation
+        // Step 3 - retrieve details for each of that Child collection and store as a ItemVariation
 
-        // Step 3 - Map size and color to the ML codes tables for each of the variations
+        // Step 4 - Map size and color to the ML codes tables for each of the variations
 
 
         // Step 4 [FINAL] - combine 'parent' configurable product PLUS associated and pass all those with non
