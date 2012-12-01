@@ -20,7 +20,9 @@
 				<div class="progress progress-striped active">
 					<div class="bar" style="width: 50%;"></div>
 				</div>
-				<p class="muted" style="text-align: center;">## out of <g:fieldValue bean="${magentoCatalogImportJobInstance}" field="validItemsCount"/> imported</p>
+				<p class="muted" style="text-align: center;">
+                    <g:fieldValue bean="${magentoCatalogImportJobInstance}" field="validItemsCount"/>
+                    out of <g:fieldValue bean="${magentoCatalogImportJobInstance}" field="totalItemsCount"/> imported</p>
 			</div>
 		</div>
 		<br />
@@ -40,7 +42,7 @@
 							<td><strong>Mode</strong></td>
 							<td><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="buyingMode"/></td>
 							<td><strong><abbr title="Listing Type">Type</abbr></strong></td>
-							<td><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="listingTypeId"/></td>
+							<td><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="listingType"/></td>
 						</tr>
 						<g:if test="${magentoCatalogImportJobInstance?.description}">
 							<tr>
