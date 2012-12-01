@@ -36,6 +36,12 @@ class MagentoStoreService {
     def productStubs =
       magentoSOAPCatalogService.getProductIdsInCategory(magentoBaseURI, apiUser, apiKey, categoryId)
 
+    if (!productStubs) {
+      return Collections.emptyList()
+    }
+    else {
+      return productStubs
+    }
   }
 
 
