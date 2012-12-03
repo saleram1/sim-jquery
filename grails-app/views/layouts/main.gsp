@@ -39,6 +39,7 @@
 					<div class="nav-collapse">
 						<ul class="nav">
                             <li<%= request.forwardURI == "${createLink(uri: '/magentoItem/list')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/magentoItem/list')}">Listings</a></li>
+                            <li<%= request.forwardURI == "${createLink(uri: '/magentoCatalogImportJob/list?sort=dateCreated&max=20&order=desc')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/magentoCatalogImportJob/list?sort=dateCreated&max=20&order=desc')}">History</a></li>
                             <li>
                                 <g:link target="_blank" absolute="true" url="https://questions.mercadolibre.com.ar/seller">Questions</g:link>
                             </li>
