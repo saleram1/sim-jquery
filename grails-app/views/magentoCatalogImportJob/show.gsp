@@ -75,6 +75,11 @@
 							</g:if>
 						</dl>
 					</div>
-				</div> -->
+            </div> -->
+
+        <script>
+            window.setTimeout( function() { window.location.reload() }, 2500);
+        </script>
+
 	</body>
 </html>
