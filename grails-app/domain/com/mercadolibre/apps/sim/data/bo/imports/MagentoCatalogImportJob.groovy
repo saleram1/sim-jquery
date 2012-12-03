@@ -2,6 +2,7 @@ package com.mercadolibre.apps.sim.data.bo.imports
 
 import com.mercadolibre.apps.sim.data.bo.errors.ApiError
 import com.mercadolibre.apps.sim.data.bo.core.ItemListing
+import groovy.transform.ToString
 
 /**
  * Record of each session to download the needed products from Store and list in ML[A,B]
@@ -12,6 +13,7 @@ import com.mercadolibre.apps.sim.data.bo.core.ItemListing
  * Time: 3:15 PM
  * To change this template use File | Settings | File Templates.
  */
+@ToString
 class MagentoCatalogImportJob {
 
   String buyingMode

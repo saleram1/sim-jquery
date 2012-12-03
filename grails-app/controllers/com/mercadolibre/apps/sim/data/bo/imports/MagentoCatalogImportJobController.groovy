@@ -24,6 +24,9 @@ class MagentoCatalogImportJobController {
 
     if (newJob.validate()) {
       theRealJob = newJob.save(flush: true)
+
+      sendQueueJMSMessage("queue.job.kickoff.notification",
+          ['importJobId': theRealJob.id, 'accessToken': session.ml_access_token])
     }
     else {
       log.error("Errors in saving catalogImportJob: ${newJob.errors.fieldErrorCount}")
