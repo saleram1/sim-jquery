@@ -1,6 +1,8 @@
 package com.mercadolibre.apps.magento
 
 import com.mercadolibre.apps.sim.data.bo.imports.MagentoCatalogImportJob
+import com.mercadolibre.apps.sim.CategoryService
+import com.mercadolibre.apps.sim.data.bo.imports.MagentoStoreService
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,9 +13,8 @@ import com.mercadolibre.apps.sim.data.bo.imports.MagentoCatalogImportJob
  */
 class MagentoSimpleProductSlurperService {
 
-  MagentoSOAPCatalogService magentoSOAPCatalogService
-  MagentoSOAPPingService magentoSOAPPingService
-
+  CategoryService categoryService
+  MagentoStoreService magentoStoreService
 
   static transactional = false
   static exposes = ['jms']
@@ -32,6 +33,9 @@ class MagentoSimpleProductSlurperService {
       importJob = MagentoCatalogImportJob.get(aMessage.importJobId)
       currentCount = importJob.validItemsCount
     }
+
+    importListingsFromMage(importJob, aMessage.callerId)
+
 
     // while not done - update the total items by ten per cent
     while (importJob.validItemsCount < importJob.totalItemsCount) {
@@ -54,11 +58,42 @@ class MagentoSimpleProductSlurperService {
       importJob.validItemsCount = 100
       importJob.totalItemsCount = 100
       importJob.status = 'COMPLETE'
-      importJob.description = "really, it's done for the Mage"
+      importJob.description = "really, this job is complete according to Mage"
       importJob.save(flush: true)
-      log.info importJob
+    }
+    true
+  }
 
+
+  def importListingsFromMage(MagentoCatalogImportJob job, Integer callerId, String accessToken = "") {
+    def meliItemIds = []
+
+    if (categoryService.isValidCategory(job.meliCategory)) {
+      log.info "Retrieving filtered by CategoryId: ${job.storeCategory}"
+      def allProduct = magentoStoreService.getMagentoProductsByUserAndCategory(callerId, job.storeCategory)
+
+      log.info("Products found: " + allProduct?.size())
+
+      allProduct?.each { aProduct ->
+        meliItemIds << (aProduct.sku.toString())
+
+
+      }
+    } //endif
+    else {
+      log.warn "Cannot support category_id id: ${job.meliCategory} in the current version. Please upgrade to 1.1"
     }
 
+    return meliItemIds
   }
+
+
+/*
+        VanillaItemListing listing = new VanillaItemListing(category_id: job.meliCategory, listing_type_id: job.listingType,
+          currency_id: "ARS", price: aProduct['regular_price_without_tax'], available_quantity: aProduct['is_saleable'] as Integer,
+          title: aProduct['short_description'], description: aProduct['description'], seller_custom_field: aProduct['sku'],
+          condition: "new", pictureURL: aProduct['image_url']
+        )
+
+*/
 }
