@@ -36,45 +36,15 @@ class MagentoStoreService {
     def productStubs =
       magentoSOAPCatalogService.getProductIdsInCategory(magentoBaseURI, apiUser, apiKey, categoryId)
 
+    println productStubs
+
+
     if (!productStubs) {
       return Collections.emptyList()
     }
     else {
       return productStubs
     }
-  }
-
-
-  /**
-   * Return the category id for given product using Magento REST
-   *
-   * @param productId
-   * @return
-   */
-  Long getCategoryIdForProduct(Long productId) {
-    Long categoryId = 0L
-
-    def builder = new HTTPBuilder()
-    try {
-      builder.request(canonical_test_store_base,
-          groovyx.net.http.Method.GET,
-          groovyx.net.http.ContentType.JSON) {
-        uri.path = "/magento/api/rest/products/${productId}/categories"
-        uri.query = [type: 'rest']
-        headers.'Accept' = "*/*"
-
-        response.success = { resp, json ->
-          categoryId = (json[0]['category_id']) as Long
-        }
-        response.failure = { resp, json ->
-          log.error resp.status
-        }
-      }
-    }
-    catch (Exception ex) {
-      log.error ex.message, ex
-    }
-    return categoryId
   }
 
 
