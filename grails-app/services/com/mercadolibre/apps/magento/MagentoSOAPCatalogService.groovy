@@ -186,18 +186,18 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
    * @param productId
    * @return
    */
-  Map getProductStockAttributes(String sessionId, String productId) {
-
-	def productStrockAttributeMap = [:]
-		  
-	def cisilp = new CatalogInventoryStockItemListRequestParam()
-//	ArrayOfString productIds = new ArrayOfString()
-//	productIds.getComplexObjectArray()
-	cisilp.productIds = [productId]  // since I don't know how to create an ArrayOfString object I will just try to pass in a single value list
-	cisilp.sessionId = sessionId
-
-	CatalogInventoryStockItemListResponseParam catalogInventoryStockItemListResponseParam = mageProxy.getMageApiModelServerWsiHandlerPort().catalogInventoryStockItemList(cisilp)
-	
-	return null
-  }
+//  Map getProductStockAttributes(String sessionId, String productId) {
+//
+//	def productStrockAttributeMap = [:]
+//		  
+//	def cisilp = new CatalogInventoryStockItemListRequestParam()
+////	ArrayOfString productIds = new ArrayOfString()
+////	productIds.getComplexObjectArray()
+//	cisilp.productIds = [productId]  // since I don't know how to create an ArrayOfString object I will just try to pass in a single value list
+//	cisilp.sessionId = sessionId
+//
+//	CatalogInventoryStockItemListResponseParam catalogInventoryStockItemListResponseParam = mageProxy.getMageApiModelServerWsiHandlerPort().catalogInventoryStockItemList(cisilp)
+//	
+//	return null
+//  }
 }
