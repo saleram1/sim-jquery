@@ -1,19 +1,17 @@
 package com.mercadolibre.apps.magento
 
+import magento.ArrayOfString
+import magento.AssociativeEntity
 import magento.CatalogAssignedProduct
 import magento.CatalogCategoryAssignedProductsRequestParam
 import magento.CatalogCategoryAssignedProductsResponseParam
-import magento.LoginParam
-import magento.CatalogProductLinkAssignRequestParam
-import magento.CatalogProductLinkListRequestParam
-import magento.CatalogProductListRequestParam
-import magento.Filters
-import magento.AssociativeEntity
-import magento.ComplexFilter
-import magento.AssociativeArray
-import magento.ComplexFilterArray
 import magento.CatalogProductEntity
-import com.mercadolibre.apps.sim.data.bo.core.Shoppe
+import magento.CatalogProductInfoRequestParam
+import magento.CatalogProductListRequestParam
+import magento.CatalogProductReturnEntity
+import magento.ComplexFilter
+import magento.ComplexFilterArray
+import magento.Filters
 
 /**
  * Created with IntelliJ IDEA.
@@ -106,5 +104,76 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
    */
   Map getSimpleProductDetailsForProductId(String sessionId, String sku) {
     return [:]
+  }
+  
+  /**
+   * Critical call to retrieve actual SIMPLE Saleable product id's
+   *
+   * @param sessionId
+   * @param productId
+   * @return
+   */
+  Map getProductDetails(String sessionId, String productId) {
+
+	def productDetailMap = [:]
+	  	
+	def cpip = new CatalogProductInfoRequestParam()
+	cpip.productId = productId
+	cpip.sessionId = sessionId
+	cpip.store = ""
+	
+	CatalogProductReturnEntity catalogProductReturnEntity = mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductInfo(cpip).result
+	
+	ArrayOfString categoryArray = catalogProductReturnEntity.categories
+	def categories = categoryArray.complexObjectArray
+	
+	ArrayOfString websiteArray = catalogProductReturnEntity.websites
+	def websites = websiteArray.complexObjectArray
+		
+	ArrayOfString categoryIdArray = catalogProductReturnEntity.categoryIds
+	def categoryIds = categoryIdArray.complexObjectArray
+	
+	
+	ArrayOfString webSiteIdsArray = catalogProductReturnEntity.websiteIds
+	def websiteIds = webSiteIdsArray.complexObjectArray
+	
+	productDetailMap = ["productId":catalogProductReturnEntity.productId,
+					"sku":catalogProductReturnEntity.sku,
+					"set":catalogProductReturnEntity.set,
+					"type":catalogProductReturnEntity.type,
+					"categories":categories,
+					"websites":websites,
+					"createdAt":catalogProductReturnEntity.createdAt,
+					"updatedAt":catalogProductReturnEntity.updatedAt,
+					"typeId":catalogProductReturnEntity.typeId,
+					"type":	catalogProductReturnEntity.type,
+					"name":catalogProductReturnEntity.name,
+					"description":catalogProductReturnEntity.description,
+					"shortDescription":catalogProductReturnEntity.shortDescription,
+					"weight":catalogProductReturnEntity.weight,
+					"status":catalogProductReturnEntity.status,
+					"urlKey":catalogProductReturnEntity.urlKey,
+					"urlPath":catalogProductReturnEntity.urlPath,
+					"visibility":catalogProductReturnEntity.visibility,
+					"categoryIds":categoryIds,
+					"websiteIds":websiteIds,
+					"hasOptions":catalogProductReturnEntity.hasOptions,
+					"giftMessageAvailable":catalogProductReturnEntity.giftMessageAvailable,
+					"price":catalogProductReturnEntity.price,
+					"specialPrice":catalogProductReturnEntity.specialPrice,
+					"specialFromDate":catalogProductReturnEntity.specialFromDate,
+					"specialToDate":catalogProductReturnEntity.specialToDate,
+					"taxClassId":catalogProductReturnEntity.taxClassId,
+					"tierPrice":catalogProductReturnEntity.tierPrice,
+					"metaTitle":catalogProductReturnEntity.metaTitle,
+					"metaKeyword":catalogProductReturnEntity.metaKeyword,
+					"metaDescription":catalogProductReturnEntity.metaDescription,
+					"customDesign":catalogProductReturnEntity.customDesign,
+					"customLayoutUpdate":catalogProductReturnEntity.customLayoutUpdate,
+					"optionsContainer":catalogProductReturnEntity.optionsContainer,
+					"additionalAttributes":catalogProductReturnEntity.additionalAttributes,
+					"enableGoogleCheckout":catalogProductReturnEntity.enableGooglecheckout
+  					]
+  	productDetailMap
   }
 }
