@@ -17,8 +17,8 @@ class MagentoCatalogImportJobController {
     [magentoCatalogImportJobInstanceList: MagentoCatalogImportJob.list(params), magentoCatalogImportJobInstanceTotal: MagentoCatalogImportJob.count()]
   }
 
-  def save() {
-    def newJob = new MagentoCatalogImportJob(params)
+  def save(StartMagentoExportCommand command) {
+    def newJob = new MagentoCatalogImportJob(command.properties)
     newJob.errorItemsCount = 0
     def theRealJob
 
@@ -26,7 +26,7 @@ class MagentoCatalogImportJobController {
       theRealJob = newJob.save(flush: true)
 
       sendQueueJMSMessage("queue.job.kickoff.notification",
-          ['importJobId': theRealJob.id, 'accessToken': session.ml_access_token])
+          ['importJobId': theRealJob.id, 'accessToken': session.ml_access_token, 'callerId': session.ml_caller_id])
     }
     else {
       log.error("Errors in saving catalogImportJob: ${newJob.errors.fieldErrorCount}")
@@ -71,4 +71,31 @@ class MagentoCatalogImportJobController {
 
     [magentoCatalogImportJobInstance: magentoCatalogImportJobInstance]
   }
+}
+
+
+
+/*
+  Each of these will trigger an export of Stock Items from Magento and create new listings on ML
+
+    productSelection=Products in Selected Categories
+
+    sizeAttributeName=size
+    sizeAppendedToSKU=on
+    colorAttributeName=color
+    storeCategory=3
+    meliCategory=MLA9997
+    buyingMode=buy_it_now
+
+ */
+class StartMagentoExportCommand {
+  String buyingMode
+  String listingType
+  String meliCategory
+  String productSelection
+  Integer storeCategory
+  String sizeAttributeName
+  Boolean sizeAppendedToSKU
+  Boolean colorAppendedToSKU
+  String colorAttributeName
 }
