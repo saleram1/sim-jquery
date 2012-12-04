@@ -5,6 +5,8 @@ import magento.AssociativeEntity
 import magento.CatalogAssignedProduct
 import magento.CatalogCategoryAssignedProductsRequestParam
 import magento.CatalogCategoryAssignedProductsResponseParam
+import magento.CatalogInventoryStockItemListRequestParam
+import magento.CatalogInventoryStockItemListResponseParam
 import magento.CatalogProductEntity
 import magento.CatalogProductInfoRequestParam
 import magento.CatalogProductListRequestParam
@@ -132,8 +134,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 		
 	ArrayOfString categoryIdArray = catalogProductReturnEntity.categoryIds
 	def categoryIds = categoryIdArray.complexObjectArray
-	
-	
+		
 	ArrayOfString webSiteIdsArray = catalogProductReturnEntity.websiteIds
 	def websiteIds = webSiteIdsArray.complexObjectArray
 	
@@ -175,5 +176,27 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 					"enableGoogleCheckout":catalogProductReturnEntity.enableGooglecheckout
   					]
   	productDetailMap
+  }
+  
+  /**
+   * Critical call to retrieve actual SIMPLE Saleable product id's
+   *
+   * @param sessionId
+   * @param productId
+   * @return
+   */
+  Map getProductStockAttributes(String sessionId, String productId) {
+
+	def productStrockAttributeMap = [:]
+		  
+	def cisilp = new CatalogInventoryStockItemListRequestParam()
+//	ArrayOfString productIds = new ArrayOfString()
+//	productIds.getComplexObjectArray()
+	cisilp.productIds = [productId]  // since I don't know how to create an ArrayOfString object I will just try to pass in a single value list
+	cisilp.sessionId = sessionId
+
+	CatalogInventoryStockItemListResponseParam catalogInventoryStockItemListResponseParam = mageProxy.getMageApiModelServerWsiHandlerPort().catalogInventoryStockItemList(cisilp)
+	
+	return null
   }
 }
