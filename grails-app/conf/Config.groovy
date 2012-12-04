@@ -68,8 +68,8 @@ environments {
     }
     production {
         // whether to install the java.util.logging bridge for sl4j. Disable for AppEngine!
-		grails.logging.jul.usebridge = false
-        grails.serverURL = "http://simplificar.elasticbeanstalk.com"
+	grails.logging.jul.usebridge = false
+        grails.serverURL = "http://mercadolibre-m2m.elasticbeanstalk.com/"
     }
 }
 
