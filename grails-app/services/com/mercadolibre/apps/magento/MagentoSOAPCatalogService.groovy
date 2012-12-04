@@ -5,7 +5,10 @@ import magento.AssociativeEntity
 import magento.CatalogAssignedProduct
 import magento.CatalogCategoryAssignedProductsRequestParam
 import magento.CatalogCategoryAssignedProductsResponseParam
+import magento.CatalogProductAttributeMediaListRequestParam
+import magento.CatalogProductAttributeMediaListResponseParam
 import magento.CatalogProductEntity
+import magento.CatalogProductImageEntityArray
 import magento.CatalogProductInfoRequestParam
 import magento.CatalogProductListRequestParam
 import magento.CatalogProductReturnEntity
@@ -180,11 +183,35 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
   }
   
   /**
-   * Critical call to retrieve actual SIMPLE Saleable product id's
+   * Get a list of images for a productId
    *
    * @param sessionId
    * @param productId
-   * @return
+   * @return List of images
+   */
+  List getProductImages(String sessionId, String productId) {
+
+	def productImageList = []
+	
+	def cpamlp = new CatalogProductAttributeMediaListRequestParam()
+	cpamlp.sessionId = sessionId
+	cpamlp.productId = productId
+	cpamlp.store = ""
+
+	CatalogProductAttributeMediaListResponseParam catalogProductAttributeMediaListResponseParam = mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductAttributeMediaList(cpamlp)
+	CatalogProductImageEntityArray catalogProductImageEntityArray = catalogProductAttributeMediaListResponseParam.result
+	catalogProductImageEntityArray.complexObjectArray.each {
+	  productImageList.add(it.url)
+	}
+	productImageList
+  }
+ 
+  /**
+   * call to get inventory information for product
+   *
+   * @param sessionId
+   * @param productId
+   * @return Map of product attributes
    */
 //  Map getProductStockAttributes(String sessionId, String productId) {
 //
