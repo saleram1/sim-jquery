@@ -20,9 +20,13 @@ class MagentoSimpleProductSlurperService {
   static exposes = ['jms']
   static destination = "queue.job.kickoff.notification"
 
-//
-//      {accessToken=APP_USR-12815-120316-9aa7c965201328eb629eb8883c7990cd__B_K__-85958951, importJobId=1}
-//
+  /**
+   * Process all Simple Product in this category (details in catalogImportJob) and turn as many as possible
+   * into MLA listings
+   *
+   * @param aMessage - contains accessToken, callerId, importJobId
+   * @return success flag
+   */
   def onMessage(aMessage) {
     log.info aMessage
 
@@ -34,10 +38,10 @@ class MagentoSimpleProductSlurperService {
       currentCount = importJob.validItemsCount
     }
 
-    importListingsFromMage(importJob, aMessage.callerId)
 
+    importListingsFromMage(importJob, aMessage.callerId, aMessage.accessToken)
 
-    // while not done - update the total items by ten per cent
+/*    // while not done - update the total items by ten per cent
     while (importJob.validItemsCount < importJob.totalItemsCount) {
       Thread.sleep(4800L)
 
@@ -60,7 +64,7 @@ class MagentoSimpleProductSlurperService {
       importJob.status = 'COMPLETE'
       importJob.description = "really, this job is complete according to Mage"
       importJob.save(flush: true)
-    }
+    }*/
     true
   }
 
