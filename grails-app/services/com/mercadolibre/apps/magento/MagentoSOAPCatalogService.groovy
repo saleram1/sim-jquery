@@ -3,10 +3,13 @@ package com.mercadolibre.apps.magento
 import magento.ArrayOfString
 import magento.AssociativeEntity
 import magento.CatalogAssignedProduct
+import magento.CatalogAttributeOptionEntityArray
 import magento.CatalogCategoryAssignedProductsRequestParam
 import magento.CatalogCategoryAssignedProductsResponseParam
 import magento.CatalogProductAttributeMediaListRequestParam
 import magento.CatalogProductAttributeMediaListResponseParam
+import magento.CatalogProductAttributeOptionsRequestParam
+import magento.CatalogProductAttributeOptionsResponseParam
 import magento.CatalogProductEntity
 import magento.CatalogProductImageEntityArray
 import magento.CatalogProductInfoRequestParam
@@ -206,6 +209,37 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 	productImageList
   }
  
+  /**
+   * Get a list of product options based on attributeId - this comes from the product list
+   *
+   * @param sessionId
+   * @param attributeId
+   * @return List of images
+   */
+  List getProductOptions(String sessionId, String attributeId) {
+
+	def productOptionList = []
+	
+	CatalogProductAttributeOptionsRequestParam cpaop = new CatalogProductAttributeOptionsRequestParam()
+
+	cpaop.sessionId = sessionId
+	cpaop.store = ""
+	cpaop.attributeId = attributeId
+
+	CatalogProductAttributeOptionsResponseParam catalogProductAttributeOptionsResponseParam = mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductAttributeOptions(cpaop)
+
+	CatalogAttributeOptionEntityArray catalogAttributeOptionEntityArray = catalogProductAttributeOptionsResponseParam.result
+	
+	catalogAttributeOptionEntityArray.complexObjectArray.each {
+		def productOptionExpando = new Expando()
+		productOptionExpando.label = it.label
+		productOptionExpando.value = it.value
+		
+		productOptionList.add(productOptionExpando)
+	}
+	productOptionList
+  }
+  
   /**
    * call to get inventory information for product
    *
