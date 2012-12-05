@@ -11,11 +11,13 @@ class MagentoSOAPPingService extends MagentoSOAPBase {
 
 
   Map pingMagentoStore(storeUrl, username, password) {
-    String sessionId = null
+    def sessionId = null
 
     try {
       if ((sessionId = initMagentoProxyForStore(storeUrl, username, password))) {
-        log.info "Got Session: ${sessionId}"
+        if (sessionId instanceof MageConnectionDetails)  {
+          log.info "Got Session: " +  ((sessionId as MageConnectionDetails).sessionId)
+        }
         return [status: "OK", message: "${storeUrl} is alive"]
       }
       else {

@@ -1,5 +1,5 @@
 <%@ page import="com.mercadolibre.apps.sim.data.bo.imports.MagentoItemImport" %>
-<% attributeNames = ['size', 'marca', 'description', 'name', 'qty', 'price', 'color', 'weight', '_category', '_attribute_set', '_type', '_store'] %>
+<% attributeNames = ['size', 'accesorio_size', 'shoe_size', 'shoe_size_double', 'marca', 'description', 'name', 'qty', 'price', 'color', 'weight', '_category', '_attribute_set', '_type', '_store'] %>
 <fieldset class="fieldset" name="meli">
 	<legend>Manage Products</legend>
 	<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'productSelection', 'error')}">
@@ -10,7 +10,8 @@
 			<g:select name="productSelection" from="${magentoItemImportInstance.constraints.productSelection.inList}" value="${magentoItemImportInstance?.productSelection}" valueMessagePrefix="magentoItemImport.productSelection" noSelection="['': '']" />
 		</div>
 	</div>
-	<div class="row-fluid">
+
+    <div class="row-fluid">
 		<div class="span5">
 			<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'storeCategory', 'error')}">
 				<label for="storeCategory" class="control-label">
@@ -32,27 +33,19 @@
 				</div>
 			</div>
 		</div>
-
-%{--
-        <div class="span5">
-            <div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'storeCategory', 'error')}">
-                <label for="storeCategory" class="control-label">
-                    <g:message code="magentoItemImport.storeCategory.label" default="Stock %" />
-                </label>
-                <div class="controls">
-                    <g:textField class="input-small" name="stockPercent" value="${magentoItemImportInstance?.storeCategory}" />
-                </div>
-                <label for="storeCategory" class="control-label">
-                    <g:message code="magentoItemImport.storeCategory.label" default="Mark-Up %" />
-                </label>
-                <div class="controls">
-                    <g:textField class="input-small" name="markUpPercent" value="${magentoItemImportInstance?.storeCategory}" />
-                </div>
-            </div>
-        </div>
---}%
 	</div>
-	<div class="row-fluid">
+
+    <div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'storeCategory', 'error')}">
+        <label for="stockPercent" class="control-label">
+            <g:message code="magentoItemImport.stockPercentage.label" default="Stock %" />
+        </label>
+        <div class="controls">
+            <g:textField class="input-small" name="stockPercentage" value="${magentoItemImportInstance?.stockPercentage}" />
+        </div>
+    </div>
+
+
+    <div class="row-fluid">
 		<div class="span10 offset1">
 			<table class="categories-table table table-striped hide">
 				<thead>

@@ -15,6 +15,27 @@ class MagentoStoreService {
   final static String dev_and_test_store_base = "http://ec2-107-22-49-30.compute-1.amazonaws.com/"
 
 
+  Integer getMagentoProductCountByUserAndCategory(Integer callerId, Integer categoryId) {
+    def magentoBaseURI = null
+    def apiUser
+    def apiKey
+
+    User.withTransaction() {
+      if (User.findByCallerId(callerId)) {
+        User shoppeUser = User.findByCallerId(callerId)
+        magentoBaseURI = shoppeUser.company.webAddress
+        apiUser = shoppeUser.company.apiUser
+        apiKey  = shoppeUser.company.apiKey
+      }
+    }
+
+    def productStubs =
+      magentoSOAPCatalogService.getProductIdsInCategory(magentoBaseURI, apiUser, apiKey, categoryId)
+
+    return productStubs?.size()
+  }
+
+
   List getMagentoProductsByUserAndCategory(Integer callerId, Integer categoryId) {
     def magentoBaseURI = null
     def apiUser
@@ -35,9 +56,6 @@ class MagentoStoreService {
 
     def productStubs =
       magentoSOAPCatalogService.getProductIdsInCategory(magentoBaseURI, apiUser, apiKey, categoryId)
-
-    println productStubs
-
 
     if (!productStubs) {
       return Collections.emptyList()

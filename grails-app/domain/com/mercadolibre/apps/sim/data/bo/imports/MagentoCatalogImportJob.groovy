@@ -28,7 +28,8 @@ class MagentoCatalogImportJob {
   Boolean sizeAppendedToSKU
   String sizeAttributeName
   String status = "PENDING"
-  Long storeCategory
+  Double  stockPercentage
+  Integer storeCategory
   Integer totalItemsCount = 100
   Integer validItemsCount = 0    // listings.size
 
@@ -50,6 +51,7 @@ class MagentoCatalogImportJob {
     sizeAppendedToSKU(nullable: true)
     sizeAttributeName(nullable: true, blank: false)
     status(inList:  ['READY', 'PENDING', 'STOPPED', 'COMPLETE'])
+    stockPercentage(min: 0.0d, max: 100.0d)
     storeCategory()
   }
 }

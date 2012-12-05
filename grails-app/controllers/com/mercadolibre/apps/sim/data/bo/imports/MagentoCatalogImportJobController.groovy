@@ -30,6 +30,9 @@ class MagentoCatalogImportJobController {
     }
     else {
       log.error("Errors in saving catalogImportJob: ${newJob.errors.fieldErrorCount}")
+      newJob.errors.each()  {
+        log.error(it)
+      }
     }
     redirect(controller: "magentoCatalogImportJob", action: "show", params: ['id': theRealJob.id])
   }
@@ -74,7 +77,6 @@ class MagentoCatalogImportJobController {
 }
 
 
-
 /*
   Each of these will trigger an export of Stock Items from Magento and create new listings on ML
 
@@ -89,13 +91,15 @@ class MagentoCatalogImportJobController {
 
  */
 class StartMagentoExportCommand {
-  String buyingMode
-  String listingType
-  String meliCategory
-  String productSelection
-  Integer storeCategory
-  String sizeAttributeName
-  Boolean sizeAppendedToSKU
-  Boolean colorAppendedToSKU
-  String colorAttributeName
+  String   buyingMode
+  Boolean  colorAppendedToSKU
+  String   colorAttributeName
+  String   listingType
+  String   meliCategory
+  Double   priceMarkup
+  String   productSelection
+  Boolean  sizeAppendedToSKU
+  String   sizeAttributeName
+  Double   stockPercentage
+  Integer  storeCategory
 }
