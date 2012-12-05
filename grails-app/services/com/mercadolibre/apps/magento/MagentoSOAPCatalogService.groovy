@@ -1,6 +1,7 @@
 package com.mercadolibre.apps.magento
 
 import magento.*
+import magento.MagentoService
 
 /**
  * Catalog related SOAP calls to Module: Mage_Catalog
@@ -19,19 +20,20 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
   // Should return only productId as related to SIMPLE product - such that inventory data can be retrieved
   // getSimpleProductIdsByCategory( storeURL, apiUsername, apiKey, categoryId )
   //
-  List getProductIdsInCategory(storeUrl, apiUser, apiKey, categoryId) {
-    String sessionId = null
+  List getProductIdsInCategory(String storeUrl, String apiUser, String apiKey, Integer categoryId) {
+    MageConnectionDetails mcd = null
 
     try {
-      if ((sessionId = initMagentoProxyForStore(storeUrl, apiUser, apiKey))) {
-        log.info "Session: ${sessionId}"
+      if ((mcd = initMagentoProxyForStore(storeUrl, apiUser, apiKey))) {
+        log.info "Session: ${mcd.sessionId}"
 
         CatalogCategoryAssignedProductsRequestParam cap = new CatalogCategoryAssignedProductsRequestParam()
-        cap.sessionId = sessionId
+        cap.sessionId = mcd.sessionId
         cap.categoryId = categoryId
         cap.store = ""
 
-        return getProductsAssignedToCategory(cap) as List
+        return getAllProductsAssignedToCategory(mcd.sessionId,
+            categoryId, mcd.mageProxy.getMageApiModelServerWsiHandlerPort().catalogCategoryAssignedProducts(cap)) as List
       }
       else {
         return Collections.emptyList()
@@ -44,15 +46,17 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 
 
   /**
+   * Take each of the results and query for those N+1 api calls incurred
    *
-   * @param cap
+   * @param cap - catagory param wrapper
    * @return List < String >  sku or productId
    */
-  List getProductsAssignedToCategory(CatalogCategoryAssignedProductsRequestParam cap) {
+  List getAllProductsAssignedToCategory(MageConnectionDetails mcd, Integer categId, CatalogCategoryAssignedProductsResponseParam responseParam) {
     def productIds = []
 
-    CatalogCategoryAssignedProductsResponseParam responseParam =
-      mageProxy.getMageApiModelServerWsiHandlerPort().catalogCategoryAssignedProducts(cap)
+    if (responseParam.result?.complexObjectArray?.isEmpty()) {
+      log.warn "No results for ${responseParam} in category ${categId}"
+    }
 
     // this list should be ALL - let the caller prune out the Configurable if desired
     responseParam.result?.complexObjectArray?.each() { CatalogAssignedProduct product ->
@@ -60,7 +64,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 
       productIds << "${product.sku}"
 
-      def related = getRelatedProductsForProductId(cap.sessionId, product.sku)
+      def related = getRelatedProductsForProductId(mcd.mageProxy, mcd.sessionId, product.sku)
       related?.each { CatalogProductEntity prod ->
         println "    -->>  Child Product? type=${prod.type}  Quantity: ${prod.name}  sku = ${prod.sku} size = ${prod.websiteIds.toString()} "
         if (!productIds.contains("${prod.sku}")) {
@@ -68,11 +72,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
         }
       }
     }
-
-    println getProductStockAttributes(cap.sessionId, productIds)
-
     productIds
-    //  return responseParam.result.complexObjectArray.toList()
   }
 
 
@@ -83,7 +83,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
    * @param sku
    * @return
    */
-  List getRelatedProductsForProductId(String sessionId, String sku) {
+  List getRelatedProductsForProductId(magento.MagentoService mageProxy, String sessionId, String sku) {
 /*
     CatalogProductLinkListRequestParam linkListRequestParam = new CatalogProductLinkListRequestParam()
     linkListRequestParam.sessionId = sessionId
@@ -102,7 +102,6 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     cplp.store = ""
 
     mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductList(cplp).result.complexObjectArray.toList()
-
   }
 
 
