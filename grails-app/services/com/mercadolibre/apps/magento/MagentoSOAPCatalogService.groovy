@@ -15,11 +15,15 @@ import magento.CatalogProductReturnEntity
 import magento.ComplexFilter
 import magento.ComplexFilterArray
 import magento.Filters
+import magento.CatalogInventoryStockItemListRequestParam
+import magento.CatalogInventoryStockItemListResponseParam
 
 /**
+ * Catalog related SOAP calls to Module: Mage_Catalog
+ *
  * Created with IntelliJ IDEA.
  * User: saleram
- * Date: 11/21/12
+ * Date: 12/12/12
  * Time: 12:06 PM
  * To change this template use File | Settings | File Templates.
  */
@@ -51,13 +55,14 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     }
   }
 
+
   /**
    *
    * @param cap
    * @return List < String >  sku or productId
    */
   List getProductsAssignedToCategory(CatalogCategoryAssignedProductsRequestParam cap) {
-    def skuList = []
+    def productIds = []
 
     CatalogCategoryAssignedProductsResponseParam responseParam =
       mageProxy.getMageApiModelServerWsiHandlerPort().catalogCategoryAssignedProducts(cap)
@@ -66,17 +71,20 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     responseParam.result?.complexObjectArray?.each() { CatalogAssignedProduct product ->
       println "Product? type=${product.type}  Entity ID ${product.productId}   sku = ${product.sku}"
 
-      skuList << "${product.sku}"
+      productIds << "${product.sku}"
 
       def related = getRelatedProductsForProductId(cap.sessionId, product.sku)
       related?.each { CatalogProductEntity prod ->
         println "    -->>  Child Product? type=${prod.type}  Quantity: ${prod.name}  sku = ${prod.sku} size = ${prod.websiteIds.toString()} "
-        if (!skuList.contains("${prod.sku}")) {
-          skuList << "${prod.sku}"
+        if (!productIds.contains("${prod.sku}")) {
+          productIds << "${prod.sku}"
         }
       }
     }
-    skuList
+
+    println getProductStockAttributes(cap.sessionId, productIds)
+
+    productIds
     //  return responseParam.result.complexObjectArray.toList()
   }
 
@@ -108,7 +116,6 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductList(cplp).result.complexObjectArray.toList()
 
   }
-
 
   /**
    * Critical call to retrieve actual SIMPLE Saleable product id's
@@ -181,7 +188,8 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     ]
     productDetailMap
   }
-  
+
+
   /**
    * Get a list of images for a productId
    *
@@ -190,41 +198,51 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
    * @return List of images
    */
   List getProductImages(String sessionId, String productId) {
+    def productImageList = []
 
-	def productImageList = []
-	
-	def cpamlp = new CatalogProductAttributeMediaListRequestParam()
-	cpamlp.sessionId = sessionId
-	cpamlp.productId = productId
-	cpamlp.store = ""
+    def cpamlp = new CatalogProductAttributeMediaListRequestParam()
+    cpamlp.sessionId = sessionId
+    cpamlp.productId = productId
+    cpamlp.store = ""
 
-	CatalogProductAttributeMediaListResponseParam catalogProductAttributeMediaListResponseParam = mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductAttributeMediaList(cpamlp)
-	CatalogProductImageEntityArray catalogProductImageEntityArray = catalogProductAttributeMediaListResponseParam.result
-	catalogProductImageEntityArray.complexObjectArray.each {
-	  productImageList.add(it.url)
-	}
-	productImageList
+    CatalogProductAttributeMediaListResponseParam catalogProductAttributeMediaListResponseParam = mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductAttributeMediaList(cpamlp)
+    CatalogProductImageEntityArray catalogProductImageEntityArray = catalogProductAttributeMediaListResponseParam.result
+    catalogProductImageEntityArray.complexObjectArray.each {
+      productImageList.add(it.url)
+    }
+    productImageList
   }
- 
+
+
   /**
-   * call to get inventory information for product
+   * call to get inventory information for set of Products
    *
    * @param sessionId
-   * @param productId
-   * @return Map of product attributes
+   * @param productIds
+   * @return List of product inventory values
    */
-//  Map getProductStockAttributes(String sessionId, String productId) {
-//
-//	def productStrockAttributeMap = [:]
-//		  
-//	def cisilp = new CatalogInventoryStockItemListRequestParam()
-////	ArrayOfString productIds = new ArrayOfString()
-////	productIds.getComplexObjectArray()
-//	cisilp.productIds = [productId]  // since I don't know how to create an ArrayOfString object I will just try to pass in a single value list
-//	cisilp.sessionId = sessionId
-//
-//	CatalogInventoryStockItemListResponseParam catalogInventoryStockItemListResponseParam = mageProxy.getMageApiModelServerWsiHandlerPort().catalogInventoryStockItemList(cisilp)
-//	
-//	return null
-//  }
+  List getProductStockAttributes(String sessionId, List productIds) {
+
+
+    def catalogInventoryStockItems = []
+
+    def stockItemListRequestParam = new CatalogInventoryStockItemListRequestParam()
+    stockItemListRequestParam.sessionId  = sessionId
+    stockItemListRequestParam.productIds = getArrayOfStringFromGroovyList(productIds)
+
+    CatalogInventoryStockItemListResponseParam catalogInventoryStockItemListResponseParam =
+      mageProxy.getMageApiModelServerWsiHandlerPort().catalogInventoryStockItemList(stockItemListRequestParam)
+
+    return catalogInventoryStockItemListResponseParam.result.complexObjectArray.toList()
+  }
+
+
+  ArrayOfString getArrayOfStringFromGroovyList(aList) {
+    ArrayOfString arrayOfString = new ArrayOfString()
+
+    aList?.each() { aString ->
+      arrayOfString.complexObjectArray.add(aString.toString())
+    }
+    arrayOfString
+  }
 }
