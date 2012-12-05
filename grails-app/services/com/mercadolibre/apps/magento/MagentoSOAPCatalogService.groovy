@@ -1,25 +1,6 @@
 package com.mercadolibre.apps.magento
 
-import magento.ArrayOfString
-import magento.AssociativeEntity
-import magento.CatalogAssignedProduct
-import magento.CatalogAttributeOptionEntityArray
-import magento.CatalogCategoryAssignedProductsRequestParam
-import magento.CatalogCategoryAssignedProductsResponseParam
-import magento.CatalogProductAttributeMediaListRequestParam
-import magento.CatalogProductAttributeMediaListResponseParam
-import magento.CatalogProductAttributeOptionsRequestParam
-import magento.CatalogProductAttributeOptionsResponseParam
-import magento.CatalogProductEntity
-import magento.CatalogProductImageEntityArray
-import magento.CatalogProductInfoRequestParam
-import magento.CatalogProductListRequestParam
-import magento.CatalogProductReturnEntity
-import magento.ComplexFilter
-import magento.ComplexFilterArray
-import magento.Filters
-import magento.CatalogInventoryStockItemListRequestParam
-import magento.CatalogInventoryStockItemListResponseParam
+import magento.*
 
 /**
  * Catalog related SOAP calls to Module: Mage_Catalog
@@ -31,6 +12,9 @@ import magento.CatalogInventoryStockItemListResponseParam
  * To change this template use File | Settings | File Templates.
  */
 class MagentoSOAPCatalogService extends MagentoSOAPBase {
+
+  static transactional = false
+
   //
   // Should return only productId as related to SIMPLE product - such that inventory data can be retrieved
   // getSimpleProductIdsByCategory( storeURL, apiUsername, apiKey, categoryId )
@@ -91,6 +75,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     //  return responseParam.result.complexObjectArray.toList()
   }
 
+
   /**
    * Critical call to retrieve actual SIMPLE Saleable product id's
    *
@@ -120,6 +105,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 
   }
 
+
   /**
    * Critical call to retrieve actual SIMPLE Saleable product id's
    * skuList << "${product.sku}"
@@ -129,7 +115,6 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
    * @return
    */
   Map getProductDetails(String sessionId, String productId) {
-
     def productDetailMap = [:]
 
     def cpip = new CatalogProductInfoRequestParam()
@@ -218,49 +203,13 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 
 
   /**
-<<<<<<< HEAD
-   * call to get inventory information for set of Products
-=======
    * Get a list of product options based on attributeId - this comes from the product list
-   *
-   * @param sessionId
-   * @param attributeId
-   * @return List of images
-   */
-  List getProductOptions(String sessionId, String attributeId) {
-
-	def productOptionList = []
-	
-	CatalogProductAttributeOptionsRequestParam cpaop = new CatalogProductAttributeOptionsRequestParam()
-
-	cpaop.sessionId = sessionId
-	cpaop.store = ""
-	cpaop.attributeId = attributeId
-
-	CatalogProductAttributeOptionsResponseParam catalogProductAttributeOptionsResponseParam = mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductAttributeOptions(cpaop)
-
-	CatalogAttributeOptionEntityArray catalogAttributeOptionEntityArray = catalogProductAttributeOptionsResponseParam.result
-	
-	catalogAttributeOptionEntityArray.complexObjectArray.each {
-		def productOptionExpando = new Expando()
-		productOptionExpando.label = it.label
-		productOptionExpando.value = it.value
-		
-		productOptionList.add(productOptionExpando)
-	}
-	productOptionList
-  }
-  
-  /**
-   * call to get inventory information for product
->>>>>>> 42b83f2235460099c583d25f5b4d99770776e03c
    *
    * @param sessionId
    * @param productIds
    * @return List of product inventory values
    */
   List getProductStockAttributes(String sessionId, List productIds) {
-
 
     def catalogInventoryStockItems = []
 
