@@ -136,7 +136,15 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     ArrayOfString webSiteIdsArray = catalogProductReturnEntity.websiteIds
     def websiteIds = webSiteIdsArray.complexObjectArray
 
-
+	AssociativeArray aa = catalogProductReturnEntity.additionalAttributes
+	def listOfAdditionalAttributeMap = []
+	def additionalAttributeMap = [:]
+	aa.complexObjectArray.each {
+	  additionalAttributeMap = ["key": it.key, "value": it.value]
+	  listOfAdditionalAttributeMap.add(additionalAttributeMap)
+	}
+	def additionalAttributes = listOfAdditionalAttributeMap // just to maintain convention of names from Magento - no other reason
+	
     productDetailMap = ["productId": catalogProductReturnEntity.productId,
         "sku": catalogProductReturnEntity.sku,
         "set": catalogProductReturnEntity.set,
@@ -171,7 +179,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
         "customDesign": catalogProductReturnEntity.customDesign,
         "customLayoutUpdate": catalogProductReturnEntity.customLayoutUpdate,
         "optionsContainer": catalogProductReturnEntity.optionsContainer,
-        "additionalAttributes": catalogProductReturnEntity.additionalAttributes,
+        "additionalAttributes": additionalAttributes,
         "enableGoogleCheckout": catalogProductReturnEntity.enableGooglecheckout
     ]
     productDetailMap
