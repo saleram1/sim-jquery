@@ -22,6 +22,7 @@ class MagentoCatalogImportJob {
   String description
   // errs.size
   Integer errorItemsCount
+  String htmlDescription
   String listingType
   String meliCategory
   String productSelection
@@ -45,6 +46,7 @@ class MagentoCatalogImportJob {
     colorAppendedToSKU(nullable: true)
     colorAttributeName(nullable: true, blank: false)
     description(nullable: true)
+    htmlDescription(nullable: true)
     listingType()
     meliCategory()
     productSelection()

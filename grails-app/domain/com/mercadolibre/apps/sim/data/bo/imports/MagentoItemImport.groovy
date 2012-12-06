@@ -19,10 +19,12 @@ class MagentoItemImport implements Comparable {
  	String currency =  "ARS"
  	String productSelection = 'Products in Selected Categories'
   Double  stockPercentage = 50.0d
+  String htmlDescription
 
-	static constraints = {
+  static constraints = {
     id(display:false, attributes:[listable:false]) // do not show id anywhere
     buyingMode(nullable:  false, inList: ['buy_it_now'])
+    htmlDescription(widget: 'textarea', nullable: true, blank: false)
     listingType(nullable: false, inList: ['bronze', 'silver', 'gold'])
     meliCategory()
     productSelection(nullable:  false, inList: ['Products in Selected Categories'])
