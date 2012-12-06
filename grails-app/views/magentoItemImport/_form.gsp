@@ -2,23 +2,14 @@
 <% attributeNames = ['size', 'accesorio_size', 'shoe_size', 'shoe_size_double', 'marca', 'description', 'name', 'qty', 'price', 'color', 'weight', '_category', '_attribute_set', '_type', '_store'] %>
 <fieldset class="fieldset" name="meli">
 	<legend>Manage Products</legend>
-	<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'productSelection', 'error')}">
-		<label for="productSelection" class="control-label">
-			<g:message code="magentoItemImport.productSelection.label" default="Store Selector" />
-		</label>
-		<div class="controls">
-			<g:select name="productSelection" from="${magentoItemImportInstance.constraints.productSelection.inList}" value="${magentoItemImportInstance?.productSelection}" valueMessagePrefix="magentoItemImport.productSelection" noSelection="['': '']" />
-		</div>
-	</div>
-
-    <div class="row-fluid">
+	<div class="row-fluid">
 		<div class="span5">
 			<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'storeCategory', 'error')}">
 				<label for="storeCategory" class="control-label">
 					<g:message code="magentoItemImport.storeCategory.label" default="Store Category" />
 				</label>
 				<div class="controls">
-					<g:textField class="input-small" name="storeCategory" value="${magentoItemImportInstance?.storeCategory}" />
+					<g:textField class="input-small" name="storeCategory" value="${magentoItemImportInstance?.storeCategory}" required="required" />
 				</div>
 			</div>
 		</div>
@@ -28,23 +19,26 @@
 					<g:message code="magentoItemImport.meliCategory.label" default="MLCategory" />
 				</label>
 				<div class="controls">
-					<g:textField id="meliCategory" class="input-small" name="meliCategory" value="${magentoItemImportInstance?.meliCategory}" />
+					<g:textField id="meliCategory" class="input-small" name="meliCategory" value="${magentoItemImportInstance?.meliCategory}" required="required" />
 					<span class="help-inline"></span>
 				</div>
 			</div>
 		</div>
 	</div>
-
-    <div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'storeCategory', 'error')}">
-        <label for="stockPercent" class="control-label">
-            <g:message code="magentoItemImport.stockPercentage.label" default="Stock %" />
-        </label>
-        <div class="controls">
-            <g:textField class="input-small" name="stockPercentage" value="${magentoItemImportInstance?.stockPercentage}" />
-        </div>
-    </div>
-
-
+	<div class="row-fluid">
+		<div class="span5">
+			<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'stockPercentage', 'error')}">
+				<label for="stockPercent" class="control-label">
+					<g:message code="magentoItemImport.stockPercentage.label" default="Stock %" />
+				</label>
+				<div class="controls">
+					<div class="input-append">
+						<input type="number" min="5" max="100" step="5" class="input-mini" name="stockPercentage" value="${magentoItemImportInstance?.stockPercentage}" required="required" /><span class="add-on" style="height: 15px;">%</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
     <div class="row-fluid">
 		<div class="span10 offset1">
 			<table class="categories-table table table-striped hide">
@@ -58,21 +52,13 @@
 				<tbody>
 					<tr>
 						<td>Talle</td>
-						<td>
-							<g:select name="sizeAttributeName" from="${attributeNames}" value="size" />
-						</td>
-						<td>
-							<g:checkBox name="sizeAppendedToSKU" />
-						</td>
+						<td><g:select name="sizeAttributeName" from="${attributeNames}" value="size" /></td>
+						<td><g:checkBox name="sizeAppendedToSKU" /></td>
 					</tr>
 					<tr>
 						<td>Color Primario</td>
-						<td>
-							<g:select name="colorAttributeName" from="${attributeNames}" value="color" />
-						</td>
-						<td>
-							<g:checkBox name="colorAppendedToSKU"/>
-						</td>
+						<td><g:select name="colorAttributeName" from="${attributeNames}" value="color" /></td>
+						<td><g:checkBox name="colorAppendedToSKU"/></td>
 					</tr>
 			</table>
 		</div>
@@ -88,12 +74,15 @@
 			<g:select name="listingType" from="${magentoItemImportInstance.constraints.listingType.inList}" value="${magentoItemImportInstance?.listingType}" valueMessagePrefix="magentoItemImport.listingType" noSelection="['': '']"/>
 		</div>
 	</div>
-	<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'buyingMode', 'error')}">
-		<label for="buyingMode" class="control-label">
-			<g:message code="magentoItemImport.buyingMode.label" default="Mode" />
-		</label>
-		<div class="controls">
-			<g:select name="buyingMode" from="${magentoItemImportInstance.constraints.buyingMode.inList}" value="${magentoItemImportInstance?.buyingMode}" valueMessagePrefix="magentoItemImport.buyingMode" noSelection="['': '']"/>
-		</div>
-	</div>
+</fieldset>
+<fieldset class="fieldset" name="meli">
+	<legend>Description Template</legend>
+	<textarea name="htmlDescription" class="span12" placeholder="" style="resize: none; height: 300px;" required="required">&lt;html&gt;
+	&lt;body&gt;
+		&lt;div&gt;
+			[$MAGENTO_DESCRIPTION]
+		&lt;/div&gt; 
+	&lt;/body&gt;
+&lt;/html&gt;</textarea>
+	<button id="desc-preview" class="btn pull-right" type="button" style="margin-top: 10px;"><i class="icon-search"></i> Preview</button>
 </fieldset>
