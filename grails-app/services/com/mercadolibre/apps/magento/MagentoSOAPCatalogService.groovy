@@ -23,6 +23,8 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
   List getProductIdsInCategory(String storeUrl, String apiUser, String apiKey, Integer categoryId) {
     MageConnectionDetails mcd = null
 
+    log.info("... searching for product in ${categoryId} using username ${apiUser}")
+
     try {
       if ((mcd = initMagentoProxyForStore(storeUrl, apiUser, apiKey))) {
         log.info "Session: ${mcd.sessionId}"
@@ -32,7 +34,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
         cap.categoryId = categoryId
         cap.store = ""
 
-        return getAllProductsAssignedToCategory(mcd.sessionId,
+        return getAllProductsAssignedToCategory(mcd,
             categoryId, mcd.mageProxy.getMageApiModelServerWsiHandlerPort().catalogCategoryAssignedProducts(cap)) as List
       }
       else {
@@ -65,7 +67,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 
       def related = getRelatedProductsForProductId(mcd.mageProxy, mcd.sessionId, product.sku)
       related?.each { CatalogProductEntity prod ->
-        println "    -->>  Child Product? type=${prod.type}  Quantity: ${prod.name}  sku = ${prod.sku} size = ${prod.websiteIds.toString()} "
+        println "    -->>  Child Product? type=${prod.type}  sku = ${prod.sku} Name: ${prod.name}"
         if (!productIds.contains("${prod.sku}")) {
           productIds << "${prod.sku}"
         }
