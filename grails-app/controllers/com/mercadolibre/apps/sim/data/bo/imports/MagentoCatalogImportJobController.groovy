@@ -94,6 +94,7 @@ class StartMagentoExportCommand {
   String   buyingMode
   Boolean  colorAppendedToSKU
   String   colorAttributeName
+  String   htmlDescription
   String   listingType
   String   meliCategory
   Double   priceMarkup
