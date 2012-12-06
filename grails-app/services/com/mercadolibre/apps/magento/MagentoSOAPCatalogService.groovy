@@ -23,6 +23,8 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
   List getProductIdsInCategory(String storeUrl, String apiUser, String apiKey, Integer categoryId) {
     MageConnectionDetails mcd = null
 
+    log.info("... searching for product in ${categoryId} using username ${apiUser}")
+
     try {
       if ((mcd = initMagentoProxyForStore(storeUrl, apiUser, apiKey))) {
         log.info "Session: ${mcd.sessionId}"
@@ -32,7 +34,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
         cap.categoryId = categoryId
         cap.store = ""
 
-        return getAllProductsAssignedToCategory(mcd.sessionId,
+        return getAllProductsAssignedToCategory(mcd,
             categoryId, mcd.mageProxy.getMageApiModelServerWsiHandlerPort().catalogCategoryAssignedProducts(cap)) as List
       }
       else {
@@ -44,9 +46,8 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     }
   }
 
-
   /**
-   * Take each of the results and query for those N+1 api calls incurred
+   * Take each of the results under this one category and query for those N+1 api calls incurred
    *
    * @param cap - catagory param wrapper
    * @return List < String >  sku or productId
@@ -66,7 +67,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 
       def related = getRelatedProductsForProductId(mcd.mageProxy, mcd.sessionId, product.sku)
       related?.each { CatalogProductEntity prod ->
-        println "    -->>  Child Product? type=${prod.type}  Quantity: ${prod.name}  sku = ${prod.sku} size = ${prod.websiteIds.toString()} "
+        println "    -->>  Child Product? type=${prod.type}  sku = ${prod.sku} Name: ${prod.name}"
         if (!productIds.contains("${prod.sku}")) {
           productIds << "${prod.sku}"
         }
@@ -74,7 +75,6 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     }
     productIds
   }
-
 
   /**
    * Critical call to retrieve actual SIMPLE Saleable product id's
@@ -92,7 +92,6 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductLinkList(linkListRequestParam).result.complexObjectArray.toList()
 */
     Filters filters = new Filters()
-    // it is OVERcomplex this time
     filters.complexFilter = new ComplexFilterArray()
     filters.complexFilter.complexObjectArray.add(new ComplexFilter(key: "sku", value: new AssociativeEntity(key: "like", value: "${sku}%")))
 
@@ -104,10 +103,8 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductList(cplp).result.complexObjectArray.toList()
   }
 
-
   /**
    * Critical call to retrieve actual SIMPLE Saleable product id's
-   * skuList << "${product.sku}"
    *
    * @param sessionId
    * @param productId
@@ -135,15 +132,15 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     ArrayOfString webSiteIdsArray = catalogProductReturnEntity.websiteIds
     def websiteIds = webSiteIdsArray.complexObjectArray
 
-	AssociativeArray aa = catalogProductReturnEntity.additionalAttributes
-	def listOfAdditionalAttributeMap = []
-	def additionalAttributeMap = [:]
-	aa.complexObjectArray.each {
-	  additionalAttributeMap = ["key": it.key, "value": it.value]
-	  listOfAdditionalAttributeMap.add(additionalAttributeMap)
-	}
-	def additionalAttributes = listOfAdditionalAttributeMap // just to maintain convention of names from Magento - no other reason
-	
+    AssociativeArray aa = catalogProductReturnEntity.additionalAttributes
+    def listOfAdditionalAttributeMap = []
+    def additionalAttributeMap = [:]
+    aa.complexObjectArray.each {
+      additionalAttributeMap = ["key": it.key, "value": it.value]
+      listOfAdditionalAttributeMap.add(additionalAttributeMap)
+    }
+    def additionalAttributes = listOfAdditionalAttributeMap // just to maintain convention of names from Magento - no other reason
+
     productDetailMap = ["productId": catalogProductReturnEntity.productId,
         "sku": catalogProductReturnEntity.sku,
         "set": catalogProductReturnEntity.set,
@@ -184,7 +181,6 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     productDetailMap
   }
 
-
   /**
    * Get a list of images for a productId
    *
@@ -208,7 +204,6 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     productImageList
   }
 
-
   /**
    * Get a list of product options based on attributeId - this comes from the product list
    *
@@ -221,7 +216,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     def catalogInventoryStockItems = []
 
     def stockItemListRequestParam = new CatalogInventoryStockItemListRequestParam()
-    stockItemListRequestParam.sessionId  = sessionId
+    stockItemListRequestParam.sessionId = sessionId
     stockItemListRequestParam.productIds = getArrayOfStringFromGroovyList(productIds)
 
     CatalogInventoryStockItemListResponseParam catalogInventoryStockItemListResponseParam =
