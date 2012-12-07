@@ -81,7 +81,7 @@
 						</tr>
 						<tr>
 							<td><strong>Mode</strong></td>
-							<td><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="buyingMode"/></td>
+							<td>Buy It Now</td>
 							<td><strong><abbr title="Listing Type">Type</abbr></strong></td>
 							<td><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="listingType"/></td>
 						</tr>
@@ -107,15 +107,5 @@
 				</table>
 			</div>
 		</div>
-		<!-- <div class="row-fluid">
-					<div class="span9">
-						<dl>
-							<g:if test="${magentoCatalogImportJobInstance?.errorItemsCount}">
-								<dt><g:message code="magentoCatalogImportJob.errorItemsCount.label" default="Error Items Count" /></dt>
-								<dd><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="errorItemsCount"/></dd>
-							</g:if>
-						</dl>
-					</div>
-            </div> -->
 	</body>
 </html>
