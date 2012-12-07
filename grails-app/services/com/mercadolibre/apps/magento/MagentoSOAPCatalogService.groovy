@@ -110,7 +110,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
    * @param productId
    * @return
    */
-  Map getProductDetails(String sessionId, String productId) {
+  Map getProductDetails(magento.MagentoService mageProxy, String sessionId, String productId) {
     def productDetailMap = [:]
 
     def cpip = new CatalogProductInfoRequestParam()
@@ -188,7 +188,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
    * @param productId
    * @return List of images
    */
-  List getProductImages(String sessionId, String productId) {
+  List getProductImages(magento.MagentoService mageProxy, String sessionId, String productId) {
     def productImageList = []
 
     def cpamlp = new CatalogProductAttributeMediaListRequestParam()
@@ -211,7 +211,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
    * @param productIds
    * @return List of product inventory values
    */
-  List getProductStockAttributes(String sessionId, List productIds) {
+  List getProductStockAttributes(magento.MagentoService mageProxy, String sessionId, List productIds) {
 
     def catalogInventoryStockItems = []
 
