@@ -134,6 +134,10 @@ class MeliCategorySyncService {
     }
   }
 
+  private getMaxCategoryId() {
+	def maxNextId = Category.executeQuery("select max(id) from Category")[0]
+  }
+  
 //  private downloadCategoryZipFileOLD2(address)
 //  {
 //    def file = new FileOutputStream("/tmp/MeliCategoryZipFile.gz")
