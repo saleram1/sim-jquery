@@ -16,7 +16,6 @@ import groovy.transform.ToString
 @ToString
 class MagentoCatalogImportJob {
 
-  String buyingMode
   Boolean colorAppendedToSKU
   String colorAttributeName
   String description
@@ -25,7 +24,6 @@ class MagentoCatalogImportJob {
   String htmlDescription
   String listingType
   String meliCategory
-  String productSelection
   Boolean sizeAppendedToSKU
   String sizeAttributeName
   String status = "PENDING"
@@ -42,14 +40,12 @@ class MagentoCatalogImportJob {
   static hasMany = [errs: ApiError, listings: ItemListing]
 
   static constraints = {
-    buyingMode()
     colorAppendedToSKU(nullable: true)
     colorAttributeName(nullable: true, blank: false)
     description(nullable: true)
     htmlDescription(nullable: true)
     listingType()
     meliCategory()
-    productSelection()
     sizeAppendedToSKU(nullable: true)
     sizeAttributeName(nullable: true, blank: false)
     status(inList:  ['READY', 'PENDING', 'STOPPED', 'COMPLETE'])
