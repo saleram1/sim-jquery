@@ -77,12 +77,14 @@
 </fieldset>
 <fieldset class="fieldset" name="meli">
 	<legend>Description Template</legend>
-	<textarea name="htmlDescription" class="span12" placeholder="" style="resize: none; height: 300px;" required="required">&lt;html&gt;
+	<textarea name="htmlDescription" class="span12" required="required">&lt;html&gt;
 	&lt;body&gt;
 		&lt;div&gt;
 			[$MAGENTO_DESCRIPTION]
 		&lt;/div&gt; 
 	&lt;/body&gt;
 &lt;/html&gt;</textarea>
-	<button id="desc-preview" class="btn pull-right" type="button" style="margin-top: 10px;"><i class="icon-search"></i> Preview</button>
+	<div class="align-right">
+		<button id="preview-btn" class="btn" type="button"><i class="icon-search"></i> Preview</button>
+	</div>
 </fieldset>

@@ -12,6 +12,17 @@
 			.categories-table th {
 				background: none;
 			}
+			textarea {
+				resize: none;
+				height: 300px;
+				font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;
+			}
+			.align-right {
+				text-align: right;
+			}
+			#preview-btn {
+				margin-top: 15px;
+			}
 		</style>
 		
 		<g:javascript>
@@ -48,7 +59,7 @@
 					}
 				});
 
-				$('#desc-preview').click(function(e) {
+				$('#preview-btn').click(function(e) {
 					var htmlTemplate = $('textarea').val().replace('[$MAGENTO_DESCRIPTION]', '<img src="http://placehold.it/500x400&amp;text=Product description goes here." />');
 					window.open('data:text/html,' + htmlTemplate, null, 'height=600,width=800,status=no,menubar=no,location=no,toolbar=no');
 					e.preventDefault();
@@ -76,7 +87,7 @@
 				</bootstrap:alert>
 			</g:hasErrors>
 		</div>
-		<g:form class="form-horizontal" action="save" controller="magentoCatalogImportJob" >
+		<g:form class="form-horizontal" action="save" controller="magentoCatalogImportJob">
 			<g:render template="form"/>
 			<div class="form-actions">
 				<button type="submit" class="btn btn-primary">

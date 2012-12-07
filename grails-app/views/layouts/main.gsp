@@ -55,7 +55,7 @@
 			<hr>
 			<footer>
 				<div class="container" style="background-color:yellow;">
-		    		<p>Copyright &copy; 2012 MercadoLibre S.R.L &nbsp;&nbsp; <a href="http://www.mercadolibre.com.ar/seguro_terminos.html" id="FOOT:TERMS">Terms & Conditions</a></P
+		    		<p>Copyright &copy; 2012 MercadoLibre S.R.L &nbsp;&nbsp; <a href="http://www.mercadolibre.com.ar/seguro_terminos.html" id="FOOT:TERMS">Terms &amp; Conditions</a></p>
 				</div>
 			</footer>
 		</div>
