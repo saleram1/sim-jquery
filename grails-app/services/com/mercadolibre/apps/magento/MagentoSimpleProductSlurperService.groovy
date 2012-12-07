@@ -28,44 +28,37 @@ class MagentoSimpleProductSlurperService {
    * @return success flag
    */
   def onMessage(aMessage) {
-    log.info aMessage
+    log.info "Start Product Slurper Message:\n" + aMessage
 
     MagentoCatalogImportJob importJob
-
-    int currentCount = 0
     MagentoCatalogImportJob.withTransaction {
       importJob = MagentoCatalogImportJob.get(aMessage.importJobId)
-      currentCount = importJob.validItemsCount
     }
 
-
-    importListingsFromMage(importJob, aMessage.callerId, aMessage.accessToken)
-
-/*    // while not done - update the total items by ten per cent
-    while (importJob.validItemsCount < importJob.totalItemsCount) {
-      Thread.sleep(4800L)
-
-      MagentoCatalogImportJob.withTransaction {
-        importJob = MagentoCatalogImportJob.get(aMessage.importJobId)
-        currentCount = importJob.validItemsCount
-      }
-
-      MagentoCatalogImportJob.withTransaction {
-        importJob = MagentoCatalogImportJob.load(aMessage.importJobId)
-        importJob.validItemsCount = currentCount + 10
-        importJob.save()
-      }
+    def allProductIds
+    try {
+      allProductIds =
+        magentoStoreService.getMagentoProductsByUserAndCategory(aMessage.callerId, importJob.storeCategory as Integer)
     }
+    catch (Throwable tr) {
+      log.error tr.message
+    }
+
+    log.info "Updating size of job to: ${allProductIds.size()}"
+
 
     MagentoCatalogImportJob.withTransaction {
-      importJob = MagentoCatalogImportJob.get(aMessage.importJobId)
-      importJob.validItemsCount = 100
-      importJob.totalItemsCount = 100
-      importJob.status = 'COMPLETE'
-      importJob.description = "really, this job is complete according to Mage"
-      importJob.save(flush: true)
-    }*/
-    true
+      importJob = MagentoCatalogImportJob.load(aMessage.importJobId)
+      importJob.totalItemsCount = allProductIds.size()
+      importJob.save()
+    }
+
+    println ''
+    println allProductIds
+    println ''
+
+    //importListingsFromMage(importJob, aMessage.callerId, aMessage.accessToken)
+    return
   }
 
 

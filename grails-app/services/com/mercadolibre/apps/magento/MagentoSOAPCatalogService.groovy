@@ -20,7 +20,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
   // Should return only productId as related to SIMPLE product - such that inventory data can be retrieved
   // getSimpleProductIdsByCategory( storeURL, apiUsername, apiKey, categoryId )
   //
-  List getProductIdsInCategory(String storeUrl, String apiUser, String apiKey, Integer categoryId) {
+  List<Map> getProductIdsInCategory(String storeUrl, String apiUser, String apiKey, Integer categoryId) {
     MageConnectionDetails mcd = null
 
     log.info("... searching for product in ${categoryId} using username ${apiUser}")
@@ -35,7 +35,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
         cap.store = ""
 
         return getAllProductsAssignedToCategory(mcd,
-            categoryId, mcd.mageProxy.getMageApiModelServerWsiHandlerPort().catalogCategoryAssignedProducts(cap)) as List
+            categoryId, mcd.mageProxy.getMageApiModelServerWsiHandlerPort().catalogCategoryAssignedProducts(cap))
       }
       else {
         return Collections.emptyList()
@@ -52,29 +52,46 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
    * @param cap - catagory param wrapper
    * @return List < String >  sku or productId
    */
-  List getAllProductsAssignedToCategory(MageConnectionDetails mcd, Integer categId, CatalogCategoryAssignedProductsResponseParam responseParam) {
-    def productIds = []
-
-    if (responseParam.result?.complexObjectArray?.isEmpty()) {
+  List<Map> getAllProductsAssignedToCategory(MageConnectionDetails mcd, Integer categId, CatalogCategoryAssignedProductsResponseParam responseParam) {
+  //check params
+    if (responseParam?.result?.complexObjectArray?.isEmpty()) {
       log.warn "No results for ${responseParam} in category ${categId}"
+      return Collections.emptyList()
     }
 
-    // this list should be ALL - let the caller prune out the Configurable if desired
-    responseParam.result?.complexObjectArray?.each() { CatalogAssignedProduct product ->
-      println "Product? type=${product.type}  Entity ID ${product.productId}   sku = ${product.sku}"
 
-      productIds << "${product.sku}"
+
+
+    /// return the list of Map's
+
+    def productIds = []
+
+    responseParam.result?.complexObjectArray?.each() { CatalogAssignedProduct product ->
+      /// Create the map with first sku (six-digit)
+      def productMap = new LinkedHashMap<String,List>()
+
+      /// add to the map a new empty list to indicate no children
+      productMap.put(product.sku, new Vector<String>())
+      println "Product? type=${product.type}  Entity ID ${product.productId}   sku = ${product.sku}"
 
       def related = getRelatedProductsForProductId(mcd.mageProxy, mcd.sessionId, product.sku)
       related?.each { CatalogProductEntity prod ->
-        println "    -->>  Child Product? type=${prod.type}  sku = ${prod.sku} Name: ${prod.name}"
-        if (!productIds.contains("${prod.sku}")) {
-          productIds << "${prod.sku}"
+
+        def childList = productMap.get(product.sku)
+        def childType = "${prod.type}"
+        if (!childList.contains("${prod.sku}") && childType != 'configurable') {
+          println "    -->>  Child Product? type=${prod.type}  sku = ${prod.sku} Name: ${prod.name}"
+          childList.add("${prod.sku}")
         }
       }
+      assert  productMap.get(product.sku).size() == 0 ||
+              ((related?.size() - 1) == productMap.get(product.sku).size())
+
+      productIds.add(productMap)
     }
     productIds
   }
+
 
   /**
    * Critical call to retrieve actual SIMPLE Saleable product id's

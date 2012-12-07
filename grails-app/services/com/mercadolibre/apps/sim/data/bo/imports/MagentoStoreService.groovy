@@ -12,9 +12,8 @@ class MagentoStoreService {
 
   MagentoSOAPCatalogService magentoSOAPCatalogService
 
-  final static String dev_and_test_store_base = "http://ec2-107-22-49-30.compute-1.amazonaws.com/"
 
-
+//METHODS
   Integer getMagentoProductCountByUserAndCategory(Integer callerId, Integer categoryId) {
     def magentoBaseURI = null
     def apiUser
@@ -49,8 +48,7 @@ class MagentoStoreService {
         apiKey  = shoppeUser.company.apiKey
 
         log.info "Shoppe URL is ${magentoBaseURI} ... connecting as user ${apiUser}"
-        log.info "Mage Category Id is ${categoryId}"
-        // logging
+        log.info "Caller Id is: ${callerId}  Mage Category Id is: ${categoryId}"
       }
     }
 
