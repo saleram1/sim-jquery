@@ -14,14 +14,12 @@
 			}
 			textarea {
 				resize: none;
-				height: 300px;
-				font-family: Monaco, Menlo, Consolas, 'Courier New', monospace;
+				height: 300px !important;
+				margin-bottom: 15px !important;
+				font-family: Monaco, Menlo, Consolas, 'Courier New', monospace !important;
 			}
 			.align-right {
 				text-align: right;
-			}
-			#preview-btn {
-				margin-top: 15px;
 			}
 		</style>
 		
@@ -88,7 +86,7 @@
 			</g:hasErrors>
 		</div>
 		<g:form class="form-horizontal" action="save" controller="magentoCatalogImportJob">
-			<g:render template="form"/>
+			<g:render template="form" />
 			<div class="form-actions">
 				<button type="submit" class="btn btn-primary">
 					<i class="icon-chevron-right icon-white"></i> <g:message code="default.button.next.label" default="Next" />
