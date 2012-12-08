@@ -25,12 +25,14 @@
 					var $bar = $('#bar'),
 						$status = $('#status'),
 						$validItems = $('#valid-items'),
+						$totalItems = $('#total-items'),
 						$errorItems = $('#error-items');
 
 					var updateStatus = setInterval(function() {
 						$.getJSON(statusUrl, function(job, status, $xhr) {
 							$status.text(job.status);
 							$validItems.text(job.validItemsCount);
+							$totalItems.text(job.totalItemsCount);
 
 							if (job.errorItemsCount) $errorItems.text(job.errorItemsCount).parent().removeClass('hide');
 
@@ -39,7 +41,7 @@
 
 							if (job.status === 'COMPLETE') {
 								clearInterval(updateStatus);
-								$bar.parent().removeClass('active')
+								$bar.parent().removeClass('active').addClass('progress-success');
 							}
 						});
 					}, 2000);
@@ -62,7 +64,7 @@
 				<div class="progress progress-striped ${percentComplete < 100 ? 'active' : ''}">
 					<div id="bar" class="bar" style="width: ${percentComplete}%;"></div>
 				</div>
-				<p class="muted"><span id="valid-items"><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="validItemsCount" /></span> out of <g:fieldValue bean="${magentoCatalogImportJobInstance}" field="totalItemsCount" /> imported</p>
+				<p class="muted"><span id="valid-items"><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="validItemsCount" /></span> out of <span id="total-items"><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="totalItemsCount" /></span> imported</p>
 				<p class="${magentoCatalogImportJobInstance?.errorItemsCount == 0 ? 'hide' : ''}"><span id="error-items"><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="errorItemsCount" /></span> error(s) found.</p>
 			</div>
 		</div>
