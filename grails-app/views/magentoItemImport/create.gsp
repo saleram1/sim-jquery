@@ -62,6 +62,23 @@
 					window.open('data:text/html,' + htmlTemplate, null, 'height=600,width=800,status=no,menubar=no,location=no,toolbar=no');
 					e.preventDefault();
 				});
+
+				$('form').submit(function(e, submitForm) {
+					if (submitForm !== true) {
+						var form = this,
+							url = (/^\/sim/.test(document.location.pathname) ? '/sim' : '') + '/magentoCatalogImportJob/duplicates',
+							xhrData = {
+								storeCategory: $('input[name="storeCategory"]', this).val().trim(),
+								meliCategory: $('input[name="meliCategory"]', this).val().trim()
+							};
+
+						$.getJSON(url, xhrData, function(data, status, $xhr) {
+							if (data.isDuplicate === true) alert('Duplicate import job!');
+							else $(form).trigger('submit', [true]);
+						});
+						e.preventDefault();
+					}
+				});
 			   
 				$('[rel="tooltip"]').tooltip();
 			});
