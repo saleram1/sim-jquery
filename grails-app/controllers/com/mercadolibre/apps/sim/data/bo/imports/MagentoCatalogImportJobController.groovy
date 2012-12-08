@@ -6,7 +6,27 @@ import com.mercadolibre.apps.sim.CategoryService
 class MagentoCatalogImportJobController {
   CategoryService categoryService
 
-  static allowedMethods = [create: ['GET', 'POST'], edit: ['GET', 'POST'], save: 'POST']
+  static allowedMethods = [create: ['GET', 'POST'], edit: ['GET', 'POST'], save: 'POST', duplicates: 'GET']
+
+  def duplicates() {
+    ///String   meliCategory
+    ///Integer  storeCategory
+
+    def runningJobs =
+      MagentoCatalogImportJob.findAllByMeliCategoryAndStoreCategory(params.meliCategory, params.int('storeCategory'))
+
+    Boolean results
+    if (runningJobs?.size() > 0 && runningJobs.get(0).id) {
+      results = true
+    }
+    else {
+      results = false
+    }
+
+    Map map = [isDuplicate: results]
+    render  map as JSON
+  }
+
 
   def index() {
     redirect action: 'list', params: params
