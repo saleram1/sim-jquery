@@ -44,18 +44,14 @@ class MagentoSimpleProductSlurperService {
       log.error tr.message
     }
 
-    log.info "Updating size of job to: ${allProductIds.size()}"
-
 
     MagentoCatalogImportJob.withTransaction {
       importJob = MagentoCatalogImportJob.load(aMessage.importJobId)
       importJob.totalItemsCount = allProductIds.size()
-      importJob.save()
+      if (importJob.save()) {
+        log.info "Updated size of job to: ${allProductIds.size()}"
+      }
     }
-
-    println ''
-    println allProductIds
-    println ''
 
     //importListingsFromMage(importJob, aMessage.callerId, aMessage.accessToken)
     return
