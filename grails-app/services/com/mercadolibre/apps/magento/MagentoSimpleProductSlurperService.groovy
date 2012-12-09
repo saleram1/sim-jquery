@@ -9,11 +9,9 @@ import com.mercadolibre.apps.sim.data.bo.errors.ApiError
 import org.springframework.beans.factory.InitializingBean
 
 /**
- * Created with IntelliJ IDEA.
+ * Called by the JMS Queue handler after each job request is saved
+ *
  * User: saleram
- * Date: 11/30/12
- * Time: 8:48 PM
- * To change this template use File | Settings | File Templates.
  */
 class MagentoSimpleProductSlurperService {
   static transactional = false
@@ -42,7 +40,6 @@ class MagentoSimpleProductSlurperService {
     try {
       allProductIds =
         magentoStoreService.getMagentoProductsByUserAndCategory(aMessage.callerId, importJob.storeCategory as Integer)
-
       updateImportJobTotalListings(importJob, allProductIds.size())
       createMercadoLibreListings(allProductIds, importJob, aMessage.callerId, aMessage.accessToken)
     }
@@ -56,42 +53,36 @@ class MagentoSimpleProductSlurperService {
 
   def createMercadoLibreListings(List productIds, MagentoCatalogImportJob job, Integer callerId, String accessToken) {
     log.info("Products found: " + productIds?.size())
-    log.info("just listing first in the array Variation or Vanilla")
 
+/*
     Map aProduct = productIds.get(0)
     if (aProduct) {
       if (categoryService.isFunkyFashionFootwearCategory(job.meliCategory)) {
-        mercadoLibreListingService.listFashionItem(aProduct)
+        mercadoLibreListingService.listFashionItem(aProduct, callerId)
       }
       else {
-        mercadoLibreListingService.listRegularItem(aProduct)
+        mercadoLibreListingService.listRegularItem(aProduct, callerId)
       }
     }
-
-    return
-  }
-/*
-
+*/
     Integer itemsListedWithMeli = 0
     Boolean isFashionista = false
-    isFashionista =    categoryService.isFunkyFashionFootwearCategory(job.meliCategory)
+    isFashionista = true   //categoryService.isFunkyFashionFootwearCategory(job.meliCategory)
 
     productIds?.eachWithIndex { Map aProduct, Integer index ->
       String meliListingId
       if (isFashionista) {
-        meliListingId = mercadoLibreListingService.listFashionItem(aProduct)
+        meliListingId = mercadoLibreListingService.listFashionItem(aProduct, callerId, job.stockPercentage / 100.0d, job.meliCategory)
       }
       else {
-        meliListingId = mercadoLibreListingService.listRegularItem(aProduct)
+        meliListingId = mercadoLibreListingService.listRegularItem(aProduct, callerId)
       }
-      //updateImportJobListingsOrErrors(job, meliListingId, aProduct, index)
-      catalogImportJobService.updateImportJobProgress(job, ++itemsListedWithMeli)
+      //updateImportJobListingsOrErrors(job, meliListingId, aProduct)
+      updateImportJobProgress(job, ++itemsListedWithMeli)
     }
     //DONE!
-    catalogImportJobService.updateImportJobProgress(job, productIds.size(), 'COMPLETE')
+    updateImportJobProgress(job, productIds.size(), 'COMPLETE')
   }
-*/
-
 
 
 //HELPER METHODS

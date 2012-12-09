@@ -6,6 +6,7 @@ import net.sf.json.JSONArray
 import com.mercadolibre.apps.sim.data.bo.errors.ApiError
 import com.mercadolibre.apps.sim.data.bo.core.User
 import com.mercadolibre.apps.magento.MagentoSOAPCatalogService
+import com.mercadolibre.apps.magento.MageConnectionDetails
 
 
 class MagentoStoreService {
@@ -13,11 +14,8 @@ class MagentoStoreService {
   MagentoSOAPCatalogService magentoSOAPCatalogService
 
 
-//METHODS
-  Integer getMagentoProductCountByUserAndCategory(Integer callerId, Integer categoryId) {
-    def magentoBaseURI = null
-    def apiUser
-    def apiKey
+  def findShoppeDetailsByCallerId(Integer callerId) {
+    String magentoBaseURI, apiUser, apiKey
 
     User.withTransaction() {
       if (User.findByCallerId(callerId)) {
@@ -27,31 +25,14 @@ class MagentoStoreService {
         apiKey  = shoppeUser.company.apiKey
       }
     }
+    log.info "Shoppe URL is ${magentoBaseURI} ... connecting as user ${apiUser}"
 
-    def productStubs =
-      magentoSOAPCatalogService.getProductIdsInCategory(magentoBaseURI, apiUser, apiKey, categoryId)
-
-    return productStubs?.size()
+    [magentoBaseURI, apiUser, apiKey]
   }
 
-
+//METHODS
   List getMagentoProductsByUserAndCategory(Integer callerId, Integer categoryId) {
-    def magentoBaseURI = null
-    def apiUser
-    def apiKey
-
-    User.withTransaction() {
-      if (User.findByCallerId(callerId)) {
-        User shoppeUser = User.findByCallerId(callerId)
-        magentoBaseURI = shoppeUser.company.webAddress
-        apiUser = shoppeUser.company.apiUser
-        apiKey  = shoppeUser.company.apiKey
-
-        log.info "Shoppe URL is ${magentoBaseURI} ... connecting as user ${apiUser}"
-        log.info "Caller Id is: ${callerId}  Mage Category Id is: ${categoryId}"
-      }
-    }
-
+    def (magentoBaseURI, apiUser, apiKey) = findShoppeDetailsByCallerId(callerId)
     def productStubs =
       magentoSOAPCatalogService.getProductIdsInCategory(magentoBaseURI, apiUser, apiKey, categoryId)
 
@@ -61,6 +42,36 @@ class MagentoStoreService {
     else {
       return productStubs
     }
+  }
+
+  /**
+   * Adds three map buckets to the empty map - containing details and images
+   *
+   * @param callerId
+   * @param productId  - sku
+   * @return
+   */
+  Map getMagentoProductDetailsByProductId(Integer callerId, String productId) {
+    log.info "Caller Id is: ${callerId}  Mage Product Id is: ${productId}"
+
+    def (magentoBaseURI, apiUser, apiKey) = findShoppeDetailsByCallerId(callerId)
+    MageConnectionDetails mcd =
+      magentoSOAPCatalogService.initMagentoProxyForStore(magentoBaseURI, apiUser, apiKey)
+
+    Map allDetailsMap = [:]
+    allDetailsMap.putAll(magentoSOAPCatalogService.getProductDetails(mcd.mageProxy, mcd.sessionId, productId))
+    //allDetailsMap.putAll(magentoSOAPCatalogService.getProductImages(mcd.mageProxy, mcd.sessionId, productId))
+
+    return allDetailsMap
+  }
+
+
+  List getMagentoProductInventoryByProductId(Integer callerId, List productIds) {
+    def (magentoBaseURI, apiUser, apiKey) = findShoppeDetailsByCallerId(callerId)
+    MageConnectionDetails mcd =
+      magentoSOAPCatalogService.initMagentoProxyForStore(magentoBaseURI, apiUser, apiKey)
+
+    return magentoSOAPCatalogService.getProductStockAttributes(mcd.mageProxy, mcd.sessionId, productIds)
   }
 
 

@@ -249,7 +249,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     ArrayOfString arrayOfString = new ArrayOfString()
 
     aList?.each() { aString ->
-      arrayOfString.complexObjectArray.add(aString)
+      arrayOfString.complexObjectArray.add(aString.toString())
     }
     arrayOfString
   }
