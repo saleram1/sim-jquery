@@ -53,16 +53,10 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
    * @return List < String >  sku or productId
    */
   List<Map> getAllProductsAssignedToCategory(MageConnectionDetails mcd, Integer categId, CatalogCategoryAssignedProductsResponseParam responseParam) {
-  //check params
     if (responseParam?.result?.complexObjectArray?.isEmpty()) {
       log.warn "No results for ${responseParam} in category ${categId}"
       return Collections.emptyList()
     }
-
-
-
-
-    /// return the list of Map's
 
     def productIds = []
 
@@ -87,7 +81,6 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 
       if (productMap.get(product.sku).size() != 0 &&
           ((related?.size() - 1) != productMap.get(product.sku).size())) {
-
         log.warn "related.size = ${related ?: related.size()}   productMap = ${productMap.get(product.sku).size()}"
       }
 
@@ -124,6 +117,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductList(cplp).result.complexObjectArray.toList()
   }
 
+
   /**
    * Critical call to retrieve actual SIMPLE Saleable product id's
    *
@@ -135,9 +129,22 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     def productDetailMap = [:]
 
     def cpip = new CatalogProductInfoRequestParam()
-    cpip.productId = productId
     cpip.sessionId = sessionId
+    cpip.productId = productId  //not SKU - this is the entityId
+    // DO NOT TOUCH
+    /// in Magento 1.5 and above, if your SKUs are numeric, it now fails to find them.
+    ///  Passing in "sku" as the productIdentifierType doesn't seem to help either
+    //cpip.identifierType = "sku"
     cpip.store = ""
+
+    cpip.attributes = new CatalogProductRequestAttributes()
+    cpip.attributes.additionalAttributes = new ArrayOfString()
+    cpip.attributes.additionalAttributes.complexObjectArray.add("color")
+    cpip.attributes.additionalAttributes.complexObjectArray.add("marca")
+    cpip.attributes.additionalAttributes.complexObjectArray.add("gender")
+    cpip.attributes.additionalAttributes.complexObjectArray.add("size")
+    cpip.attributes.additionalAttributes.complexObjectArray.add("accesorio_size")
+    cpip.attributes.additionalAttributes.complexObjectArray.add("shoe_size")
 
     CatalogProductReturnEntity catalogProductReturnEntity = mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductInfo(cpip).result
 
@@ -147,16 +154,10 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     ArrayOfString websiteArray = catalogProductReturnEntity.websites
     def websites = websiteArray.complexObjectArray
 
-    ArrayOfString categoryIdArray = catalogProductReturnEntity.categoryIds
-    def categoryIds = categoryIdArray.complexObjectArray
-
-    ArrayOfString webSiteIdsArray = catalogProductReturnEntity.websiteIds
-    def websiteIds = webSiteIdsArray.complexObjectArray
-
     AssociativeArray aa = catalogProductReturnEntity.additionalAttributes
     def listOfAdditionalAttributeMap = []
     def additionalAttributeMap = [:]
-    aa.complexObjectArray.each {
+    aa?.complexObjectArray?.each {
       additionalAttributeMap = ["key": it.key, "value": it.value]
       listOfAdditionalAttributeMap.add(additionalAttributeMap)
     }
@@ -180,8 +181,6 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
         "urlKey": catalogProductReturnEntity.urlKey,
         "urlPath": catalogProductReturnEntity.urlPath,
         "visibility": catalogProductReturnEntity.visibility,
-        "categoryIds": categoryIds,
-        "websiteIds": websiteIds,
         "hasOptions": catalogProductReturnEntity.hasOptions,
         "giftMessageAvailable": catalogProductReturnEntity.giftMessageAvailable,
         "price": catalogProductReturnEntity.price,
@@ -196,11 +195,14 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
         "customDesign": catalogProductReturnEntity.customDesign,
         "customLayoutUpdate": catalogProductReturnEntity.customLayoutUpdate,
         "optionsContainer": catalogProductReturnEntity.optionsContainer,
+        "enableGoogleCheckout": catalogProductReturnEntity.enableGooglecheckout,
         "additionalAttributes": additionalAttributes,
-        "enableGoogleCheckout": catalogProductReturnEntity.enableGooglecheckout
+        "pictureURLs": getProductImages(mageProxy, sessionId, productId)
     ]
+
     productDetailMap
   }
+
 
   /**
    * Get a list of images for a productId
@@ -210,31 +212,27 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
    * @return List of images
    */
   List getProductImages(magento.MagentoService mageProxy, String sessionId, String productId) {
-    def productImageList = []
-
     def cpamlp = new CatalogProductAttributeMediaListRequestParam()
     cpamlp.sessionId = sessionId
-    cpamlp.productId = productId
+    cpamlp.productId = productId  //not SKU - this is the entityId
     cpamlp.store = ""
 
     CatalogProductAttributeMediaListResponseParam catalogProductAttributeMediaListResponseParam = mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductAttributeMediaList(cpamlp)
     CatalogProductImageEntityArray catalogProductImageEntityArray = catalogProductAttributeMediaListResponseParam.result
-    catalogProductImageEntityArray.complexObjectArray.each {
-      productImageList.add(it.url)
+    return catalogProductImageEntityArray.complexObjectArray.toList().collect {
+      it.url
     }
-    productImageList
   }
 
+
   /**
-   * Get a list of product options based on attributeId - this comes from the product list
+   * Get a list of product stock info based on productIds - this is a mini product list
    *
    * @param sessionId
    * @param productIds
-   * @return List of product inventory values
+   * @return List of product inventory values - one per SKU
    */
   List getProductStockAttributes(magento.MagentoService mageProxy, String sessionId, List productIds) {
-
-    def catalogInventoryStockItems = []
 
     def stockItemListRequestParam = new CatalogInventoryStockItemListRequestParam()
     stockItemListRequestParam.sessionId = sessionId
@@ -251,7 +249,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     ArrayOfString arrayOfString = new ArrayOfString()
 
     aList?.each() { aString ->
-      arrayOfString.complexObjectArray.add(aString.toString())
+      arrayOfString.complexObjectArray.add(aString)
     }
     arrayOfString
   }
