@@ -26,11 +26,13 @@
 
                             <g:sortableColumn property="status" title="${message(code: 'magentoCatalogImportJob.buyingMode.label', default: 'Status')}" />
 
-                            <g:sortableColumn property="buyingMode" title="${message(code: 'magentoCatalogImportJob.buyingMode.label', default: 'Buying Mode')}" />
+                            <g:sortableColumn property="storeCategory" title="${message(code: 'magentoCatalogImportJob.totalItemsCount.label', default: '#Products')}" />
 
-                            <g:sortableColumn property="listingType" title="${message(code: 'magentoCatalogImportJob.listingTypeId.label', default: 'Listing Type Id')}" />
+                            <g:sortableColumn property="storeCategory" title="${message(code: 'magentoCatalogImportJob.storeCategory.label', default: 'Mage Category')}" />
 
                             <g:sortableColumn property="meliCategory" title="${message(code: 'magentoCatalogImportJob.meliCategory.label', default: 'Meli Category')}" />
+
+                            <g:sortableColumn property="listingType" title="${message(code: 'magentoCatalogImportJob.listingTypeId.label', default: 'Listing Type')}" />
 
                             <g:sortableColumn property="dateCreated" title="${message(code: 'magentoCatalogImportJob.dateCreated.label', default: 'Date Created')}" />
 						
@@ -45,13 +47,15 @@
 
                             <td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "status")}</td>
 
-                            <td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "buyingMode")}</td>
+                            <td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "totalItemsCount")}</td>
 
-                            <td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "listingType")}</td>
+                            <td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "storeCategory")}</td>
 
                             <td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "meliCategory")}</td>
 
-							<td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "dateCreated")}</td>
+                            <td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "listingType")}</td>
+
+                            <td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "dateCreated")}</td>
 						
 							<td>${fieldValue(bean: magentoCatalogImportJobInstance, field: "description")}</td>
 						
