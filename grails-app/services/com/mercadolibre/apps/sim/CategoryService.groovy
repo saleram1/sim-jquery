@@ -5,6 +5,7 @@ import com.mercadolibre.apps.sim.data.bo.imports.meli.Category
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.ContentType
 import net.sf.json.JSONArray
+import grails.plugin.cache.Cacheable
 
 
 class CategoryService {
@@ -16,6 +17,7 @@ class CategoryService {
    * @param categoryId
    * @return
    */
+  @Cacheable("categoryCache")
   Boolean isValidCategory(String categoryId) {
     Boolean valid = false
 
@@ -42,11 +44,36 @@ class CategoryService {
 
 
   /**
+   * Test category validity by its id and name - Fashion based category will have
+   * under it some very strange bits for the Required extra fields
+   *
+   * @param categoryId - e.g. MLA1458
+   * @return  true if a child of 'Ropa' , false otherwise
+   */
+  @Cacheable("categoryCache")
+  Boolean isFunkyFashionFootwearCategory(String categoryId) {
+    Boolean isFunky = false
+
+    def builder = new HTTPBuilder("https://v1.api.mercadolibre.com")
+    try {
+      builder.contentType = ContentType.JSON
+      builder.get(path: "/categories/${categoryId}/attributes") { resp, json ->
+        isFunky = (resp.status == 200 && !(json as JSONArray).isEmpty())
+      }
+    }
+    catch (Exception ex) {
+      log.error ex.message, ex
+    }
+    return isFunky
+  }
+
+  /**
    * Turn the Meli category into a domain object
    *
    * @param categoryId
    * @return Return an object if the ML Category is found, null if not
    */
+  @Cacheable("categoryCache")
   Category getCategory(String categoryId) {
     Boolean valid
     Category aCategory
@@ -81,30 +108,6 @@ class CategoryService {
     }
   }
 
-  /**
-   * Test category validity by its id and name - Fashion based category will have
-   * under it some very strange bits for the Required extra fields
-   *
-   * @param categoryId - e.g. MLA1458
-   * @return  true if a child of 'Ropa' , false otherwise
-   */
-  Boolean isFunkyFashionFootwearCategory(String categoryId) {
-    Boolean isFunky = false
-
-    def builder = new HTTPBuilder("https://v1.api.mercadolibre.com")
-    try {
-      builder.contentType = ContentType.JSON
-      builder.get(path: "/categories/${categoryId}/attributes") { resp, json ->
-        isFunky = (resp.status == 200 && !(json as JSONArray).isEmpty())
-      }
-    }
-    catch (Exception ex) {
-      log.error ex.message, ex
-    }
-    return isFunky
-  }
-
-
   String getCategoryNotFoundMessage(String category = "MLX123") {
     def notFound = """{
         "message": "Category not found: ${category}",
@@ -119,26 +122,78 @@ class CategoryService {
 
 
   /**
-   * Search by category id instead of query string - this returns a subset / paged results
-   * @param siteId
-   * @param friendlyCategoryId
-   * @param limit
-   * @param offset
-   * @return
+   * Find out from the category and the current colour if we can SKIP it
+
+   * @param sourceList -  listOfPossibleColor id,name pairs
+   * @param categoryId -   meliCategory
+   * @param colorValue  -  '17'
+   * @return true if colorValue is legit
+   *
+   * EXAMPLE usage
+
+   if (!isColorValueSupported(categoryId, details['additionalAttributes'].find() { key == 'color' })) {
+     useGray = true
+   }
+   *
    */
-  List findAllItemsByCategoryId(String siteId, String friendlyCategoryId, Integer limit = 200, Integer offset = 0) {
-    def itemListings = []
+  Boolean isColorValueSupported(String meliCategory, String colorValue) {
+    def sourceList = this.getFashionCategoryAttribute(meliCategory, "Color Primario")['values']
+    if (!sourceList) {
+      return false
+    }
+    else {
+      return (getIdValueForColorValue(sourceList, colorValue) != null ? true : false)
+    }
+  }
 
-    withHttp(uri: globalConfigService.get("config.apiBaseURL")) {
-      def responseData = get(path: "/sites/${siteId}/search",
-          query: [category: friendlyCategoryId, limit: limit, offset: offset, max: limit])
-      assert responseData instanceof net.sf.json.JSONObject
+  String getIdValueForColorValue(List sourceList, String colorName) {
+    def attributeValues = sourceList.find() {
+      colorName?.equalsIgnoreCase(it.name)
+    }
+    return attributeValues?.id
+  }
 
-      responseData['results'].eachWithIndex() { item, idx ->
-        items.add(item['id'])
+  String getIdValueForSizeValue(List sourceList, String sizeName) {
+    def attributeValues = sourceList.find() {
+      it.name == sizeName
+    }
+    return attributeValues?.id
+  }
+
+
+  /**
+   * Return id/name pairs which indicate legal values on ML in this category
+   *
+   * @param categoryId
+   * @param attributeTag e.g. 'Talle'
+   * @return Map
+   */
+  @Cacheable("categoryCache")
+  Map getFashionCategoryAttribute(String categoryId, String attributeTag) {
+    def attributeMap = null
+
+    def builder = new HTTPBuilder("https://v1.api.mercadolibre.com")
+    try {
+      builder.contentType = ContentType.JSON
+      builder.get(path: "/categories/${categoryId}/attributes") { resp, json ->
+
+        if ((json as JSONArray).isEmpty()) {
+          attributeMap = [:]
+        }
+        else {
+          (json as JSONArray).toList().each() { attr ->
+            if (attributeTag == attr['name']) {
+              attributeMap = [id: attr['id'], name: attr['name'], type: attr['type'], value_type: 'list', values: attr['values']]
+            }
+          }
+        }
       }
     }
-    return items
+    catch (Exception ex) {
+      log.error ex.message, ex
+    }
+
+    return attributeMap
   }
 
 
@@ -149,7 +204,6 @@ class CategoryService {
    * @return number of categories loaded
    */
   def loadMeliCategories() {
-	
 	runAsync {
       String aLine
 
