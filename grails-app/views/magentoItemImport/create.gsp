@@ -58,7 +58,9 @@
 				});
 
 				$('#preview-btn').click(function(e) {
-					var htmlTemplate = $('textarea').val().replace('[$MAGENTO_DESCRIPTION]', '<img src="http://placehold.it/500x400&amp;text=Product description goes here." />');
+					var htmlTemplate = $('textarea').val().replace('[$MAGENTO_DESCRIPTION]', '<img src="http://placehold.it/500x400&amp;text=Magento+product+description+goes+here." />');
+					htmlTemplate += '<a href="#" onclick="window.close();" style="position: fixed; bottom: 0; right: 0;">Close Preview</a>';
+					
 					window.open('data:text/html,' + htmlTemplate, null, 'height=600,width=800,status=no,menubar=no,location=no,toolbar=no');
 					e.preventDefault();
 				});
@@ -106,7 +108,7 @@
 			<g:render template="form" />
 			<div class="form-actions">
 				<button type="submit" class="btn btn-primary">
-					<i class="icon-chevron-right icon-white"></i> <g:message code="default.button.next.label" default="Next" />
+					<i class="icon-download-alt icon-white"></i> <g:message code="default.button.startImport.label" default="Start Import" />
 				</button>
 			</div>
 		</g:form>

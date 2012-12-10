@@ -77,12 +77,16 @@
 </fieldset>
 <fieldset class="fieldset" name="meli">
 	<legend>Description Template</legend>
-	<textarea name="htmlDescription" required="required" style="width: 100%; display: block;">&lt;html&gt;
-	&lt;body&gt;
-		&lt;div&gt;
-			[$MAGENTO_DESCRIPTION]
-		&lt;/div&gt; 
-	&lt;/body&gt;
-&lt;/html&gt;</textarea>
+	<textarea name="htmlDescription" required="required" style="width: 100%; display: block; white-space: pre-wrap;">&lt;div style="width: 500px; margin: 0 auto; text-align: center;"&gt;
+	&lt;span&gt;
+		&lt;a href="http://www.fotter.com.ar/" target="_blank"&gt;
+			&lt;img src="http://www.fotter.com.ar/skin/frontend/fotter/default/images/logo_navidad.png" width="440" /&gt;
+		&lt;/a&gt;
+	&lt;/span&gt;
+	&lt;br /&gt;&lt;br /&gt;
+	[$MAGENTO_DESCRIPTION]
+	&lt;br /&gt;&lt;br /&gt;
+	&lt;span&gt;&amp;copy; 2010-2013 &lt;a href="http://www.fotter.com.ar/" target="_blank"&gt;Fotter&lt;/a&gt; SRL of Argentina&lt;/span&gt;
+&lt;/div&gt;</textarea>
 	<button id="preview-btn" class="btn" type="button"><i class="icon-search"></i> Preview</button>
 </fieldset>
