@@ -147,14 +147,14 @@ class CategoryService {
   }
 
   String getIdValueForColorValue(List sourceList, String colorName) {
-    def attributeValues = sourceList.find() {
+    def attributeValues = sourceList?.find() {
       colorName?.equalsIgnoreCase(it.name)
     }
     return attributeValues?.id
   }
 
   String getIdValueForSizeValue(List sourceList, String sizeName) {
-    def attributeValues = sourceList.find() {
+    def attributeValues = sourceList?.find() {
       it.name == sizeName
     }
     return attributeValues?.id

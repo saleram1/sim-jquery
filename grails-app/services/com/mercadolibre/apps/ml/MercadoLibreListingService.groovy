@@ -48,7 +48,7 @@ class MercadoLibreListingService {
       fashionListing =
         new FashionItemListing(title: details['name'], description: details['description'], category_id: job.meliCategory, listing_type_id: job.listingType, currency_id: "ARS", condition: "new")
 
-      String colorValueId = decodeMeliColor(job.meliCategory, details['additionalAttributes'].find() { key == 'color' })
+      String colorValueId = decodeMeliColor(job.meliCategory, details['additionalAttributes'].find() { it.key == 'color' })
 
       //simpleProductIds array represents solely the INVENTORY for a given size - NO other bits are needed
       List inventoryList = magentoStoreService.getMagentoProductInventoryByProductId(callerId, simpleProductIds)
@@ -75,14 +75,43 @@ class MercadoLibreListingService {
     }
   }
 
-  def decodeMeliColor(String meliCategoryId, String colorName) {
-    def sourceList = categoryService.getFashionCategoryAttribute(meliCategoryId, "Color Primario")['values']
-    if (!sourceList) {
-      return null
+  def static EAV_COLOR_MAP =
+    [120: "Amarillo",
+        16: "Animal Print",
+        13: "Azul",
+        151: "Beige",
+        11: "Blanco",
+        355: "Bordo",
+        129: "Cebra",
+        84: "Celeste",
+        144: "Coral",
+        8: "Crudo",
+        85: "Fucsia",
+        14: "Gris",
+        15: "Marron",
+        86: "Multi",
+        223: "Naranja",
+        17: "Negro",
+        10: "Oro",
+        9: "Plata",
+        18: "Rojo",
+        12: "Rosa",
+        366: "Suela",
+        77: "Turquesa",
+        39: "Verde",
+        75: "Violeta",
+        364: "Vison"]
+
+  def decodeMeliColor(String meliCategoryId, colorOption) {
+    Integer colorOptionId = 0
+    try {
+      colorOptionId = Integer.valueOf(colorOption['value'])
+      def sourceList = categoryService.getFashionCategoryAttribute(meliCategoryId, "Color Primario")['values']
+      return (categoryService.getIdValueForColorValue(sourceList, EAV_COLOR_MAP[colorOptionId]) ?: "92028")
     }
-    else {
-      return (categoryService.getIdValueForColorValue(sourceList, colorName) ?: "92028")
-    }
+    catch (NumberFormatException ex) {}
+
+    "92028"
   }
 
   def decodeMeliSize(String meliCategoryId, String sizeName) {
@@ -96,15 +125,23 @@ class MercadoLibreListingService {
   }
 
 
+  /**
+   * Get the quantity available for this sku
+   *
+   * @param stockItemEntity
+   * @param sku  - only needed for potential Out-of-stock warn
+   * @param quantityPercentToList  10% 50%  100%
+   * @return 0.0 if not enough stock - quantityTotal otherwise
+   */
   Double getItemVariationStock(CatalogInventoryStockItemEntity stockItemEntity, String sku, quantityPercentToList) {
     Boolean itemInStock = (stockItemEntity.isInStock == '1')
-    Double quantityToList = (stockItemEntity.qty as Double)
+    Double quantityAvailableToStore = (stockItemEntity.qty as Double)
 
-    if (itemInStock && quantityToList >= (1.0d / quantityPercentToList)) {
-      return quantityToList
+    if (itemInStock && quantityAvailableToStore >= (1.0d / quantityPercentToList)) {
+      return quantityAvailableToStore
     }
     else {
-      log.warn("SKU ${sku} is too low or Out of stock.  Qty = ${quantityToList}")
+      log.warn("SKU ${sku} is too low or Out of stock.  Qty = ${quantityAvailableToStore}")
       return 0.0d
     }
   }
