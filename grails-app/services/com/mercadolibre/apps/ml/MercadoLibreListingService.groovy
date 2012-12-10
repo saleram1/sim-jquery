@@ -1,14 +1,13 @@
 package com.mercadolibre.apps.ml
 
-import com.mercadolibre.apps.sim.data.bo.imports.MagentoStoreService
-
 import com.mercadolibre.apps.sim.CategoryService
-import magento.CatalogInventoryStockItemEntity
-import com.mercadolibre.apps.sim.data.bo.core.FashionItemListing
-import com.mercadolibre.apps.sim.data.bo.imports.MagentoCatalogImportJob
-import com.mercadolibre.apps.sim.data.bo.core.ItemVariation
-import grails.converters.JSON
 import com.mercadolibre.apps.sim.ImportService
+import com.mercadolibre.apps.sim.data.bo.core.FashionItemListing
+import com.mercadolibre.apps.sim.data.bo.core.ItemVariation
+import com.mercadolibre.apps.sim.data.bo.imports.MagentoCatalogImportJob
+import com.mercadolibre.apps.sim.data.bo.imports.MagentoStoreService
+import magento.CatalogInventoryStockItemEntity
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -70,8 +69,9 @@ class MercadoLibreListingService {
     }
 
     if (!fashionListing.variations.empty) {
-      println (fashionListing as JSON)
-      println importService.pushItemToMarketplace2(fashionListing, accessToken)
+      def newListingId = importService.pushItemToMarketplace2(fashionListing, accessToken)
+      println newListingId
+      return  newListingId
     }
   }
 

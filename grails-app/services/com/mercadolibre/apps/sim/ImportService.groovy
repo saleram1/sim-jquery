@@ -125,20 +125,6 @@ class ImportService {
       uri.path = '/items'
       uri.query = [access_token: appUser]
       body = itemRef
-//
-//        println "************"
-//        println itemRef.category_id
-//        println itemRef.buying_mode
-//        println itemRef.listing_type_id
-//        println itemRef.currency_id
-//        println itemRef.title
-//        println itemRef.description
-//        println itemRef.available_quantity
-//        println itemRef.price
-//        println itemRef.condition
-//        println itemRef.pictureURL
-//        println "************"
-//
 
       response.success = { resp, json ->
         newItemId = json['id']
