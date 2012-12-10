@@ -1,0 +1,118 @@
+{
+    "title": "Zapatilla abrojo lisa rosa ",
+    "description": "Zapatilla baja  de lona con abrojos rosa Rave. Sobre la cara externa posee bordado el dibujo de una mariposa y una flor, las cuales se unen por medio de un hilo plateado con tres flores que se encuentran en la parte de atrás del tobillo.\r\nEstá completamente forrada en lona rayada negra y blanca. Ambos lados del tobillo se encuentran acolchados para una mayor seguridad.\r\n\r\nLa suela está confeccionada en PVC fucsia antideslizante, ideal para las que recién están aprendiendo a caminar.\r\n\r\nEs una zapatilla clásica, que combina con cualquier ropa.\r\n\r\nTe sugerimos llevar tu talle habitual.",
+    "site_id": "MLA",
+    "category_id": "MLA9997",
+    "currency_id": "ARS",
+    "buying_mode": null,
+    "listing_type_id": "bronze",
+    "condition": "new",
+    "accepts_mercadopago": true,
+    "variations":
+    [
+    {
+        "attribute_combinations":
+        [
+        {
+            "id": "73002",
+            "value_id": "132001",
+            "value_name": ""
+        },
+        {
+            "id": "83000",
+            "value_id": "92028",
+            "value_name": ""
+        }
+        ],
+        "price": 89,
+        "available_quantity": 1,
+        "picture_ids":
+        [
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-fr.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-pt.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-lt.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-cc_1.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-in.jpg"
+        ],
+        "seller_custom_field": "11002223"
+    },
+    {
+        "attribute_combinations":
+        [
+        {
+            "id": "73002",
+            "value_id": "132002",
+            "value_name": ""
+        },
+        {
+            "id": "83000",
+            "value_id": "92028",
+            "value_name": ""
+        }
+        ],
+        "price": 89,
+        "available_quantity": 1,
+        "picture_ids":
+        [
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-fr.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-pt.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-lt.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-cc_1.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-in.jpg"
+        ],
+        "seller_custom_field": "11002224"
+    },
+    {
+        "attribute_combinations":
+        [
+        {
+            "id": "73002",
+            "value_id": "132003",
+            "value_name": ""
+        },
+        {
+            "id": "83000",
+            "value_id": "92028",
+            "value_name": ""
+        }
+        ],
+        "price": 89,
+        "available_quantity": 1,
+        "picture_ids":
+        [
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-fr.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-pt.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-lt.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-cc_1.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-in.jpg"
+        ],
+        "seller_custom_field": "11002225"
+    },
+    {
+        "attribute_combinations":
+        [
+        {
+            "id": "73002",
+            "value_id": "132005",
+            "value_name": ""
+        },
+        {
+            "id": "83000",
+            "value_id": "92028",
+            "value_name": ""
+        }
+        ],
+        "price": 89,
+        "available_quantity": 1,
+        "picture_ids":
+        [
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-fr.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-pt.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-lt.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-cc_1.jpg",
+        "http://staging.fotter.net/media/catalog/product/1/1/110022-in.jpg"
+        ],
+        "seller_custom_field": "11002226"
+    }
+    ]
+}
