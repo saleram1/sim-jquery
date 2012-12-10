@@ -64,6 +64,9 @@ abstract class MagentoSOAPBase {
       HTTPConduit http = (HTTPConduit) client.getConduit();
       HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
       httpClientPolicy.setAllowChunking(false);
+      httpClientPolicy.setAutoRedirect(false)
+      httpClientPolicy.setReceiveTimeout(900000)
+      httpClientPolicy.setMaxRetransmits(0)
       http.setClient(httpClientPolicy);
 
       mageProxy.getMageApiModelServerWsiHandlerPort().startSession()
