@@ -1,12 +1,11 @@
 package com.mercadolibre.apps.magento
 
-import com.mercadolibre.apps.sim.data.bo.imports.MagentoCatalogImportJob
-import com.mercadolibre.apps.sim.CategoryService
-import com.mercadolibre.apps.sim.data.bo.imports.MagentoStoreService
 import com.mercadolibre.apps.ml.MercadoLibreListingService
+import com.mercadolibre.apps.sim.CategoryService
 import com.mercadolibre.apps.sim.data.bo.core.ItemListing
 import com.mercadolibre.apps.sim.data.bo.errors.ApiError
-import org.springframework.beans.factory.InitializingBean
+import com.mercadolibre.apps.sim.data.bo.imports.MagentoCatalogImportJob
+import com.mercadolibre.apps.sim.data.bo.imports.MagentoStoreService
 
 /**
  * Called by the JMS Queue handler after each job request is saved
@@ -18,7 +17,6 @@ class MagentoSimpleProductSlurperService {
   static exposes = ['jms']
   static destination = "queue.job.kickoff.notification"
 
-//  CatalogImportJobService catalogImportJobService
   CategoryService categoryService
   MagentoStoreService magentoStoreService
   MercadoLibreListingService mercadoLibreListingService
@@ -33,7 +31,7 @@ class MagentoSimpleProductSlurperService {
    */
   def onMessage(aMessage) {
     log.info "Start Product Slurper Message:\n" + aMessage
-runAsync {
+
     MagentoCatalogImportJob importJob = getCatalogImportJob(aMessage.importJobId)
 
     def allProductIds
@@ -48,15 +46,16 @@ runAsync {
       log.error tr.message, tr
       throw tr
     }
-}
   }
 
-
   def createMercadoLibreListings(List productIds, MagentoCatalogImportJob job, Integer callerId, String accessToken) {
-    log.info("Products found: " + productIds?.size())
+    log.info("No. of Products found: " + productIds?.size())
 
     Integer itemsListedWithMeli = 0
     Boolean isFashionista = categoryService.isFunkyFashionFootwearCategory(job.meliCategory)
+//runAsync {
+
+    long startTime = System.currentTimeMillis()
 
     productIds?.eachWithIndex { Map aProduct, Integer index ->
       String meliListingId
@@ -66,14 +65,14 @@ runAsync {
       else {
         meliListingId = mercadoLibreListingService.listRegularItem(aProduct, job, callerId, accessToken)
       }
-      //updateImportJobListingsOrErrors(job, meliListingId, aProduct)
+      //updateImportJobListingsOrErrors(job, meliListingId, aProduct)  ONCE COMPLETED INTERNAL BETA REVIEW
       updateImportJobProgress(job, ++itemsListedWithMeli)
     }
 
     //DONE!
     updateImportJobProgress(job, productIds.size(), 'COMPLETE')
 
-    log.info "Job completed in ${job.runtimeSeconds} seconds...."
+    log.info "Job completed in ${(System.currentTimeMillis() - startTime)} ms...."
   }
 
 
@@ -96,7 +95,7 @@ runAsync {
     MagentoCatalogImportJob.withTransaction {
       importJob = MagentoCatalogImportJob.load(importJob.id)
       importJob.totalItemsCount = totalItemsCount
-      if (importJob.save()) {
+      if (importJob.save(flush: true)) {
         log.info "Updated size of job to: ${totalItemsCount}"
       }
     }
@@ -108,7 +107,7 @@ runAsync {
       importJob = MagentoCatalogImportJob.load(importJob.id)
       importJob.validItemsCount = validItemsCount
       importJob.status = statusChange
-      if (importJob.save()) {
+      if (importJob.save(flush: true)) {
         log.info "Updated job items listed to: ${validItemsCount}"
       }
     }
