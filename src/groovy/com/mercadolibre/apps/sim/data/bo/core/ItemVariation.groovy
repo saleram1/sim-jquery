@@ -1,34 +1,45 @@
 package com.mercadolibre.apps.sim.data.bo.core
 
+import groovy.transform.ToString
+
 /**
  * Class to represent the variations in an Item, which should be called ==> ItemDetail
  * rather than a 'variation' - it contains separate fields for price, quantity, pictures which are 
  * normally in Item body 
  */
+@ToString
 class ItemVariation implements Serializable {
 	List<VariationAttribute> attribute_combinations
-	Double available_quantity = 0
-	Double price = 0
+	Long available_quantity
+  BigDecimal price
 	String seller_custom_field
 	List<String> picture_ids
 	
-	// these are COLOUR values - independent codes tables *per Category*  
-	// @see 
-	ItemVariation(String primaryColorId = "92028", String secondaryColorId = "82059", 
-		          String size, Integer quantity, BigDecimal aPrice, List pictures) {
-
+	// Each variation contains price, size, color, and available quantity
+	ItemVariation(String sku, String sizeId, Long quantity, BigDecimal aPrice, List pictures,
+                String primaryColorId, String secondaryColorId = "82059")
+  {
+    seller_custom_field = sku
 		available_quantity = quantity
 		price = aPrice
 
 		attribute_combinations = []
-		
-		// Talle (Size) will be spec'd as value_name ==>  34 36 38 
-		attribute_combinations.add(new VariationAttribute("83000", primaryColorId))
-		attribute_combinations.add(new VariationAttribute("73001", secondaryColorId))
-		attribute_combinations.add(new VariationAttribute("73002", null, size))
-		
+    attribute_combinations.add(new VariationAttribute("73002", sizeId)) // Talle (Size) cannot be spec'd value_name ==>  34 36 38
+    attribute_combinations.add(new VariationAttribute("83000", primaryColorId))
+		//attribute_combinations.add(new VariationAttribute("73001", secondaryColorId))
+
 		picture_ids = []
-		picture_ids.addAll(pictures)
+
+    //FOTTER QA
+    if (!pictures.isEmpty()) {
+      picture_ids.addAll(
+        pictures.collect() { String pic ->
+          pic.replaceAll("ml.fotter.net", "staging.fotter.net")
+        }
+      )
+    }
+    ///FOTTER QA
+
 	}
 }
 

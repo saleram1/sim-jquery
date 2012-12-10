@@ -6,15 +6,23 @@ package com.mercadolibre.apps.sim.data.bo.core
  *
  */
 class FashionItemListing implements Serializable {
-  String gp_id       // SKU
-  String category_id
-  String buying_mode
-  String listing_type_id = "bronze"
-  String currency_id
+  /*
+  {
+    "title": "Test QA Item per Fashionista 9997 - 2012 - NO ofertar",
+    "description",
+    "category_id": "MLA9997",
+    "currency_id": "ARS",
+    "buying_mode": "buy_it_now",
+    "listing_type_id": "silver",
+    "condition": "new",
+   */
+
   String title
   String description
-  Integer available_quantity
-  Double price
+  String category_id
+  String currency_id
+  final String buying_mode = "buy_it_now"
+  String listing_type_id
   String condition
 
   String getSite_id() {
@@ -25,6 +33,6 @@ class FashionItemListing implements Serializable {
     // this.site_id =
   }
 
-  // for some Category types, namely ones of the Fashionista variety
-  List<ItemVariation> variations = Collections.emptyList()
+//    "variations": [
+  List<ItemVariation> variations = []
 }
