@@ -33,6 +33,7 @@
 						else $verifyBtn.attr('disabled', 'disabled');
 					}
 				}
+				checkVerifyFieldset();
 				
 				$inputs.change(function(e) {
 					var $el = $(this);

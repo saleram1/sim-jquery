@@ -49,7 +49,7 @@
 			<g:message code="shoppeUser.username.label" default="Username" />
 		</label>
 		<div class="controls">
-			<g:textField name="username" class="input-xxlarge" required="required" value="${shoppeUserInstance?.username ?: 'm2muser'}" />
+			<g:textField name="username" class="input-xxlarge" required="required" value="${shoppeUserInstance?.username ?: 'm2m'}" />
 		</div>
 	</div>
 	<div class="control-group ${hasErrors(bean: shoppeUserInstance, field: 'apiKey', 'error')}">
