@@ -182,7 +182,7 @@ class ImportService {
 
     // one HTTPBuilder customised to work w/ Grails converters
     def builder = getHttpBuilderInstance()
-    builder.request("https://api.mercadolibre.com",
+    builder.request("https://v1.api.mercadolibre.com",
         groovyx.net.http.Method.POST,
         groovyx.net.http.ContentType.JSON) {
       uri.path = '/items/validate'
