@@ -48,9 +48,7 @@ class MagentoService {
     OAuthRequest request = new OAuthRequest(Verb.GET, MAGENTO_REST_API_URL+ "/products/${productId}/categories?type=rest")
 		service.signRequest(accessToken, request)
 		Response response = request.send()
-    
-    println response.getCode()
-    
+
     if (response.getCode() >= 300) {
       throw RuntimeException("Could not get Products from Magento")
     }  // TODO:  Move this into it's own typed runtime exception.

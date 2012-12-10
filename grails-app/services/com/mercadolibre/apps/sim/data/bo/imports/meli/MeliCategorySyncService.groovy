@@ -35,7 +35,7 @@ class MeliCategorySyncService {
   def isMeliCategoryInSync() {
     CategoryVersion categoryVersion = CategoryVersion.get(1)
 	if (categoryVersion == null) return false
-	println "This is the categoryVersion from the lookup: " + categoryVersion
+	log.info "This is the categoryVersion from the lookup: " + categoryVersion
 	if (categoryVersion.md5 == getMeliCategoryMD5("https://api.mercadolibre.com/sites/MLA/categories/")) {
       return true
 	} 
@@ -61,7 +61,7 @@ class MeliCategorySyncService {
 		CategoryVersion categoryVersion = CategoryVersion.get(1)
 		if (categoryVersion == null) categoryVersion = new CategoryVersion()
 		categoryVersion.md5 = getMeliCategoryMD5("https://api.mercadolibre.com/sites/MLA/categories/")
-		println "Here is the md5: " + categoryVersion.md5	
+		log.info "Here is the md5: " + categoryVersion.md5	
 		categoryVersion.save(flush: true)
   }
   
@@ -120,7 +120,7 @@ class MeliCategorySyncService {
 	def reader = new BufferedReader(new FileReader(categoryFileLocation))
 	def parsedData = jsonSlurper.parse(reader)
 	//parsedData.each { id, data ->
-	//	println data.id	
+	//	log.info data.id	
 	//}
 	
 	writeToFile(outputFile, parsedData)
@@ -129,7 +129,7 @@ class MeliCategorySyncService {
   private void writeToFile(def fileName, def infoList) {
     new File("$fileName").withWriter { out ->
       infoList.each { id, data ->
-        out.println data.id
+        out.log.info data.id
       }
     }
   }
@@ -148,11 +148,11 @@ class MeliCategorySyncService {
 //    byte[] buffer = new byte[1024];
 //
 //        try {
-//            println "Downloading file..."
+//            log.info "Downloading file..."
 //            for (int length; (length = input.read(buffer)) != -1;) {
 //                output.write(buffer, 0, length);
 //            }
-//          println "Successfully downloaded"
+//          log.info "Successfully downloaded"
 //        } finally {
 //            if (output != null) try { output.close(); } catch (IOException logOrIgnore) {}
 //            if (input != null) try { input.close(); } catch (IOException logOrIgnore) {}
@@ -177,7 +177,7 @@ class MeliCategorySyncService {
 //
 //      }
 //    } catch (Exception e) {
-//      println "The file is not accessible:  ${e.message}"
+//      log.info "The file is not accessible:  ${e.message}"
 //      e.printStackTrace()
 //    } finally {
 //      output.flush()
@@ -200,7 +200,7 @@ class MeliCategorySyncService {
 //
 //    // Read the special first line...column headings say. 
 //    //firstLine = reader.readLine()
-//    //println "firstLine: $firstLine"
+//    //log.info "firstLine: $firstLine"
 //
 //    reader.readLine()
 //    // Read the rest of the file...reader picks up where 

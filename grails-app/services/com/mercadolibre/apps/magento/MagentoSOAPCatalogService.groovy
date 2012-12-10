@@ -66,15 +66,12 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 
       /// add to the map a new empty list to indicate no children
       productMap.put(product.sku, new Vector<String>())
-//      println "Product? type=${product.type}  Entity ID ${product.productId}   sku = ${product.sku}"
 
       def related = getRelatedProductsForProductId(mcd.mageProxy, mcd.sessionId, product.sku)
       related?.each { CatalogProductEntity prod ->
-
         def childList = productMap.get(product.sku)
         def childType = "${prod.type}"
         if (!childList.contains("${prod.sku}") && childType != 'configurable') {
-//          println "    -->>  Child Product? type=${prod.type}  sku = ${prod.sku} Name: ${prod.name}"
           childList.add("${prod.sku}")
         }
       }

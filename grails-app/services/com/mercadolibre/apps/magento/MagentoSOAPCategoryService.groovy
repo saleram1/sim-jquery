@@ -30,7 +30,6 @@ class MagentoSOAPCategoryService extends MagentoSOAPBase {
 
         // This is the top level category
         CatalogCategoryTreeResponseParam responseParam = mageProxy.getMageApiModelServerWsiHandlerPort().catalogCategoryTree(cat)
-        println responseParam.result.categoryId
 
         // Get Children Categories
         def categoryList

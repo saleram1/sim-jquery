@@ -35,12 +35,11 @@ class SignupController {
       new Shoppe(name: command.companyName, webAddress: command.magentoStoreURI, apiUser: command.username, apiKey: command.apiKey)
 
     aShoppe.validate()
-
     if (aShoppe.hasErrors()) {
-      aShoppe.errors.fieldErrors.each() { err ->
-        println err
-      }
+      render(view: "create", model: ['shoppeUserInstance': command])
+      return
     }
+
     if (!aShoppe.save(flush: true)) {
       render(view: "create", model: ['shoppeUserInstance': command])
       return
