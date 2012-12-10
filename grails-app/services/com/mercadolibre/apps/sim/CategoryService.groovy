@@ -21,7 +21,7 @@ class CategoryService {
   Boolean isValidCategory(String categoryId) {
     Boolean valid = false
 
-    def builder = new HTTPBuilder("https://v1.api.mercadolibre.com")
+    def builder = new HTTPBuilder("https://api.mercadolibre.com")
 
     try {
       builder.contentType = ContentType.JSON
@@ -54,7 +54,7 @@ class CategoryService {
   Boolean isFunkyFashionFootwearCategory(String categoryId) {
     Boolean isFunky = false
 
-    def builder = new HTTPBuilder("https://v1.api.mercadolibre.com")
+    def builder = new HTTPBuilder("https://api.mercadolibre.com")
     try {
       builder.contentType = ContentType.JSON
       builder.get(path: "/categories/${categoryId}/attributes") { resp, json ->
@@ -78,7 +78,7 @@ class CategoryService {
     Boolean valid
     Category aCategory
 
-    def builder = new HTTPBuilder("https://v1.api.mercadolibre.com")
+    def builder = new HTTPBuilder("https://api.mercadolibre.com")
     try {
       builder.contentType = ContentType.JSON
       builder.get(path: "/categories/${categoryId}") { resp, json ->
@@ -172,7 +172,7 @@ class CategoryService {
   Map getFashionCategoryAttribute(String categoryId, String attributeTag) {
     def attributeMap = null
 
-    def builder = new HTTPBuilder("https://v1.api.mercadolibre.com")
+    def builder = new HTTPBuilder("https://api.mercadolibre.com")
     try {
       builder.contentType = ContentType.JSON
       builder.get(path: "/categories/${categoryId}/attributes") { resp, json ->
