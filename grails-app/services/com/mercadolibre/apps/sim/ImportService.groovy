@@ -185,15 +185,19 @@ class ImportService {
     builder.request("https://api.mercadolibre.com",
         groovyx.net.http.Method.POST,
         groovyx.net.http.ContentType.JSON) {
-      uri.path = '/items'
+      uri.path = '/items/validate'
       uri.query = [access_token: appUser]
       body = itemRef
 
+/*
       response.success = { resp, json ->
         newItemId = json['id']
       }
+*/
+      response.'204' = { resp, json ->
+        newItemId = "HTTP/1.1 204 No Content"
+      }
       response.failure = { resp, json ->
-        //assert json.size() == 4
         def anException = new ApiError(status: json['status'], error: json['error'], message: json['message'], cause: json['cause'] ?: "",
             originalFilename: null)
         log.error anException
