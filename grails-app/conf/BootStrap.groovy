@@ -26,11 +26,12 @@ class BootStrap {
     map["title"] = it.title
     map["price"] = it.price
     map["currency_id"] = it.currency_id
+    map["buying_mode"] = it.buying_mode
     map["available_quantity"] = it.available_quantity
     map["listing_type_id"] = it.listing_type_id
     map["condition"] = it.condition
     map["description"] = it.description
-    map["accepts_mercadopago"] = "true"
+    map["accepts_mercadopago"] = Boolean.TRUE
     map
   }
 
@@ -44,12 +45,11 @@ class BootStrap {
       return map
     }
 
-
     // Deep workaround...
     JSON.registerObjectMarshaller(ItemVariation, 3) {
       def map = [:]
       map.attribute_combinations = it.attribute_combinations as List
-      map.attribute_combinations.sort { o1, o2 -> o1.id <=> o2.id }
+      //map.attribute_combinations.sort { o1, o2 -> o1.id <=> o2.id }
       map.price = it.price
       map.available_quantity = it.available_quantity
       map.picture_ids = it.picture_ids
@@ -58,9 +58,19 @@ class BootStrap {
       return map
     }
 
-
     JSON.registerObjectMarshaller(FashionItemListing, 2) {
-      def map = getBaseItemMap(it)
+      def map = [:]
+
+      map["title"] = it.title
+      map["description"] = it.description
+      map["site_id"] = it.site_id
+      map["category_id"] = it.category_id
+      map["currency_id"] = it.currency_id
+      map["buying_mode"] = it.buying_mode
+      map["listing_type_id"] = it.listing_type_id
+      map["condition"] = it.condition
+      map["accepts_mercadopago"] = Boolean.TRUE
+
       map["variations"] = it.variations
       return map
     }
@@ -82,16 +92,7 @@ class BootStrap {
     // NON-Listing related like errors
     JSON.registerObjectMarshaller(ApiError, 3) {
       def map = [:]
-      /*
-          {
-            "message": "Category not found: MLA78884",
-            "error": "not_found",
-            "status": 404,
-            "cause": [
-            ],
-          }
 
-      */
       map.message = it.message
       map.error   = it.error
       map.status  = it.status
@@ -108,6 +109,8 @@ class BootStrap {
       return map
     }
 
+
+    //CLEANUP AISLE 14
     if (!System.getProperty("meli.category.load.skip") &&
         Category.count() == 0) {
       
@@ -131,6 +134,5 @@ class BootStrap {
   }
 
   def destroy = {
-
   }
 }
