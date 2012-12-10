@@ -33,7 +33,7 @@ class MagentoSimpleProductSlurperService {
    */
   def onMessage(aMessage) {
     log.info "Start Product Slurper Message:\n" + aMessage
-
+runAsync {
     MagentoCatalogImportJob importJob = getCatalogImportJob(aMessage.importJobId)
 
     def allProductIds
@@ -48,40 +48,32 @@ class MagentoSimpleProductSlurperService {
       log.error tr.message, tr
       throw tr
     }
+}
   }
 
 
   def createMercadoLibreListings(List productIds, MagentoCatalogImportJob job, Integer callerId, String accessToken) {
     log.info("Products found: " + productIds?.size())
 
-/*
-    Map aProduct = productIds.get(0)
-    if (aProduct) {
-      if (categoryService.isFunkyFashionFootwearCategory(job.meliCategory)) {
-        mercadoLibreListingService.listFashionItem(aProduct, callerId)
-      }
-      else {
-        mercadoLibreListingService.listRegularItem(aProduct, callerId)
-      }
-    }
-*/
     Integer itemsListedWithMeli = 0
-    Boolean isFashionista = false
-    isFashionista = true   //categoryService.isFunkyFashionFootwearCategory(job.meliCategory)
+    Boolean isFashionista = categoryService.isFunkyFashionFootwearCategory(job.meliCategory)
 
     productIds?.eachWithIndex { Map aProduct, Integer index ->
       String meliListingId
       if (isFashionista) {
-        meliListingId = mercadoLibreListingService.listFashionItem(aProduct, callerId, job.stockPercentage / 100.0d, job.meliCategory)
+        meliListingId = mercadoLibreListingService.listFashionItem(aProduct, job, callerId, accessToken)
       }
       else {
-        meliListingId = mercadoLibreListingService.listRegularItem(aProduct, callerId)
+        meliListingId = mercadoLibreListingService.listRegularItem(aProduct, job, callerId, accessToken)
       }
       //updateImportJobListingsOrErrors(job, meliListingId, aProduct)
       updateImportJobProgress(job, ++itemsListedWithMeli)
     }
+
     //DONE!
     updateImportJobProgress(job, productIds.size(), 'COMPLETE')
+
+    log.info "Job completed in ${job.runtimeSeconds} seconds...."
   }
 
 
