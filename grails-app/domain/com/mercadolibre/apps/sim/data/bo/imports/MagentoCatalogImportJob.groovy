@@ -15,7 +15,6 @@ import groovy.transform.ToString
  */
 @ToString
 class MagentoCatalogImportJob {
-
   Boolean colorAppendedToSKU
   String colorAttributeName
   String description
@@ -32,8 +31,18 @@ class MagentoCatalogImportJob {
   Integer totalItemsCount = 100
   Integer validItemsCount = 0    // listings.size
 
-  Date dateCreated
   Date lastUpdated
+  Date dateCreated
+  Date dateCompleted
+
+  def getRuntimeSeconds() {
+    if (status != 'COMPLETE') {
+      return -1
+    }
+    else {
+      (dateCompleted - dateCreated) / 1000
+    }
+  }
 
 
   // Adding ItemListing hasMany
@@ -42,6 +51,7 @@ class MagentoCatalogImportJob {
   static constraints = {
     colorAppendedToSKU(nullable: true)
     colorAttributeName(nullable: true, blank: false)
+    dateCompleted(nullable: true)
     description(nullable: true)
     htmlDescription(nullable: true)
     listingType()
@@ -49,7 +59,15 @@ class MagentoCatalogImportJob {
     sizeAppendedToSKU(nullable: true)
     sizeAttributeName(nullable: true, blank: false)
     status(inList:  ['READY', 'PENDING', 'STOPPED', 'COMPLETE'])
-    stockPercentage(min: 0.0d, max: 100.0d)
+    stockPercentage(min: 10.0d, max: 100.0d)
     storeCategory()
+  }
+
+
+//GORM EVENTS
+  def beforeUpdate = {
+    if (status == 'COMPLETE') {
+      dateCompleted = new Date()
+    }
   }
 }
