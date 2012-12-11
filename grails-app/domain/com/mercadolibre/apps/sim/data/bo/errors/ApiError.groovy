@@ -6,6 +6,7 @@ import groovy.transform.ToString
  *  Example {"message":"Category not found: MLB1234","error":"not_found","status":404,"cause":[]}
  *
  */
+@ToString
 class ApiError {
   String originalFilename
   Integer status = 400    // Bad request
