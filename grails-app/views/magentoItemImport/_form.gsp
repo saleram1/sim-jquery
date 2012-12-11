@@ -9,7 +9,49 @@
 					<g:message code="magentoItemImport.storeCategory.label" default="Store Category" />
 				</label>
 				<div class="controls">
-					<g:textField class="input-small" name="storeCategory" value="${magentoItemImportInstance?.storeCategory}" required="required" />
+					<select name="storeCategory" required="required">
+						<optgroup label="Mujeres">
+							<option value="256">Alpargatas y Ojotas</option>
+							<option value="254">Ballerinas</option>
+							<option value="259">Borcegos</option>
+							<option value="258">Botas y Botinetas</option>
+							<option value="257">Botas de Lluvia</option>
+							<option value="262">Mocasines y Oxfords</option>
+							<option value="249">Sandalias</option>
+							<option value="253">Zapatillas</option>
+							<option value="250">Zuecos y Plataformas</option>
+							<option value="251">Zapatos de Fiesta</option>
+							<option value="283">Taco Alto</option>
+							<option value="281">Taco Medio</option>
+							<option value="280">Taco Bajo</option>
+						</optgroup>
+						<optgroup label="Hombres">
+							<option value="42">Alpargatas</option>
+							<option value="321">Botas y Borcegos</option>
+							<option value="81">Sandalias y Ojotas</option>
+							<option value="41">Zapatillas</option>
+							<option value="40">Zapatos</option>
+						</optgroup>
+						<optgroup label="Niños">
+							<option value="73">Zapatillas</option>
+							<option value="195">Sandalias y Zuecos</option>
+							<option value="72">Zapatos y Ballerinas</option>
+							<option value="74">Botas y Borcegos</option>
+							<option value="63">Botitas de lluvia</option>
+							<option value="75">Alpargatas</option>
+						</optgroup>
+						<option value="23">Bebe</option>
+						<optgroup label="Accesorios">
+							<option value="295">Carteras</option>
+							<option value="349">Bandoleras y Morrales</option>
+							<option value="298">Billeteras Mujeres</option>
+							<option value="307">Billeteras Hombres</option>
+							<option value="297">Bolsos y Mochilas Mujeres</option>
+							<option value="294">Cintos Mujeres</option>
+							<option value="305">Cintos Hombres</option>
+							<option value="369">Sobres</option>
+						</optgroup>
+					</select>
 				</div>
 			</div>
 		</div>
