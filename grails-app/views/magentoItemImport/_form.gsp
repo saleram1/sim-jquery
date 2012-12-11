@@ -3,7 +3,7 @@
 <fieldset class="fieldset" name="meli">
 	<legend>Manage Products</legend>
 	<div class="row-fluid">
-		<div class="span5">
+		<div class="span7">
 			<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'storeCategory', 'error')}">
 				<label for="storeCategory" class="control-label">
 					<g:message code="magentoItemImport.storeCategory.label" default="Store Category" />
@@ -55,7 +55,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="span7">
+		<div class="span5">
 			<div class="control-group ${hasErrors(bean: magentoItemImportInstance, field: 'meliCategory', 'error')}">
 				<label for="meliCategory" class="control-label">
 					<g:message code="magentoItemImport.meliCategory.label" default="MLCategory" />
