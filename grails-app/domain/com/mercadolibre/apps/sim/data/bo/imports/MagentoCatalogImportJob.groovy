@@ -44,7 +44,7 @@ class MagentoCatalogImportJob {
     colorAttributeName(nullable: true, blank: false)
     dateCompleted(nullable: true)
     description(nullable: true)
-    htmlDescription(nullable: true, maxSize: 32*1024)
+    htmlDescription(nullable: true, maxSize: 64*1024)
     listingType()
     meliCategory()
     sizeAppendedToSKU(nullable: true)
@@ -52,6 +52,10 @@ class MagentoCatalogImportJob {
     status(inList:  ['PENDING', 'STOPPED', 'COMPLETE'])
     stockPercentage(min: 25.0d, max: 100.0d)
     storeCategory()
+  }
+
+  static mapping = {
+    htmlDescription type: "text"
   }
 
 

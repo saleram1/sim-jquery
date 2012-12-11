@@ -25,8 +25,6 @@ class MagentoStoreService {
         apiKey  = shoppeUser.company.apiKey
       }
     }
-    log.info "Shoppe URL is ${magentoBaseURI} ... connecting as user ${apiUser}"
-
     [magentoBaseURI, apiUser, apiKey]
   }
 
@@ -52,7 +50,7 @@ class MagentoStoreService {
    * @return
    */
   Map getMagentoProductDetailsByProductId(Integer callerId, String productId) {
-    log.info "Caller Id is: ${callerId}  Mage Product Id is: ${productId}"
+    log.info "getMagentoProductDetailsByProductId: Caller Id is: ${callerId}  Mage Product Id is: ${productId}"
 
     def (magentoBaseURI, apiUser, apiKey) = findShoppeDetailsByCallerId(callerId)
     MageConnectionDetails mcd =
@@ -76,7 +74,7 @@ class MagentoStoreService {
 
 
   /**
-   * @TODO have to make a change in the signupController such that the webAddress represents the Seller's
+   * In the signupController such that the webAddress represents the Seller's
    * Magento store
    *
    * @param callerId

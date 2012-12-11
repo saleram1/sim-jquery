@@ -10,13 +10,12 @@ import com.mercadolibre.apps.sim.data.bo.sales.CustomerOrder
  */
 class ItemListing {
 
-  ItemService itemService
+  def ItemService
 
   // Non-meli attributes that come from PB
   ItemInfo itemInfo
 
-  //String gp_id
-  String sku   // assigned sku or UPC
+  String gp_id    // assigned sku or UPC
   String mercadoLibreItemId    // use this to lookup most of the attributes
 
   // The following comes from Meli Items API
@@ -33,23 +32,23 @@ class ItemListing {
   String buying_mode
   String location
   Boolean acceptsMercadoPago = true
-  Date dateCreated
-  Date lastUpdated
+  Date dateCreated         // need to fix this so that it can be sent to mercado
+  Date lastUpdated                                                              // need to fix this so it can be sent to mercado
 
   static hasMany = [questions: Question]
 
-  static transients = ["category_id", "title", "description", "condition", "currency_id", "price", "pictureURL", "available_quantity", "listing_type_id", "buying_mode", "location", "acceptsMercadoPago", "status", "dateCreated", "lastUpdated"]
+  static transients = ["category_id", "title", "description", "condition", "currency_id", "price", "pictureURL", "available_quantity", "listing_type_id", "buying_mode", "location", "acceptsMercadoPago", "dateCreated", "lastUpdated", "status"]
 
   static constraints = {
     itemInfo(nullable: true)
     id(display: false, attributes: [listable: false]) // do not show id anywhere
-    sku(nullable: true, blank: false, display: false)
+    gp_id(nullable: true, blank: true, display: false)
     mercadoLibreItemId(nullable: true)
   }
 
   def afterLoad() {
     // get all transient properties from Mercado Libre items api
-    ItemCommand itemCommand = itemService.getItemCommand(mercadoLibreItemId)
+    ItemCommand itemCommand = ItemService.getItemCommand(mercadoLibreItemId)
     // I could probably set the properties or params of each to each other, but not sure if it will overwrite the gp_id and mercadoLIbreItemId to null.  I will test later and refactor below when I know better
     category_id = itemCommand.category_id
     title = itemCommand.title
@@ -61,7 +60,10 @@ class ItemListing {
     available_quantity = itemCommand.available_quantity
     listing_type_id = itemCommand.listing_type_id
     buying_mode = itemCommand.buying_mode
+    //location = itemCommand.location
     acceptsMercadoPago = itemCommand.acceptsMercadoPago
+    dateCreated = itemCommand.dateCreated
+    lastUpdated = itemCommand.lastUpdated
     status = itemCommand.status
   }
 
@@ -81,7 +83,6 @@ class ItemListing {
   }
 
   String toString() {
-    //return "ItemListing  -> [${id}] [${mercadoLibreItemId}] in category_id [${category_id}] - ${title} @ ${currency_id} ${price} \n";
-    "${mercadoLibreItemId}..${sku}"
+    return "ItemListing  -> [${id}] [${gp_id}] [${mercadoLibreItemId}] in category_id [${category_id}] - ${title} @ ${currency_id} ${price} \n";
   }
 }
