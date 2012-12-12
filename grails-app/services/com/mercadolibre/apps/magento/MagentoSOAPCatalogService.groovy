@@ -23,8 +23,6 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
   List<Map> getProductIdsInCategory(String storeUrl, String apiUser, String apiKey, Integer categoryId) {
     MageConnectionDetails mcd = null
 
-    log.info("... searching for product in ${categoryId} using username ${apiUser}")
-
     try {
       if ((mcd = initMagentoProxyForStore(storeUrl, apiUser, apiKey))) {
         log.info "Session: ${mcd.sessionId}"
@@ -45,6 +43,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
       log.error tr.message
     }
   }
+
 
   /**
    * Take each of the results under this one category and query for those N+1 api calls incurred
