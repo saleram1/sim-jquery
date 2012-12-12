@@ -48,31 +48,35 @@ class MagentoSimpleProductSlurperService {
     }
   }
 
-  def createMercadoLibreListings(List productIds, MagentoCatalogImportJob job, Integer callerId, String accessToken) {
+  def createMercadoLibreListings(List productIds, MagentoCatalogImportJob importJob, Integer callerId, String accessToken) {
     log.info("No. of Products found: " + productIds?.size())
 
     Integer itemsListedWithMeli = 0
-    Boolean isFashionista = categoryService.isFunkyFashionFootwearCategory(job.meliCategory)
+    Boolean isFashionista = categoryService.isFunkyFashionFootwearCategory(importJob.meliCategory)
 //runAsync {
-
     long startTime = System.currentTimeMillis()
 
     productIds?.eachWithIndex { Map aProduct, Integer index ->
-      String meliListingId
+      Object meliListingResult
       if (isFashionista) {
-        meliListingId = mercadoLibreListingService.listFashionItem(aProduct, job, callerId, accessToken)
+        meliListingResult = mercadoLibreListingService.listFashionItem(aProduct, importJob, callerId, accessToken)
+
+        if (meliListingResult instanceof ItemListing) {
+          addToSmeliListings(importJob, meliListingResult)
+        }
+        else if (meliListingResult instanceof ApiError) {
+          addToSmeliErrs(importJob, meliListingResult)
+        }
       }
       else {
-        meliListingId = mercadoLibreListingService.listRegularItem(aProduct, job, callerId, accessToken)
+        meliListingResult = mercadoLibreListingService.listRegularItem(aProduct, importJob, callerId, accessToken)
       }
-      //updateImportJobListingsOrErrors(job, meliListingId, aProduct)  ONCE COMPLETED INTERNAL BETA REVIEW
-      updateImportJobProgress(job, ++itemsListedWithMeli)
+      updateImportJobProgress(importJob, ++itemsListedWithMeli)
     }
 
     //DONE!
-    updateImportJobProgress(job, productIds.size(), 'COMPLETE')
-
-    log.info "Job completed in ${(System.currentTimeMillis() - startTime)} ms...."
+    updateImportJobProgress(importJob, productIds.size(), 'COMPLETE')
+    log.info "Job completed in ${(System.currentTimeMillis() - startTime / 1000)}s...."
   }
 
 
@@ -108,33 +112,26 @@ class MagentoSimpleProductSlurperService {
       importJob.validItemsCount = validItemsCount
       importJob.status = statusChange
       if (importJob.save(flush: true)) {
-        log.info "Updated job items listed to: ${validItemsCount}"
+//        log.info "Updated job items listed to: ${validItemsCount}"
       }
     }
   }
 
 
-  void updateImportJobListingsOrErrors(MagentoCatalogImportJob importJob, String itemId, Map aProduct) {
+// GORM helpers
+  def addToSmeliListings(MagentoCatalogImportJob importJob, ItemListing listing) {
     MagentoCatalogImportJob.withTransaction {
-      importJob = MagentoCatalogImportJob.load(importJob.id)
-
-      if (itemId && itemId.startsWith("ML")) {
-        def myListing = new ItemListing(mercadoLibreItemId: itemId)
-        myListing.save()
-        importJob.addToListings(myListing)
-      }
-      else {
-        def anError = new ApiError(cause: [aProduct], code: itemId, message: getMessage(itemId))
-        anError.save()
-        importJob.addToErrs(anError)
-      }
-      if (importJob.save(flush: true)) {
-        log.info "Updated job associations"
-      }
+      listing.save(flush: true)
+      importJob.addToListings(listing)
+      importJob.save()
     }
   }
 
-  String getMessage(code) {
-    "Validation error"
+  def addToSmeliErrs(MagentoCatalogImportJob importJob, ApiError apiError) {
+    MagentoCatalogImportJob.withTransaction {
+      apiError.save(flush: true)
+      importJob.addToErrs(apiError)
+      importJob.save()
+    }
   }
 }

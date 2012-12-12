@@ -30,67 +30,67 @@ class ImportService {
   CategoryService categoryService
 
   def importContactsFromCSV(ItemImport itemImport, ItemImportFileSource fileSource, String accessToken = "") {
-      //String accessToken = setupMercadoApiAccess(7418, "Spz9fcrMyPQo9cD8ZJtbdn8Kk46fy2Z3")
-      log.info "importContactsFromCSV: " + fileSource.path + " orig. " + fileSource.originalFilename
-      log.info "Using accessToken: " + accessToken
+    //String accessToken = setupMercadoApiAccess(7418, "Spz9fcrMyPQo9cD8ZJtbdn8Kk46fy2Z3")
+    log.info "importContactsFromCSV: " + fileSource.path + " orig. " + fileSource.originalFilename
+    log.info "Using accessToken: " + accessToken
 
-      String csvFile = fileSource.path
-      def items = CSVImporter.doImport(csvFile)
+    String csvFile = fileSource.path
+    def items = CSVImporter.doImport(csvFile)
 
-      int totalCount = 0
-      int count = 0
+    int totalCount = 0
+    int count = 0
 
-      if (items && items instanceof List) {
-        totalCount = items?.size()
+    if (items && items instanceof List) {
+      totalCount = items?.size()
 
-        items.eachWithIndex { it, idx ->
-          //Item aProperItem = newItemFromMap(it)
-          ItemListing aProperItem = newItemFromMap(it)
-          VanillaItemListing properListing = new VanillaItemListing(it)
+      items.eachWithIndex { it, idx ->
+        //Item aProperItem = newItemFromMap(it)
+        ItemListing aProperItem = newItemFromMap(it)
+        VanillaItemListing properListing = new VanillaItemListing(it)
 
-          // WARN only
-          if (itemExists(aProperItem)) {
-            log.warn("An item was already found in catalog with gp_id : " + aProperItem.gp_id)
+        // WARN only
+        if (itemExists(aProperItem)) {
+          log.warn("An item was already found in catalog with gp_id : " + aProperItem.gp_id)
+        }
+
+        if (!aProperItem.validate()) {
+          aProperItem.errors.fieldErrors.each() {
+            log.error it
           }
+        }
+        else {
+          try {
+            // @TODO support a 'required attribute' message in the output of ItemImport - such as options for Fashion
 
-          if (!aProperItem.validate()) {
-            aProperItem.errors.fieldErrors.each() {
-              log.error it
-            }
-          }
-          else {
-            try {
-              // @TODO support a 'required attribute' message in the output of ItemImport - such as options for Fashion
+            // if user has not already uploaded and the Category is okay
+            if (categoryService.isValidCategory(aProperItem.category_id) && !categoryService.isFunkyFashionFootwearCategory(aProperItem.category_id)) {
+              //String newItemId = pushItemToMarketplace(itemImport, fileSource, idx, aProperItem, accessToken)
+              String newItemId = pushItemToMarketplace(itemImport, fileSource, idx, properListing, accessToken)
+              aProperItem.mercadoLibreItemId = newItemId
 
-              // if user has not already uploaded and the Category is okay
-              if (categoryService.isValidCategory(aProperItem.category_id) && !categoryService.isFunkyFashionFootwearCategory(aProperItem.category_id)) {
-                //String newItemId = pushItemToMarketplace(itemImport, fileSource, idx, aProperItem, accessToken)
-                String newItemId = pushItemToMarketplace(itemImport, fileSource, idx, properListing, accessToken)
-                aProperItem.mercadoLibreItemId = newItemId
-
-                if (newItemId) {
-                  count++
-                  log.info(aProperItem.save(flush: true))
-                  itemImport.listings.add(aProperItem)
-                }
-                else {
-                  log.error("New Item was not listed in MLA/MLB")
-                }
+              if (newItemId) {
+                count++
+                log.info(aProperItem.save(flush: true))
+                itemImport.listings.add(aProperItem)
               }
               else {
-                log.warn "Cannot support category_id id: ${aProperItem.category_id} in the current version"
+                log.error("New Item was not listed in MLA/MLB")
               }
             }
-            catch (Throwable tr) {
-              tr.printStackTrace()
+            else {
+              log.warn "Cannot support category_id id: ${aProperItem.category_id} in the current version"
             }
           }
+          catch (Throwable tr) {
+            tr.printStackTrace()
+          }
+        }
 
-          //
-        } // for each Item
-      }
-      [count, totalCount]
+        //
+      } // for each Item
     }
+    [count, totalCount]
+  }
 
   /**
    * Does the item already exist in User 's history
@@ -171,15 +171,13 @@ class ImportService {
     builder.request("https://v1.api.mercadolibre.com",
         groovyx.net.http.Method.POST,
         groovyx.net.http.ContentType.JSON) {
-      uri.path = '/items/validate'
+      uri.path = '/items'
       uri.query = [access_token: appUser]
       body = itemRef
 
-/*
       response.success = { resp, json ->
         newItemId = json['id']
       }
-*/
       response.'204' = { resp, json ->
         newItemId = "HTTP/1.1 204 No Content"
       }

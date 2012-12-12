@@ -23,8 +23,6 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
   List<Map> getProductIdsInCategory(String storeUrl, String apiUser, String apiKey, Integer categoryId) {
     MageConnectionDetails mcd = null
 
-    log.info("... searching for product in ${categoryId} using username ${apiUser}")
-
     try {
       if ((mcd = initMagentoProxyForStore(storeUrl, apiUser, apiKey))) {
         log.info "Session: ${mcd.sessionId}"
@@ -45,6 +43,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
       log.error tr.message
     }
   }
+
 
   /**
    * Take each of the results under this one category and query for those N+1 api calls incurred
@@ -78,7 +77,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 
       if (productMap.get(product.sku).size() != 0 &&
           ((related?.size() - 1) != productMap.get(product.sku).size())) {
-        log.warn "related.size = ${related ?: related.size()}   productMap = ${productMap.get(product.sku).size()}"
+        log.warn "related.size = ${related.size()}  productMap.size = ${productMap.get(product.sku).size()}"
       }
 
       productIds.add(productMap)
@@ -138,10 +137,10 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     cpip.attributes.additionalAttributes = new ArrayOfString()
     cpip.attributes.additionalAttributes.complexObjectArray.add("color")
     cpip.attributes.additionalAttributes.complexObjectArray.add("marca")
-    cpip.attributes.additionalAttributes.complexObjectArray.add("gender")
-    cpip.attributes.additionalAttributes.complexObjectArray.add("size")
-    cpip.attributes.additionalAttributes.complexObjectArray.add("accesorio_size")
-    cpip.attributes.additionalAttributes.complexObjectArray.add("shoe_size")
+//    cpip.attributes.additionalAttributes.complexObjectArray.add("gender")
+//    cpip.attributes.additionalAttributes.complexObjectArray.add("size")
+//    cpip.attributes.additionalAttributes.complexObjectArray.add("accesorio_size")
+//    cpip.attributes.additionalAttributes.complexObjectArray.add("shoe_size")
 
     CatalogProductReturnEntity catalogProductReturnEntity = mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductInfo(cpip).result
 

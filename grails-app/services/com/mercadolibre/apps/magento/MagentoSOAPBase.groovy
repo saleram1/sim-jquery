@@ -38,9 +38,7 @@ abstract class MagentoSOAPBase {
    * @return SessionID string
    */
   MageConnectionDetails initMagentoProxyForStore(String storeURL, String username = "m2m", String password = "2dxkp14lggreh7f5m8ejqmzyskwhzoj0") {
-
     if (getMagentoSessionForStore(storeURL)) {
-      log.info "Retrieving existing Mage session ... store base ${storeURL}"
       return getMagentoSessionForStore(storeURL)
     }
 
@@ -65,7 +63,7 @@ abstract class MagentoSOAPBase {
       HTTPClientPolicy httpClientPolicy = new HTTPClientPolicy();
       httpClientPolicy.setAllowChunking(false);
       httpClientPolicy.setAutoRedirect(false)
-      httpClientPolicy.setReceiveTimeout(900000)
+      httpClientPolicy.setReceiveTimeout(60000)
       httpClientPolicy.setMaxRetransmits(0)
       http.setClient(httpClientPolicy);
 
@@ -78,6 +76,7 @@ abstract class MagentoSOAPBase {
       String session =
         mageProxy.getMageApiModelServerWsiHandlerPort().login(lp).result
 
+      log.info "New session ... ${session} for store base ${storeURL}"
       return cacheSessionForFutureUse(session, storeURL, mageProxy)
     }
     catch (Throwable throwable) {

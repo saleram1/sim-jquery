@@ -35,15 +35,6 @@ class MagentoCatalogImportJob {
   Date dateCreated
   Date dateCompleted
 
-  def getRuntimeSeconds() {
-    if (status != 'COMPLETE') {
-      return -1
-    }
-    else {
-      (dateCompleted - dateCreated) / 1000
-    }
-  }
-
 
   // Adding ItemListing hasMany
   static hasMany = [errs: ApiError, listings: ItemListing]
@@ -53,14 +44,18 @@ class MagentoCatalogImportJob {
     colorAttributeName(nullable: true, blank: false)
     dateCompleted(nullable: true)
     description(nullable: true)
-    htmlDescription(nullable: true)
+    htmlDescription(nullable: true, maxSize: 64*1024)
     listingType()
     meliCategory()
     sizeAppendedToSKU(nullable: true)
     sizeAttributeName(nullable: true, blank: false)
-    status(inList:  ['READY', 'PENDING', 'STOPPED', 'COMPLETE'])
-    stockPercentage(min: 10.0d, max: 100.0d)
+    status(inList:  ['PENDING', 'STOPPED', 'COMPLETE'])
+    stockPercentage(min: 25.0d, max: 100.0d)
     storeCategory()
+  }
+
+  static mapping = {
+    htmlDescription type: "text"
   }
 
 

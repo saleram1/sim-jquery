@@ -122,46 +122,6 @@ class CategoryService {
 
 
   /**
-   * Find out from the category and the current colour if we can SKIP it
-
-   * @param sourceList -  listOfPossibleColor id,name pairs
-   * @param categoryId -   meliCategory
-   * @param colorValue  -  '17'
-   * @return true if colorValue is legit
-   *
-   * EXAMPLE usage
-
-   if (!isColorValueSupported(categoryId, details['additionalAttributes'].find() { key == 'color' })) {
-     useGray = true
-   }
-   *
-   */
-  Boolean isColorValueSupported(String meliCategory, String colorValue) {
-    def sourceList = this.getFashionCategoryAttribute(meliCategory, "Color Primario")['values']
-    if (!sourceList) {
-      return false
-    }
-    else {
-      return (getIdValueForColorValue(sourceList, colorValue) != null ? true : false)
-    }
-  }
-
-  String getIdValueForColorValue(List sourceList, String colorName) {
-    def attributeValues = sourceList?.find() {
-      colorName?.equalsIgnoreCase(it.name)
-    }
-    return attributeValues?.id
-  }
-
-  String getIdValueForSizeValue(List sourceList, String sizeName) {
-    def attributeValues = sourceList?.find() {
-      it.name == sizeName
-    }
-    return attributeValues?.id
-  }
-
-
-  /**
    * Return id/name pairs which indicate legal values on ML in this category
    *
    * @param categoryId

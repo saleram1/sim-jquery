@@ -49,7 +49,10 @@ class CatalogItem implements Comparable {
     weight(nullable: true)
 	}
 
-
+	static mapping = {
+		id generator: "uuid"
+	}
+	
 	int compareTo(Object o) {
 		// TODO: change id to fitting order property
 		return (id.compareTo(o.id))
