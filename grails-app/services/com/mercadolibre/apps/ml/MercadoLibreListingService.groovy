@@ -18,6 +18,8 @@ import com.mercadolibre.apps.sim.integration.fotter.FotterMagicDecoder
  */
 class MercadoLibreListingService {
   static transactional = false
+  static final default_currency_id = "ARS"
+      ///https://v1.api.mercadolibre.com/sites/MLA
 
   CategoryService categoryService
   MagentoStoreService magentoStoreService
@@ -34,6 +36,7 @@ class MercadoLibreListingService {
    * @return
    */
   def listFashionItem(Map aProduct, MagentoCatalogImportJob job, Integer callerId, String accessToken) {
+
     FashionItemListing fashionListing
 
     aProduct.each() { String key, List simpleProductIds ->
@@ -47,7 +50,7 @@ class MercadoLibreListingService {
       String brandName = FotterMagicDecoder.decodeFotterMarcaOrBrand(details['additionalAttributes'].find() { it.key == 'marca'})
       fashionListing =
         new FashionItemListing(title: (brandName + details['name']), description: details['description'],
-            category_id: job.meliCategory, listing_type_id: job.listingType, currency_id: "ARS", condition: "new")
+            category_id: job.meliCategory, listing_type_id: job.listingType, currency_id: default_currency_id, condition: "new")
 
       def sourceList = categoryService.getFashionCategoryAttribute(job.meliCategory, "Color Primario")['values']
       String colorValueId = FotterMagicDecoder.decodeFotterColor(sourceList, details['additionalAttributes'].find() { it.key == 'color' })
