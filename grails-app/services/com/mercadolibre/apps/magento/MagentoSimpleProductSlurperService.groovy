@@ -71,7 +71,6 @@ class MagentoSimpleProductSlurperService {
       else {
         meliListingResult = mercadoLibreListingService.listRegularItem(aProduct, importJob, callerId, accessToken)
       }
-      //updateImportJobListingsOrErrors(importJob, meliListingId, aProduct)  ONCE COMPLETED INTERNAL BETA REVIEW
       updateImportJobProgress(importJob, ++itemsListedWithMeli)
     }
 
@@ -113,28 +112,7 @@ class MagentoSimpleProductSlurperService {
       importJob.validItemsCount = validItemsCount
       importJob.status = statusChange
       if (importJob.save(flush: true)) {
-        log.info "Updated job items listed to: ${validItemsCount}"
-      }
-    }
-  }
-
-
-  void updateImportJobListingsOrErrors(MagentoCatalogImportJob importJob, String itemId, Map aProduct) {
-    MagentoCatalogImportJob.withTransaction {
-      importJob = MagentoCatalogImportJob.load(importJob.id)
-
-      if (itemId && itemId.startsWith("ML")) {
-        def myListing = new ItemListing(mercadoLibreItemId: itemId)
-        myListing.save()
-        importJob.addToListings(myListing)
-      }
-      else {
-        def anError = new ApiError(cause: [aProduct], code: itemId, message: getMessage(itemId))
-        anError.save()
-        importJob.addToErrs(anError)
-      }
-      if (importJob.save(flush: true)) {
-        log.info "Updated job associations"
+//        log.info "Updated job items listed to: ${validItemsCount}"
       }
     }
   }
@@ -155,10 +133,5 @@ class MagentoSimpleProductSlurperService {
       importJob.addToErrs(apiError)
       importJob.save()
     }
-  }
-
-
-  String getMessage(code) {
-    "Validation error"
   }
 }
