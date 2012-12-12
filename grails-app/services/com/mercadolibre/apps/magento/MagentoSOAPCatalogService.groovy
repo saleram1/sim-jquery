@@ -77,7 +77,7 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
 
       if (productMap.get(product.sku).size() != 0 &&
           ((related?.size() - 1) != productMap.get(product.sku).size())) {
-        log.warn "related.size = ${related ?: related.size()}   productMap = ${productMap.get(product.sku).size()}"
+        log.warn "related.size = ${related.size()}  productMap.size = ${productMap.get(product.sku).size()}"
       }
 
       productIds.add(productMap)
@@ -137,10 +137,10 @@ class MagentoSOAPCatalogService extends MagentoSOAPBase {
     cpip.attributes.additionalAttributes = new ArrayOfString()
     cpip.attributes.additionalAttributes.complexObjectArray.add("color")
     cpip.attributes.additionalAttributes.complexObjectArray.add("marca")
-    cpip.attributes.additionalAttributes.complexObjectArray.add("gender")
-    cpip.attributes.additionalAttributes.complexObjectArray.add("size")
-    cpip.attributes.additionalAttributes.complexObjectArray.add("accesorio_size")
-    cpip.attributes.additionalAttributes.complexObjectArray.add("shoe_size")
+//    cpip.attributes.additionalAttributes.complexObjectArray.add("gender")
+//    cpip.attributes.additionalAttributes.complexObjectArray.add("size")
+//    cpip.attributes.additionalAttributes.complexObjectArray.add("accesorio_size")
+//    cpip.attributes.additionalAttributes.complexObjectArray.add("shoe_size")
 
     CatalogProductReturnEntity catalogProductReturnEntity = mageProxy.getMageApiModelServerWsiHandlerPort().catalogProductInfo(cpip).result
 
