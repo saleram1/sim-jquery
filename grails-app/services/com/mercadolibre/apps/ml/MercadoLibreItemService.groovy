@@ -16,6 +16,7 @@ import com.mercadolibre.apps.sim.data.bo.errors.AccessViolationError
 import com.mercadolibre.apps.sim.data.bo.errors.ApiError
 import com.mercadolibre.apps.sim.data.bo.errors.NewUserListingUnsupportedError
 import com.mercadolibre.apps.sim.data.bo.imports.MagentoCatalogImportJob
+import net.sf.json.JSONArray
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,6 +28,27 @@ import com.mercadolibre.apps.sim.data.bo.imports.MagentoCatalogImportJob
 class MercadoLibreItemService {
 
   static transactional = false
+
+  //
+  ///https://api.mercadolibre.com/users/119053991/available_listing_types?access_token=APP_USR-12815-121121-07cd3e3a08e59a01c6eb0d24957e29c8__K_J__-119053991
+  //
+  def getAvailableItemListingTypes(Integer callerId, String appUser) {
+
+    // one HTTPBuilder customised to work w/ Grails converters
+    def builder = getHttpBuilderInstance()
+    builder.request("https://api.mercadolibre.com",
+        groovyx.net.http.Method.GET,
+        groovyx.net.http.ContentType.JSON) {
+      uri.path = "/users/${callerId}/available_listing_types"
+      uri.query = [access_token: appUser]
+
+      response.success = { resp, json ->
+        return grails.converters.JSON.parse(json)
+      }
+    }
+    [:]
+  }
+
 
 
   /**
