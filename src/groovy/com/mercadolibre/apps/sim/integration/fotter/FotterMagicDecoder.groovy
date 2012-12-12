@@ -1,6 +1,6 @@
 package com.mercadolibre.apps.sim.integration.fotter
 
-import com.mercadolibre.apps.sim.CategoryService
+import org.apache.commons.logging.LogFactory
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,23 +11,29 @@ import com.mercadolibre.apps.sim.CategoryService
  */
 class FotterMagicDecoder {
 
-  def static decodeFotterMarcaOrBrand(marcaId) {
-    Integer marcaOption = -1
-    try {
-      marcaOption = Integer.valueOf(marcaId['value'])
-      if (marcaOption > 0) {
-        return  "<strong>${EAV_MARCA_MAP[marcaOption]}</strong> - "
+  static def log = LogFactory.getLog(this)
+
+
+  static String decodeFotterMarcaOrBrand(marcaId) {
+    if (marcaId instanceof Map && (marcaId as Map).containsKey("value")) {
+      Integer marcaOptionId
+      try {
+        marcaOptionId = Integer.valueOf(marcaId['value'])
+        if (EAV_MARCA_MAP[marcaOptionId]) {
+          return  "${EAV_MARCA_MAP[marcaOptionId]} - "
+        }
+        else {
+          return ""
+        }
       }
-      else {
-        return ""
+      catch (NumberFormatException ex) { // eat it
       }
-    }
-    catch (NumberFormatException ex) { // eat it
     }
     ""
   }
 
-  def static decodeFotterColor(List sourceList, Map colorOption) {   // key:color  value:17
+
+  static String decodeFotterColor(List sourceList, Map colorOption) {   // key:color  value:17
     Integer colorOptionId = 0
     try {
       colorOptionId = Integer.valueOf(colorOption['value'])
@@ -39,7 +45,8 @@ class FotterMagicDecoder {
     "92028"
   }
 
-  def static decodeFotterSize(List sourceList, String size) {
+
+  static String decodeFotterSize(List sourceList, String size) {
     if (!sourceList) {
       return null
     }
