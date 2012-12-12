@@ -34,7 +34,7 @@ class ItemVariation implements Serializable {
     if (!pictures.isEmpty()) {
       picture_ids.addAll(
         pictures.collect() { String pic ->
-          pic.replaceAll("ml.fotter.net", "staging.fotter.net")
+          pic.replaceAll("107.20.159.40", "staging.fotter.net")
         }
       )
     }

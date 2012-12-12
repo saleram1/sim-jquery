@@ -49,12 +49,11 @@ class MagentoSimpleProductSlurperService {
   }
 
   def createMercadoLibreListings(List productIds, MagentoCatalogImportJob importJob, Integer callerId, String accessToken) {
+    long startTime = System.currentTimeMillis()
     log.info("No. of Products found: " + productIds?.size())
 
     Integer itemsListedWithMeli = 0
     Boolean isFashionista = categoryService.isFunkyFashionFootwearCategory(importJob.meliCategory)
-//runAsync {
-    long startTime = System.currentTimeMillis()
 
     productIds?.eachWithIndex { Map aProduct, Integer index ->
       Object meliListingResult
@@ -76,7 +75,7 @@ class MagentoSimpleProductSlurperService {
 
     //DONE!
     updateImportJobProgress(importJob, productIds.size(), 'COMPLETE')
-    log.info "Job completed in ${(System.currentTimeMillis() - startTime / 1000)}s...."
+    log.info "Job completed in ${(System.currentTimeMillis() - startTime) / 1000}s...."
   }
 
 

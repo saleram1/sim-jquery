@@ -30,15 +30,17 @@ class MagentoStoreService {
 
 //METHODS
   List getMagentoProductsByUserAndCategory(Integer callerId, Integer categoryId) {
-    def (magentoBaseURI, apiUser, apiKey) = findShoppeDetailsByCallerId(callerId)
-    def productStubs =
-      magentoSOAPCatalogService.getProductIdsInCategory(magentoBaseURI, apiUser, apiKey, categoryId)
+    withStopwatch("SOAPCatalogService.getProductIdsInCategory") {
+      def (magentoBaseURI, apiUser, apiKey) = findShoppeDetailsByCallerId(callerId)
+      def productStubs =
+        magentoSOAPCatalogService.getProductIdsInCategory(magentoBaseURI, apiUser, apiKey, categoryId)
 
-    if (!productStubs) {
-      return Collections.emptyList()
-    }
-    else {
-      return productStubs
+      if (!productStubs) {
+        return Collections.emptyList()
+      }
+      else {
+        return productStubs
+      }
     }
   }
 
@@ -50,44 +52,30 @@ class MagentoStoreService {
    * @return
    */
   Map getMagentoProductDetailsByProductId(Integer callerId, String productId) {
-    log.info "getMagentoProductDetailsByProductId: Caller Id is: ${callerId}  Mage Product Id is: ${productId}"
+    withStopwatch("SOAPCatalogService.getProductDetails") {
+      log.info "getMagentoProductDetailsByProductId: Caller Id is: ${callerId}  Mage Product Id is: ${productId}"
 
-    def (magentoBaseURI, apiUser, apiKey) = findShoppeDetailsByCallerId(callerId)
-    MageConnectionDetails mcd =
-      magentoSOAPCatalogService.initMagentoProxyForStore(magentoBaseURI, apiUser, apiKey)
+      def (magentoBaseURI, apiUser, apiKey) = findShoppeDetailsByCallerId(callerId)
+      MageConnectionDetails mcd =
+        magentoSOAPCatalogService.initMagentoProxyForStore(magentoBaseURI, apiUser, apiKey)
 
-    Map allDetailsMap = [:]
-    allDetailsMap.putAll(magentoSOAPCatalogService.getProductDetails(mcd.mageProxy, mcd.sessionId, productId))
-    //allDetailsMap.putAll(magentoSOAPCatalogService.getProductImages(mcd.mageProxy, mcd.sessionId, productId))
+      Map allDetailsMap = [:]
+      allDetailsMap.putAll(magentoSOAPCatalogService.getProductDetails(mcd.mageProxy, mcd.sessionId, productId))
+      //allDetailsMap.putAll(magentoSOAPCatalogService.getProductImages(mcd.mageProxy, mcd.sessionId, productId))
 
-    return allDetailsMap
+      return allDetailsMap
+    }
   }
 
 
   List getMagentoProductInventoryByProductId(Integer callerId, List productIds) {
-    def (magentoBaseURI, apiUser, apiKey) = findShoppeDetailsByCallerId(callerId)
-    MageConnectionDetails mcd =
-      magentoSOAPCatalogService.initMagentoProxyForStore(magentoBaseURI, apiUser, apiKey)
+    withStopwatch("SOAPCatalogService.getProductStockAttributes") {
+      def (magentoBaseURI, apiUser, apiKey) = findShoppeDetailsByCallerId(callerId)
 
-    return magentoSOAPCatalogService.getProductStockAttributes(mcd.mageProxy, mcd.sessionId, productIds)
-  }
+      MageConnectionDetails mcd =
+        magentoSOAPCatalogService.initMagentoProxyForStore(magentoBaseURI, apiUser, apiKey)
 
-
-  /**
-   * In the signupController such that the webAddress represents the Seller's
-   * Magento store
-   *
-   * @param callerId
-   * @return
-   */
-  String getStoreBaseURIForUser(Integer callerId) {
-    User aUser = User.findByCallerId(callerId)
-
-    if (aUser) {
-      aUser.company.webAddress
-    }
-    else {
-      ""
+      return magentoSOAPCatalogService.getProductStockAttributes(mcd.mageProxy, mcd.sessionId, productIds)
     }
   }
 }

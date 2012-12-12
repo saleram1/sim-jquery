@@ -11,22 +11,24 @@ class MagentoSOAPPingService extends MagentoSOAPBase {
 
 
   Map pingMagentoStore(storeUrl, username, password) {
-    def sessionId = null
+    withStopwatch("SOAPPingService.pingMagentoStore") {
+      def sessionId = null
 
-    try {
-      if ((sessionId = initMagentoProxyForStore(storeUrl, username, password))) {
-        if (sessionId instanceof MageConnectionDetails)  {
-          log.info "Got Session: " +  ((sessionId as MageConnectionDetails).sessionId)
+      try {
+        if ((sessionId = initMagentoProxyForStore(storeUrl, username, password))) {
+          if (sessionId instanceof MageConnectionDetails)  {
+            log.info "Got Session: " +  ((sessionId as MageConnectionDetails).sessionId)
+          }
+          return [status: "OK", message: "${storeUrl} is alive"]
         }
-        return [status: "OK", message: "${storeUrl} is alive"]
+        else {
+          return [status: "ERROR", message: "Cannot reach ${storeUrl}", cause: ""]
+        }
       }
-      else {
-        return [status: "ERROR", message: "Cannot reach ${storeUrl}", cause: ""]
+      catch (Throwable tr) {
+        log.error tr.message
+        return [status: "ERROR", message: tr.message, cause: ["Cannot reach ${storeUrl} - Caused by ${tr.message}"]]
       }
-    }
-    catch (Throwable tr) {
-      log.error tr.message
-      return [status: "ERROR", message: tr.message, cause: ["Cannot reach ${storeUrl} - Caused by ${tr.message}"]]
     }
   }
 }
