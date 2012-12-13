@@ -75,7 +75,7 @@
 				</label>
 				<div class="controls">
 					<div class="input-append">
-						<input type="number" min="5" max="100" step="5" class="input-mini" name="stockPercentage" value="${magentoItemImportInstance?.stockPercentage}" required="required" /><span class="add-on" style="height: 15px;">%</span>
+						<input type="number" min="25" max="100" step="25" class="input-mini" name="stockPercentage" value="${magentoItemImportInstance?.stockPercentage}" required="required" /><span class="add-on" style="height: 15px;">%</span>
 					</div>
 				</div>
 			</div>
