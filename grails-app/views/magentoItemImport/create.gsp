@@ -58,7 +58,7 @@
 				});
 
 				$('#preview-btn').click(function(e) {
-					var htmlTemplate = $('textarea').val().replace('[[MAGENTO_DESCRIPTION]]', '<img src="http://placehold.it/500x400&amp;text=Magento+product+description+goes+here." />');
+					var htmlTemplate = $('textarea').val().replace('{{MAGENTO_DESCRIPTION}}', '<img src="http://placehold.it/500x400&amp;text=Magento+product+description+goes+here." />');
 					htmlTemplate += '<a href="#" onclick="window.close();" style="position: fixed; bottom: 0; right: 0;">Close Preview</a>';
 					
 					window.open('data:text/html,' + htmlTemplate, null, 'height=600,width=800,status=no,menubar=no,location=no,toolbar=no');
