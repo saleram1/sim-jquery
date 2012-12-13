@@ -91,7 +91,6 @@
 			<g:render template="form"/>
 			<div class="row-fluid">
 				<div class="form-actions">
-					<g:link controller="magentoItemImport" action="create" class="btn">Skip</g:link>
 					<g:submitButton name="create" class="btn btn-primary save" value="${'Save'}" disabled="disabled" />
 				</div>
 			</div>
