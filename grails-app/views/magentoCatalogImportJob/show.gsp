@@ -16,38 +16,80 @@
 			#status-container > p:last-child {
 				text-align: center; color: #B94A48;
 			}
+			.table.centered tr > *:first-child {
+				text-align: center !important;
+			} 
+			.table.centered th, .table.centered td {
+				background: none;
+				border-top: none !important;
+			}
 		</style>
-		<g:if test="${magentoCatalogImportJobInstance?.status != 'COMPLETE'}">
-			<g:javascript>
-				$(document).ready(function() {
-					var statusUrl = (/^\/sim/.test(document.location.pathname) ? '/sim' : '') + '/magentoCatalogImportJob/status/<g:fieldValue bean="${magentoCatalogImportJobInstance}" field="id" />';
+		<g:javascript>
+			$(document).ready(function() {
+				var statusUrl = (/^\/sim/.test(document.location.pathname) ? '/sim' : '') + '/magentoCatalogImportJob/status/<g:fieldValue bean="${magentoCatalogImportJobInstance}" field="id" />';
 
-					var $bar = $('#bar'),
-						$status = $('#status'),
-						$validItems = $('#valid-items'),
-						$totalItems = $('#total-items'),
-						$errorItems = $('#error-items');
+				var $bar = $('#bar'),
+					$status = $('#status'),
+					$validItems = $('#valid-items'),
+					$totalItems = $('#total-items'),
+					$errorItems = $('#error-items');
 
-					var updateStatus = setInterval(function() {
-						$.getJSON(statusUrl, function(job, status, $xhr) {
-							$status.text(job.status);
-							$validItems.text(job.validItemsCount);
-							$totalItems.text(job.totalItemsCount);
+				var refreshFn,
+					listingsAdded = [],
+					$listingsBody = $('table.listings tbody');
 
-							if (job.errorItemsCount) $errorItems.text(job.errorItemsCount).parent().removeClass('hide');
+				function itemTemplate(it) {
+					return '<tr><td><a href="' + it.permalink + '" target="_blank">' + it.id + '</a></td><td>' + it.title + '</td></tr>';
+				}
 
-							var percentComplete = Math.ceil(((job.errorItemsCount + job.validItemsCount) / job.totalItemsCount) * 100);
-							$bar.width(percentComplete + '%');
+				(refreshFn = function() {
+					$.getJSON(statusUrl, function(job, status, $xhr) {
+						$status.text(job.status);
+						$validItems.text(job.validItemsCount);
+						$totalItems.text(job.totalItemsCount);
 
-							if (job.status === 'COMPLETE') {
-								clearInterval(updateStatus);
-								$bar.parent().removeClass('active').addClass('progress-success');
-							}
-						});
-					}, 2000);
-				});
-			</g:javascript>
-		</g:if>
+						if (job.errorItemsCount) $errorItems.text(job.errorItemsCount).parent().removeClass('hide');
+
+						var percentComplete = Math.ceil(((job.errorItemsCount + job.validItemsCount) / job.totalItemsCount) * 100);
+						$bar.width(percentComplete + '%');
+
+						var listingsToAdd = [];
+						if ($.isArray(job.listings)) {
+							job.listings.forEach(function(listing) {
+								if (listingsAdded.indexOf(listing.mercadoLibreItemId) === -1) {
+									listingsToAdd.push(listing.mercadoLibreItemId);
+									listingsAdded.push(listing.mercadoLibreItemId);
+								}
+							});
+						}
+
+						if (listingsToAdd.length) {
+							$.getJSON(
+								'https://api.mercadolibre.com/items',
+								{
+									ids: listingsToAdd.join(','),
+									attributes: 'id,title,permalink'
+								},
+								function (items, status, $xhr) {
+									if ($.isArray(items)) {
+										items.forEach(function(it) {
+											$listingsBody.append($(itemTemplate(it)));
+										});
+									}
+								}
+							);
+						}
+
+						if (job.status === 'COMPLETE') {
+							clearInterval(updateStatus);
+							$bar.parent().removeClass('active').addClass('progress-success');
+						}
+					});
+				})();
+
+				var updateStatus = setInterval(refreshFn, 2000);
+			});
+		</g:javascript>
 	</head>
 	<body>
 		<div class="page-header">
@@ -61,7 +103,7 @@
 			<div id="status-container" class="span4">
 				<h3 id="status"><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="status" /></h3>
 				<% percentComplete = Math.ceil(((magentoCatalogImportJobInstance?.errorItemsCount + magentoCatalogImportJobInstance?.validItemsCount) / magentoCatalogImportJobInstance?.totalItemsCount) * 100) %>
-				<div class="progress progress-striped ${percentComplete < 100 ? 'active' : ''}">
+				<div class="progress progress-striped ${percentComplete < 100 ? 'active' : 'progress-success'}">
 					<div id="bar" class="bar" style="width: ${percentComplete}%;"></div>
 				</div>
 				<p class="muted"><span id="valid-items"><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="validItemsCount" /></span> out of <span id="total-items"><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="totalItemsCount" /></span> imported</p>
@@ -105,6 +147,18 @@
 								<td colspan="3">The attribute <code><g:fieldValue bean="${magentoCatalogImportJobInstance}" field="sizeAttributeName" /></code> is appended to SKU</td>
 							</tr>
 						</g:if>
+					</tbody>
+				</table>
+				<br /><br /><br />
+				<table class="table table-condensed centered listings">
+					<caption><h3>Items Listed to MercadoLibre</h3></caption>
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Title</th>
+						</tr>
+					</thead>
+					<tbody>
 					</tbody>
 				</table>
 			</div>
