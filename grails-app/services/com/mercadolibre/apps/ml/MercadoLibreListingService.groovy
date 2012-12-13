@@ -1,7 +1,6 @@
 package com.mercadolibre.apps.ml
 
 import com.mercadolibre.apps.sim.CategoryService
-import com.mercadolibre.apps.sim.ImportService
 import com.mercadolibre.apps.sim.data.bo.core.FashionItemListing
 import com.mercadolibre.apps.sim.data.bo.core.ItemVariation
 import com.mercadolibre.apps.sim.data.bo.imports.MagentoCatalogImportJob
@@ -24,7 +23,6 @@ class MercadoLibreListingService {
   CategoryService categoryService
   MagentoStoreService magentoStoreService
   MercadoLibreItemService mercadoLibreItemService
-//  ImportService importService
 
   /**
    * List the product and its variations in Meli marketplace under meliCategoryToList
