@@ -36,10 +36,15 @@
 
 				var refreshFn,
 					listingsAdded = [],
-					$listingsBody = $('table.listings tbody');
+					$listingsBody = $('table.listings tbody'),
+					$errorsBody = $('table.errors tbody');
 
 				function itemTemplate(it) {
 					return '<tr><td><a href="' + it.permalink + '" target="_blank">' + it.id + '</a></td><td>' + it.title + '</td></tr>';
+				}
+
+				function errorTemplate(e) {
+					return '<tr><td>' + e.status + '</td><td>' + e.productName + '</td><td>' + e.message + '</td></tr>';
 				}
 
 				(refreshFn = function() {
@@ -78,6 +83,13 @@
 									}
 								}
 							);
+						}
+
+						if ($.isArray(job.errs) && job.errs.length) {
+							$errorsBody.empty().closest('table').removeClass('hide');
+							job.errs.forEach(function(e) {
+								$errorsBody.append($(errorTemplate(e)));
+							});
 						}
 
 						if (job.status === 'COMPLETE') {
@@ -149,7 +161,20 @@
 						</g:if>
 					</tbody>
 				</table>
-				<br /><br /><br />
+				<br /><br />
+				<table class="table table-condensed centered errors hide">
+					<caption><h3>Errors Found</h3></caption>
+					<thead>
+						<tr>
+							<th>Error Code</th>
+							<th>Product Name</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+				<br /><br />
 				<table class="table table-condensed centered listings">
 					<caption><h3>Items Listed to MercadoLibre</h3></caption>
 					<thead>
