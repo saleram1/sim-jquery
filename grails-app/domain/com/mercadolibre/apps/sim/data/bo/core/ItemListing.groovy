@@ -1,6 +1,5 @@
 package com.mercadolibre.apps.sim.data.bo.core
 
-import com.mercadolibre.apps.sim.data.bo.sales.CustomerOrder
 
 /**
  * Represents an Item to be listed for sale in MercadoLibre
