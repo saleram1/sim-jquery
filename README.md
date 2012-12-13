@@ -1,3 +1,5 @@
+// A branch representing the state of sim-jquery prior to domain purge of 
+// currently unnecessary objects
 
 Simple Inventory Management (SIM)
 ---------------------------------
