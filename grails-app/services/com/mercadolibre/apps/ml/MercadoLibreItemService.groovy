@@ -1,12 +1,10 @@
 package com.mercadolibre.apps.ml
 
-import com.mercadolibre.apps.sim.data.bo.core.VanillaItemListing
-import com.mercadolibre.apps.sim.util.CSVImporter
 import com.mercadolibre.apps.sim.data.bo.core.ItemListing
 
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.ParserRegistry
-import groovyx.net.http.ContentType
+
 import static groovyx.net.http.ContentType.JSON
 
 import org.apache.http.entity.StringEntity
@@ -16,7 +14,6 @@ import com.mercadolibre.apps.sim.data.bo.errors.AccessViolationError
 import com.mercadolibre.apps.sim.data.bo.errors.ApiError
 import com.mercadolibre.apps.sim.data.bo.errors.NewUserListingUnsupportedError
 import com.mercadolibre.apps.sim.data.bo.imports.MagentoCatalogImportJob
-import net.sf.json.JSONArray
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,7 +29,8 @@ class MercadoLibreItemService {
   //
   ///https://api.mercadolibre.com/users/119053991/available_listing_types?access_token=APP_USR-12815-121121-07cd3e3a08e59a01c6eb0d24957e29c8__K_J__-119053991
   //
-  def getAvailableItemListingTypes(Integer callerId, String appUser) {
+  def getAvailableItemListingTypes(Integer callerId, String accessToken) {
+    Object responseBody
 
     // one HTTPBuilder customised to work w/ Grails converters
     def builder = getHttpBuilderInstance()
@@ -40,13 +38,13 @@ class MercadoLibreItemService {
         groovyx.net.http.Method.GET,
         groovyx.net.http.ContentType.JSON) {
       uri.path = "/users/${callerId}/available_listing_types"
-      uri.query = [access_token: appUser]
+      uri.query = [access_token: accessToken]
 
       response.success = { resp, json ->
-        return grails.converters.JSON.parse(json)
+        responseBody = json
       }
     }
-    [:]
+    return responseBody
   }
 
 

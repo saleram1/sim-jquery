@@ -7,6 +7,7 @@ import com.mercadolibre.apps.sim.data.bo.imports.MagentoCatalogImportJob
 import com.mercadolibre.apps.sim.data.bo.imports.MagentoStoreService
 import magento.CatalogInventoryStockItemEntity
 import com.mercadolibre.apps.sim.integration.fotter.FotterMagicDecoder
+import com.mercadolibre.apps.sim.integration.fotter.FotterDescriptionMaker
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,7 +35,6 @@ class MercadoLibreListingService {
    * @return
    */
   def listFashionItem(Map aProduct, MagentoCatalogImportJob job, Integer callerId, String accessToken) {
-
     FashionItemListing fashionListing
 
     aProduct.each() { String key, List simpleProductIds ->
@@ -42,30 +42,30 @@ class MercadoLibreListingService {
         return  // SKIP SKU ${key} has no variations - cannot list
       }
       List parentInventory = magentoStoreService.getMagentoProductInventoryByProductId(callerId, [key])
-
       Map details = magentoStoreService.getMagentoProductDetailsByProductId(callerId, parentInventory.get(0).productId)
 
+      //simpleProductIds array represents solely the inventory for a given size - NO other bits are needed
+      List childInventoryList = magentoStoreService.getMagentoProductInventoryByProductId(callerId, simpleProductIds)
+//MARCA
       String brandName = FotterMagicDecoder.decodeFotterMarcaOrBrand(details['additionalAttributes'].find() { it.key == 'marca'})
       fashionListing =
-        new FashionItemListing(title: (brandName + details['name']), description: details['description'],
+        new FashionItemListing(title: (brandName + details['name']), description: FotterDescriptionMaker.getDescriptionText(job.htmlDescription, details['description']),
             category_id: job.meliCategory, listing_type_id: job.listingType, currency_id: default_currency_id, condition: "new")
-
+//COLOUR
       def sourceList = categoryService.getFashionCategoryAttribute(job.meliCategory, "Color Primario")['values']
       String colorValueId = FotterMagicDecoder.decodeFotterColor(sourceList, details['additionalAttributes'].find() { it.key == 'color' })
 
+//SIZES
+      def sourceList2 = categoryService.getFashionCategoryAttribute(job.meliCategory, "Talle")['values']
 
-      /// USE the job flag to go into the child product
+      // TODO - use strictly the job flag to go into the child product
       if (job.sizeAppendedToSKU || true) {
         simpleProductIds.eachWithIndex() { String sku, Integer idx ->
-          //simpleProductIds array represents solely the INVENTORY for a given size - NO other bits are needed
-          List inventoryList = magentoStoreService.getMagentoProductInventoryByProductId(callerId, simpleProductIds)
-
           Long availableQuantity =
-            getItemVariationStock((inventoryList.get(idx) as CatalogInventoryStockItemEntity), sku, job.stockPercentage / 100.0d)
+            getItemVariationStock((childInventoryList.get(idx) as CatalogInventoryStockItemEntity), sku, job.stockPercentage / 100.0d)
 
           if (availableQuantity >= 1L) {
-            sourceList = categoryService.getFashionCategoryAttribute(job.meliCategory, "Talle")['values']
-            String sizeValueId = FotterMagicDecoder.decodeFotterSize(sourceList, (sku.minus(key)))
+            String sizeValueId = FotterMagicDecoder.decodeFotterSize(sourceList2, (sku.minus(key)))
 
             fashionListing.variations.add(
               new ItemVariation(sku, sizeValueId, availableQuantity,

@@ -10,7 +10,12 @@ package com.mercadolibre.apps.sim.integration.fotter
 class FotterDescriptionMaker {
 
   static String getDescriptionText(String htmlDescription, String plainDescription) {
-    return htmlDescription.replace(/{{MAGENTO_DESCRIPTION}}/, plainDescription).toString()
+    if (!htmlDescription || htmlDescription?.trim() == '') {
+      return plainDescription
+    }
+    else {
+      return htmlDescription.replace(/{{MAGENTO_DESCRIPTION}}/, plainDescription).toString()
+    }
   }
 
 

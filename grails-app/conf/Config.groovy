@@ -84,8 +84,8 @@ log4j = {
 	debug  "org.apache.http.headers",
 	       "org.apache.http.wire"
 */
-	info   'grails.app'
-    warn   'org.codehaus.groovy.grails.web.servlet',        // controllers
+	error   'grails.app'
+  warn     'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
            'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
