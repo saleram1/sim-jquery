@@ -1,6 +1,5 @@
 package com.mercadolibre.apps.sim.data.bo.core
 
-import com.mercadolibre.apps.sim.data.bo.sales.CustomerOrder
 
 /**
  * Represents an Item to be listed for sale in MercadoLibre
@@ -17,7 +16,9 @@ class ItemListing {
 
   String gp_id    // assigned sku or UPC
   String mercadoLibreItemId    // use this to lookup most of the attributes
-
+  String sku
+  String listingStatus
+  
   // The following comes from Meli Items API
   String category_id
   String title
@@ -44,6 +45,8 @@ class ItemListing {
     id(display: false, attributes: [listable: false]) // do not show id anywhere
     gp_id(nullable: true, blank: true, display: false)
     mercadoLibreItemId(nullable: true)
+	sku(nullable: true)
+	listingStatus(nullable: true)
   }
 
   def afterLoad() {
