@@ -14,9 +14,9 @@ class ItemListing {
   // Non-meli attributes that come from PB
   ItemInfo itemInfo
 
-  String gp_id    // assigned sku or UPC
+  String gp_id    
   String mercadoLibreItemId    // use this to lookup most of the attributes
-  String sku
+  String sku                   // assigned sku or UPC
   String listingStatus
   
   // The following comes from Meli Items API
@@ -45,8 +45,8 @@ class ItemListing {
     id(display: false, attributes: [listable: false]) // do not show id anywhere
     gp_id(nullable: true, blank: true, display: false)
     mercadoLibreItemId(nullable: true)
-	sku(nullable: true)
-	listingStatus(nullable: true)
+    sku(nullable: true)
+    listingStatus(nullable: true)
   }
 
   def afterLoad() {
