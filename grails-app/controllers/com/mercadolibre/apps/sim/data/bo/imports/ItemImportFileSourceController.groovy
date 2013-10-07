@@ -18,23 +18,13 @@ class ItemImportFileSourceController {
   def authorize(AuthoriseCommand command) {
     def nextAction = [controller: "magentoItemImport", action: "create"]
 
-    // Use MELI.login to test if the client has a valid access_token
+      session.ml_access_token = '1234'
+      session.ml_caller_id = '7809' // command.user_id
+///      session.setMaxInactiveInterval(command.expires_in - 30)
+      session.nickname = 'nicky'  // userService.getNickname(command.user_id)
 
-    if (command.validate()) {
-      session.ml_access_token = command.access_token
-      session.ml_caller_id = command.user_id
-      session.setMaxInactiveInterval(command.expires_in - 30)
-      session.nickname = userService.getNickname(command.user_id)
       log.info "Storing session for User ${session.ml_caller_id} nicknamed ${session.nickname} and token - ${session.ml_access_token}"
 
-      User existingUser = User.findByCallerId(session.ml_caller_id as Integer)
-      if (!existingUser) {
-        nextAction = [controller: "signup", action: "create"]
-      }
-      else {
-        session.company = existingUser.company.name  // this also must be done on signup controller
-      }
-    }
     redirect(nextAction)
   }
 

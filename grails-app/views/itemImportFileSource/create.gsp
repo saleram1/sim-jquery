@@ -45,7 +45,7 @@
 
 			<div id="update4">&nbsp;</div>
 
-			<bsfu:fileUpload action="upload" controller="itemImportFileSource" action="save" maxNumberOfFiles="${4}" maxFileSize="${250*1024}" formData="${formDataModelMap}" acceptFileTypes="/(\\.|\\/)(csv|xls?x|txt)\$/i" dropTarget="dropZone51" />
+			<bsfu:fileUpload action="upload" controller="itemImportFileSource" action="save" maxNumberOfFiles="${15}" maxFileSize="${250*1024}" formData="${formDataModelMap}" acceptFileTypes="/(\\.|\\/)(jpeg|jpg|png|gif)\$/i" dropTarget="dropZone51" />
 			
 			<div id="dropZone51" dropzone="copy"><p>Drag-n-Drop</p> </div>
 		  </div>

@@ -4,7 +4,7 @@ class ItemListingController {
 
   def itemListingService
 
-  static scaffold = true
+  def scaffold = true
   static navigation = ["list"]
 
 
